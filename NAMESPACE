@@ -2,6 +2,7 @@
 
 export("%!in%")
 export("%>%")
+export(agree_strongly_agree)
 export(calc_nps)
 export(check_email_approved)
 export(check_email_domain)
