@@ -138,5 +138,16 @@ agree_strongly_agree <- function(data, question) {
     paste0("%")
 }
 
+#' @title File path
+#' @description Gives the file path without double slash bug
+#' @param ... The file path
+#' @param fsep the file separation
+#' @return fp a file path
+#' @export
+file.path2 <- function(..., fsep = .Platform$file.sep) {
+  fp <- gsub("//", "/", file.path(..., fsep = fsep))
+  return(fp)
+}
+
 
 
