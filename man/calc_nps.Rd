@@ -11,6 +11,7 @@ calc_nps(x)
 }
 \value{
 Returns the nps score
+With formula `%` promoters - `%` detractors where promoters are 9 or 10 ratings and detractors are 0 to 6
 }
 \description{
 Calculate nps score

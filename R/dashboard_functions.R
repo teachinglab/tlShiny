@@ -109,10 +109,14 @@ html_wrap <- function(string, n = 40) {
 #'
 #' @param x A vector of nps scores
 #' @return Returns the nps score
+#' With formula `%` promoters - `%` detractors where promoters are 9 or 10 ratings and detractors are 0 to 6
 #' @export
 
 calc_nps <- function(x) {
-  nps <- round(((length(which(x %in% c(9, 10))) / length(x)) - (length(which(x %in% c(0:6))) / length(x))) * 100, 2)
+  nps <- round((
+    (sum(x == 10 | x == 9, na.rm = T) / sum(!is.na(x))) -
+      (sum(x == 6 | x == 5 | x == 4 | x == 3 | x == 2 | x == 1 | x == 0, na.rm = T) / sum(!is.na(x)))
+  ) * 100, 2)
   return(nps)
 }
 
