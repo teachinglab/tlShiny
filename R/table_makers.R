@@ -10,7 +10,7 @@
 #' @export
 find_highlight <- function(string, n = 3, print = F) {
   stop_words <- tidytext::stop_words |>
-    dplyr::bind_rows(tibble::tibble(word = TeachingLab::na_df,
+    dplyr::bind_rows(tibble::tibble(word = tlShiny::na_df,
                                     lexicon = "TL_NA"))
 
   highlight <- string |>
@@ -46,7 +46,7 @@ find_highlight <- function(string, n = 3, print = F) {
 #' @return a vector of strings
 #'
 #' @export
-highlight_fun <- function(data, highlight = TeachingLab::find_highlight(data)) {
+highlight_fun <- function(data, highlight = tlShiny::find_highlight(data)) {
 
   # If the word is not plural then add highlighting for the plural version of the same word,
   plural_highlights <- unlist(
@@ -119,7 +119,7 @@ highlight_fun <- function(data, highlight = TeachingLab::find_highlight(data)) {
 #'
 #' @examples
 #' \dontrun{
-#' df <- TeachingLab::survey_monkey
+#' df <- tlShiny::survey_monkey
 #' colnames(df)[1] <- "What learning are you excited to try?"
 #' quote_viz(
 #'   data = df,
@@ -169,7 +169,7 @@ quote_viz <- function(data,
 
     # If not custom highlighting, find a specified number of words to highlight, n = 3 by default
     if (is.null(custom_highlight)) {
-      highlight <- purrr::map_dfc(selecting_cols, ~ TeachingLab::find_highlight(string = data %>%
+      highlight <- purrr::map_dfc(selecting_cols, ~ tlShiny::find_highlight(string = data %>%
                                                                                   dplyr::pull(.x), n = n)) %>%
         suppressMessages()
       highlight <- purrr::map_chr(1:length(highlight), ~ paste0("highlight", .x)) %>%
@@ -197,8 +197,8 @@ quote_viz <- function(data,
     # Issue: this allows for overlay of html tags since it doesn't all occur at once,
     # NEED TO PREVENT <br> and <span> from getting highlighted
     data_final <- purrr::map2_dfc(data_text[selecting_cols], 1:length(colnames(highlight)), ~
-                                    TeachingLab::highlight_fun(
-                                      TeachingLab::html_wrap(.x, n = width),
+                                    tlShiny::highlight_fun(
+                                      tlShiny::html_wrap(.x, n = width),
                                       highlight |> dplyr::pull(.y)
                                     )) %>% purrr::map_df(., ~ append(
                                       sort(as.character(factor(.x, levels = unique(.x[stringr::str_detect(.x, "<span")])))),
@@ -211,7 +211,7 @@ quote_viz <- function(data,
       # Make gt table with all HTML Formatting
       data_final |>
         janitor::remove_empty("rows") |>
-        dplyr::filter(dplyr::if_any(dplyr::everything(), ~ .x %!in% TeachingLab::na_df)) |>
+        dplyr::filter(dplyr::if_any(dplyr::everything(), ~ .x %!in% tlShiny::na_df)) |>
         gt::gt() %>%
         {
           if (!is.null(title)) gt::tab_header(data = ., title = gt::md(paste0("**", title, "**"))) else .
@@ -232,7 +232,7 @@ quote_viz <- function(data,
           )
         ) |>
         gt::opt_row_striping(row_striping = TRUE) |>
-        TeachingLab::gt_theme_tl(align = align, ...)
+        tlShiny::gt_theme_tl(align = align, ...)
     }
 
   }

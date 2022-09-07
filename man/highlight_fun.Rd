@@ -4,7 +4,7 @@
 \alias{highlight_fun}
 \title{Word highlighting}
 \usage{
-highlight_fun(data, highlight = TeachingLab::find_highlight(data))
+highlight_fun(data, highlight = tlShiny::find_highlight(data))
 }
 \arguments{
 \item{data}{the data to highlight}
