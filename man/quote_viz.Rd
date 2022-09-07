@@ -15,6 +15,7 @@ quote_viz(
   title = NULL,
   suppress_warnings = T,
   align = "center",
+  save = T,
   ...
 )
 }
@@ -49,7 +50,7 @@ takes a dataframe and makes a gt table or ggplot that shows a quote
 }
 \examples{
 \dontrun{
-df <- tlShiny::survey_monkey
+df <- TeachingLab::survey_monkey
 colnames(df)[1] <- "What learning are you excited to try?"
 quote_viz(
   data = df,

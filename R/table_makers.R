@@ -9,26 +9,27 @@
 #'
 #' @export
 find_highlight <- function(string, n = 3, print = F) {
-  stop_words <- tlShiny::stop_words %>%
-    dplyr::bind_rows(tibble::tibble(word = tlShiny::na_df,
+  stop_words <- tidytext::stop_words |>
+    dplyr::bind_rows(tibble::tibble(word = TeachingLab::na_df,
                                     lexicon = "TL_NA"))
 
-  highlight <- string %>%
-    tibble::as_tibble_col(column_name = "txt") %>%
-    tidytext::unnest_tokens(word, txt) %>%
+  highlight <- string |>
+    na.omit() |>
+    tibble::as_tibble_col(column_name = "txt") |>
+    tidytext::unnest_tokens(word, txt) |>
     # This makes sure to get rid of numbers in consideration for highlighting
     # By making sure as.numeric returns NA on words
-    dplyr::filter(is.na(as.numeric(word))) %>%
+    dplyr::filter(is.na(as.numeric(word))) |>
     # Get a count of words and sort
-    dplyr::count(word, sort = T) %>%
+    dplyr::count(word, sort = T) |>
     # Get rid of generic (stop) words
-    dplyr::anti_join(stop_words) %>%
+    dplyr::anti_join(stop_words) |>
     # Get a user-specified number of words, or the default 3
-    utils::head(n) %>%
+    utils::head(n) |>
     # Make this a vector
-    dplyr::pull(word) %>%
+    dplyr::pull(word) |>
     # Suppress warnings from the as.numeric call
-    suppressWarnings() %>%
+    suppressWarnings() |>
     suppressMessages()
 
   if (print == T) {
@@ -45,28 +46,30 @@ find_highlight <- function(string, n = 3, print = F) {
 #' @return a vector of strings
 #'
 #' @export
-highlight_fun <- function(data, highlight = tlShiny::find_highlight(data)) {
+highlight_fun <- function(data, highlight = TeachingLab::find_highlight(data)) {
+
   # If the word is not plural then add highlighting for the plural version of the same word,
   plural_highlights <- unlist(
-    purrr::map(highlight, ~ if (stringr::str_sub(.x, -1, -1) != "s") {
+    purrr::map(highlight, ~ if (stringr::str_sub(.x, -1, -1)[1] != "s") {
       paste0(.x, "s")
     })
   )
+
   # Also do the inverse
   not_plural_highlights <- unlist(
-    purrr::map(highlight, ~ if (stringr::str_sub(.x, -1, -1) == "s") {
+    purrr::map(highlight, ~ if (stringr::str_sub(.x, -1, -1)[1] == "s") {
       stringr::str_remove(.x, "s$")
     })
   )
   # If the word is not capitalized then add highlighting for the capitalized version of the same word,
   capital_highlights <- unlist(
-    purrr::map(highlight, ~ if (stringr::str_detect(stringr::str_sub(.x, 1, 1), "[:upper:]")) {
+    purrr::map(highlight, ~ if (stringr::str_detect(stringr::str_sub(.x, 1, 1)[1], "[:upper:]")) {
       stringr::str_to_lower(.x)
     })
   )
   # Also do the inverse
   not_capital_highlights <- unlist(
-    purrr::map(highlight, ~ if (stringr::str_detect(stringr::str_sub(.x, 1, 1), "[:lower:]")) {
+    purrr::map(highlight, ~ if (stringr::str_detect(stringr::str_sub(.x, 1, 1)[1], "[:lower:]")) {
       stringr::str_to_title(.x)
     })
   )
@@ -75,7 +78,7 @@ highlight_fun <- function(data, highlight = tlShiny::find_highlight(data)) {
                       c(plural_highlights,
                         not_plural_highlights,
                         capital_highlights,
-                        not_capital_highlights)) %>%
+                        not_capital_highlights)) |>
     unique()
 
   # Create a vector for replacement with format <html>new_name</html> = old_name
@@ -88,7 +91,7 @@ highlight_fun <- function(data, highlight = tlShiny::find_highlight(data)) {
     highlight
   )
 
-  # Use replace_all on the original string with the replacement vector created above
+  # Use replace_all on the original `string with the replacement vector created above
   highlighted_string <- stringr::str_replace_all(
     data,
     replacement_vector
@@ -116,7 +119,7 @@ highlight_fun <- function(data, highlight = tlShiny::find_highlight(data)) {
 #'
 #' @examples
 #' \dontrun{
-#' df <- tlShiny::survey_monkey
+#' df <- TeachingLab::survey_monkey
 #' colnames(df)[1] <- "What learning are you excited to try?"
 #' quote_viz(
 #'   data = df,
@@ -137,18 +140,19 @@ quote_viz <- function(data,
                       title = NULL,
                       suppress_warnings = T,
                       align = "center",
+                      save = T,
                       ...) {
   selecting_cols <- text_col
   text_col <- rlang::enquo(text_col)
 
   if (viz_type == "ggplot") {
-    data %>%
+    data |>
       dplyr::mutate(text = stringr::str_replace_all(stringr::str_wrap(.data[[text_col]], width = 60), "\n", "<br>")) %>%
       dplyr::mutate(text = paste0("\"<i>", text, "\"")) %>%
       dplyr::mutate(
         x = 0,
         y = dplyr::row_number()
-      ) %>%
+      ) |>
       ggplot2::ggplot() +
       ggtext::geom_richtext(
         fill = NA, label.color = NA, family = "Calibri",
@@ -165,7 +169,7 @@ quote_viz <- function(data,
 
     # If not custom highlighting, find a specified number of words to highlight, n = 3 by default
     if (is.null(custom_highlight)) {
-      highlight <- purrr::map_dfc(selecting_cols, ~ tlShiny::find_highlight(string = data %>%
+      highlight <- purrr::map_dfc(selecting_cols, ~ TeachingLab::find_highlight(string = data %>%
                                                                                   dplyr::pull(.x), n = n)) %>%
         suppressMessages()
       highlight <- purrr::map_chr(1:length(highlight), ~ paste0("highlight", .x)) %>%
@@ -180,12 +184,12 @@ quote_viz <- function(data,
     }
 
     # Select just the relevant columns for highlighting
-    data_text <- data %>%
+    data_text <- data |>
       dplyr::select(!!text_col)
 
     # Get all highlights as just one vector
-    all_highlights <- highlight %>%
-      tidyr::pivot_longer(dplyr::everything(), values_to = "highlight") %>%
+    all_highlights <- highlight |>
+      tidyr::pivot_longer(dplyr::everything(), values_to = "highlight") |>
       dplyr::pull(highlight)
 
     # First map function applies the highlighting column by column
@@ -193,35 +197,44 @@ quote_viz <- function(data,
     # Issue: this allows for overlay of html tags since it doesn't all occur at once,
     # NEED TO PREVENT <br> and <span> from getting highlighted
     data_final <- purrr::map2_dfc(data_text[selecting_cols], 1:length(colnames(highlight)), ~
-    tlShiny::highlight_fun(
-      tlShiny::html_wrap(.x, n = width),
-      highlight %>% dplyr::pull(.y)
-    )) %>% purrr::map_df(., ~ append(
-      sort(as.character(factor(.x, levels = unique(.x[stringr::str_detect(.x, "<span")])))),
-      .x[!stringr::str_detect(.x, "<span")]
-    ))
+                                    TeachingLab::highlight_fun(
+                                      TeachingLab::html_wrap(.x, n = width),
+                                      highlight |> dplyr::pull(.y)
+                                    )) %>% purrr::map_df(., ~ append(
+                                      sort(as.character(factor(.x, levels = unique(.x[stringr::str_detect(.x, "<span")])))),
+                                      .x[!stringr::str_detect(.x, "<span")]
+                                    ))
 
-    # Make gt table with all HTML Formatting
-    data_final %>%
-      gt::gt() %>%
-      {
-        if (!is.null(title)) gt::tab_header(data = ., title = gt::html(title)) else .
-      } %>%
-      gt::fmt_markdown(columns = gt::everything()) %>%
-      gt::cols_align(align = align) %>%
-      gt::tab_style(
-        style = list(
-          gt::cell_text(
-            size = "medium"
+    if (save == F) {
+      data_final
+    } else {
+      # Make gt table with all HTML Formatting
+      data_final |>
+        janitor::remove_empty("rows") |>
+        dplyr::filter(dplyr::if_any(dplyr::everything(), ~ .x %!in% TeachingLab::na_df)) |>
+        gt::gt() %>%
+        {
+          if (!is.null(title)) gt::tab_header(data = ., title = gt::md(paste0("**", title, "**"))) else .
+        } %>%
+        gt::fmt_markdown(columns = gt::everything()) |>
+        gt::sub_missing(columns = everything(),
+                        missing_text = " ") |>
+        gt::cols_align(align = align) |>
+        gt::tab_style(
+          style = list(
+            gt::cell_text(
+              size = "medium"
+            )
+          ),
+          locations = gt::cells_body(
+            columns = gt::everything(),
+            rows = gt::everything()
           )
-        ),
-        locations = gt::cells_body(
-          columns = gt::everything(),
-          rows = gt::everything()
-        )
-      ) %>%
-      gt::opt_row_striping(row_striping = TRUE) %>%
-      tlShiny::gt_theme_tl(align = align, ...)
+        ) |>
+        gt::opt_row_striping(row_striping = TRUE) |>
+        TeachingLab::gt_theme_tl(align = align, ...)
+    }
+
   }
 }
 
