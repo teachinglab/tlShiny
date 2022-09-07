@@ -16,6 +16,7 @@ Imports:
     ggtext,
     glue,
     gt,
+    janitor,
     magrittr,
     purrr,
     rlang,
