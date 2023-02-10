@@ -109,9 +109,8 @@ know_assess_summary_detailed <- function(data, know_assess) {
                                 "After"),
                   value = score,
                   name = factor(name, levels = c("Before", "After")),
-                  question = stringr::str_wrap(question, width = 25)) |>
-    dplyr::select(name, value, question) |>
-    print()
+                  question = stringr::str_wrap(question, width = 35)) |>
+    dplyr::select(name, value, question)
 
   ### Make sure no over 100's ###
   plot_data$value <- ifelse(plot_data$value >= 100, 100, plot_data$value)
@@ -121,17 +120,31 @@ know_assess_summary_detailed <- function(data, know_assess) {
     stringr::str_replace_all("Ana", "ANA") |>
     stringr::str_replace_all("Eic", "EIC") # Correct title casing
 
-  n1 <- data |>
-    dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "pre") |>
-    # dplyr::pull(id) |>
-    nrow()
-  n1 <- n1/(length(unique(data$score)) - 1)
+  if (know_assess != "All Knowledge Assessments") {
 
-  n2 <- data |>
-    dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "post") |>
-    # dplyr::pull(id) |>
-    nrow()
+    n1 <- data |>
+      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "pre") |>
+      nrow()
+
+    n2 <- data |>
+      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "post") |>
+      nrow()
+
+  } else {
+
+    n1 <- data |>
+      dplyr::filter(prepost == "pre") |>
+      nrow()
+
+    n2 <- data |>
+      dplyr::filter(prepost == "post") |>
+      nrow()
+
+  }
+
+  n1 <- n1/(length(unique(data$score)) - 1)
   n2 <- n2/(length(unique(data$score)) - 1)
+
 
   if (length(n1) == 0) {
     n1 <- 0
@@ -161,6 +174,7 @@ know_assess_summary_detailed <- function(data, know_assess) {
     ggplot2::theme(
       plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 14),
       legend.position = "none",
+      strip.text = ggplot2::element_text(size = 10, face = "bold"),
       axis.text.x = ggplot2::element_text(face = "bold", size = 12),
       axis.text.y = ggplot2::element_text(face = "bold", size = 12))
 
