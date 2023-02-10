@@ -27,15 +27,25 @@ know_assess_summary <- function(data, know_assess, summary_path = "report_summar
     stringr::str_replace_all("Ana", "ANA") |>
     stringr::str_replace_all("Eic", "EIC") # Correct title casing
 
-  n1 <- data |>
-    dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "pre") |>
-    # dplyr::pull(id) |>
-    nrow()
+  if (know_assess != "All Knowledge Assessments") {
+    n1 <- data |>
+      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "pre") |>
+      # dplyr::pull(id) |>
+      nrow()
 
-  n2 <- data |>
-    dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "post") |>
-    # dplyr::pull(id) |>
-    nrow()
+    n2 <- data |>
+      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "post") |>
+      # dplyr::pull(id) |>
+      nrow()
+  } else {
+    n1 <- data |>
+      dplyr::filter(prepost == "pre") |>
+      nrow()
+
+    n2 <- data |>
+      dplyr::filter(prepost == "post") |>
+      nrow()
+  }
 
   if (length(n1) == 0) {
     n1 <- 0
