@@ -55,7 +55,6 @@ know_assess_summary <- function(data, know_assess, summary_path = "report_summar
                        fontface = "bold",
                        family = "Calibri",
                        size = 10) +
-    ggplot2::facet_wrap( ~ know_assess) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     # ggtext::geom_richtext(data = data.frame(name = "Before", value = 100,
     #                                         label = "% Correct <b style='color:#d17df7'>before</b> and <b style='color:#55bbc7'>after</b>."),
