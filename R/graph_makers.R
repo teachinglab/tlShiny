@@ -7,10 +7,7 @@
 #' @export
 know_assess_summary <- function(data, know_assess, summary_path = "report_summary_images") {
 
-  plot_data <- data %>%
-    {
-      if (know_assess != "All Knowledge Assessments") dplyr::filter(know_assess == !!rlang::enquo(know_assess)) else .
-    } %>%
+  plot_data <- data |>
     # dplyr::filter(know_assess == !!rlang::enquo(know_assess)) |>
     dplyr::select(-site) |> # Get rid of site for when there is more than one
     dplyr::group_by(prepost) |>
@@ -56,7 +53,8 @@ know_assess_summary <- function(data, know_assess, summary_path = "report_summar
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(value), "%")),
                        vjust = -1,
                        fontface = "bold",
-                       family = "Calibri") +
+                       family = "Calibri",
+                       size = 10) +
     ggplot2::facet_wrap( ~ know_assess) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     # ggtext::geom_richtext(data = data.frame(name = "Before", value = 100,
@@ -72,9 +70,10 @@ know_assess_summary <- function(data, know_assess, summary_path = "report_summar
     ggplot2::theme_minimal() +
     ggplot2::theme(
       # plot.title = ggplot2::element_text(),
-      plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5),
+      plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 14),
       legend.position = "none",
-      axis.text.x = ggplot2::element_text(face = "bold"))
+      axis.text.x = ggplot2::element_text(face = "bold", size = 12),
+      axis.text.y = ggplot2::element_text(face = "bold", size = 12))
 
   if (!is.null(summary_path)) {
     ggplot2::ggsave(plot = p,
