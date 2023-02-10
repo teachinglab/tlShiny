@@ -66,7 +66,7 @@ know_assess_summary <- function(data, know_assess, summary_path = "report_summar
                        size = 10) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     ggplot2::labs(x = "", y = "",
-                  title = paste0(title, "<br>% Correct <b style='color:#d17df7'>before (n = ", n1, ")</b> and <b style='color:#55bbc7'>after (n = ", n2, ")</b>")
+                  title = paste0("<b>", title, "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
     ) +
     ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
                                 limits = c(0, 100)) +
