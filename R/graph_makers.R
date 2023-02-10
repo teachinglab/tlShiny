@@ -126,14 +126,14 @@ know_assess_summary_detailed <- function(data, know_assess) {
     ggplot2::ggplot(ggplot2::aes(x = name, y = value, fill = name)) +
     ggplot2::geom_col() +
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(value), "%")),
-                       vjust = -0.75,
+                       vjust = -0.5,
                        fontface = "bold",
                        family = "Calibri",
                        size = 10) +
     ggplot2::facet_wrap( ~ question) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     ggplot2::labs(x = "", y = "",
-                  title = paste0(title, "% Correct <b style='color:#d17df7'>Before</b> and <b style='color:#55bbc7'>After</b> Per Question")
+                  title = paste0("<b>", title, " % Correct <b style='color:#d17df7'>Before</b> and <b style='color:#55bbc7'>After</b> Per Question</b>")
     ) +
     ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
                                 limits = c(0, 100)) +
