@@ -109,7 +109,7 @@ know_assess_summary_detailed <- function(data, know_assess) {
                                 "After"),
                   value = score,
                   name = factor(name, levels = c("Before", "After")),
-                  question = stringr::str_wrap(question, width = 40)) |>
+                  question = stringr::str_wrap(question, width = 55)) |>
     dplyr::select(name, value, question)
 
   ### Make sure no over 100's ###
@@ -126,14 +126,14 @@ know_assess_summary_detailed <- function(data, know_assess) {
     ggplot2::ggplot(ggplot2::aes(x = name, y = value, fill = name)) +
     ggplot2::geom_col() +
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(value), "%")),
-                       vjust = -0.5,
+                       vjust = -0.1,
                        fontface = "bold",
                        family = "Calibri",
                        size = 10) +
-    ggplot2::facet_wrap( ~ question) +
+    ggplot2::facet_wrap( ~ factor(question, levels = c("Total", unique(plot_data$question)[!plot_data$question %in% "Total"]))) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     ggplot2::labs(x = "", y = "",
-                  title = paste0("<b>", title, " % Correct <b style='color:#d17df7'>Before</b> and <b style='color:#55bbc7'>After</b> Per Question</b>")
+                  title = paste0("<b>", title, " % Correct <span style='color:#d17df7'>Before</span> and <span style='color:#55bbc7'>After</span> Per Question</b>")
     ) +
     ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
                                 limits = c(0, 100)) +
