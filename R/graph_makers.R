@@ -109,7 +109,7 @@ know_assess_summary_detailed <- function(data, know_assess) {
                                 "After"),
                   value = score,
                   name = factor(name, levels = c("Before", "After")),
-                  question = stringr::str_wrap(question, width = 35)) |>
+                  question = stringr::str_wrap(question, width = 40)) |>
     dplyr::select(name, value, question)
 
   ### Make sure no over 100's ###
@@ -120,53 +120,20 @@ know_assess_summary_detailed <- function(data, know_assess) {
     stringr::str_replace_all("Ana", "ANA") |>
     stringr::str_replace_all("Eic", "EIC") # Correct title casing
 
-  if (know_assess != "All Knowledge Assessments") {
-
-    n1 <- data |>
-      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "pre") |>
-      nrow()
-
-    n2 <- data |>
-      dplyr::filter(know_assess == !!rlang::enquo(know_assess) & prepost == "post") |>
-      nrow()
-
-  } else {
-
-    n1 <- data |>
-      dplyr::filter(prepost == "pre") |>
-      nrow()
-
-    n2 <- data |>
-      dplyr::filter(prepost == "post") |>
-      nrow()
-
-  }
-
-  n1 <- n1/(length(unique(data$score)) - 1)
-  n2 <- n2/(length(unique(data$score)) - 1)
-
-
-  if (length(n1) == 0) {
-    n1 <- 0
-  }
-
-  if (length(n2) == 0) {
-    n2 <- 0
-  }
 
   p <- plot_data |>
     dplyr::mutate(value = 100 * value) |>
     ggplot2::ggplot(ggplot2::aes(x = name, y = value, fill = name)) +
     ggplot2::geom_col() +
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(value), "%")),
-                       vjust = -1,
+                       vjust = -0.75,
                        fontface = "bold",
                        family = "Calibri",
                        size = 10) +
     ggplot2::facet_wrap( ~ question) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
     ggplot2::labs(x = "", y = "",
-                  title = paste0(title, "<br>% Correct <b style='color:#d17df7'>before (n = ", n1, ")</b> and <b style='color:#55bbc7'>after (n = ", n2, ")</b>")
+                  title = paste0(title, "% Correct <b style='color:#d17df7'>Before</b> and <b style='color:#55bbc7'>After</b> Per Question")
     ) +
     ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
                                 limits = c(0, 100)) +
@@ -174,7 +141,7 @@ know_assess_summary_detailed <- function(data, know_assess) {
     ggplot2::theme(
       plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 14),
       legend.position = "none",
-      strip.text = ggplot2::element_text(size = 10, face = "bold"),
+      strip.text = ggplot2::element_text(size = 11, face = "bold"),
       axis.text.x = ggplot2::element_text(face = "bold", size = 12),
       axis.text.y = ggplot2::element_text(face = "bold", size = 12))
 
