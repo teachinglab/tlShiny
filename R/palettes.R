@@ -10,7 +10,7 @@ tl_palette <- function(color = c("blue", "orange", "purple", "green", "teal", "t
                        theme = c("dark"),
                        n = 6,
                        base_color_start = NULL) {
-  if (!is.null(base_color_start)) {
+  if (is.null(base_color_start)) {
         base_color_start <- if (theme == "light") {
         "#F7FBFD"
       } else if (theme == "dark") {
