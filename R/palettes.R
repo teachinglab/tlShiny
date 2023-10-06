@@ -3,16 +3,21 @@
 #' @param theme if theme is light or dark
 #' @param n number of colors to generate
 #' @param color the color palette to generate
+#' @param base_color_start the base color of the palette to start with, ramping towards the color option
 #' @return color ramp palette function
 #' @export
 tl_palette <- function(color = c("blue", "orange", "purple", "green", "teal", "tl_colors"),
                        theme = c("dark"),
-                       n = 6) {
-  base_color_start <- if (theme == "light") {
-    "#F7FBFD"
-  } else if (theme == "dark") {
-    "#040404"
-  }
+                       n = 6,
+                       base_color_start = NULL) {
+  if (!is.null(base_color_start)) {
+        base_color_start <- if (theme == "light") {
+        "#F7FBFD"
+      } else if (theme == "dark") {
+        "#040404"
+      }
+    }
+
 
   if (color == "blue") {
     col <- grDevices::colorRampPalette(c(base_color_start, "#00acf0"))
