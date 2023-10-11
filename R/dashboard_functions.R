@@ -10,18 +10,22 @@
 #' @export
 neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
 
-  # Get quo for filtering the data
-  quo_filter <- rlang::enquo(dat_filter)
+  if (!is.null(filter_this)) {
 
-  # Get a vector of the inputs to filter minus the "All x" pattern
-  filter_this_no_all <- filter_this[filter_this != if_not_this]
+    # Get quo for filtering the data
+    quo_filter <- rlang::enquo(dat_filter)
 
-  # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
-  if (any(filter_this != if_not_this)) {
-    df <- data %>%
-      dplyr::filter(!!quo_filter %in% filter_this_no_all)
-  } else {
-    df <- data
+    # Get a vector of the inputs to filter minus the "All x" pattern
+    filter_this_no_all <- filter_this[filter_this != if_not_this]
+
+    # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
+    if (any(filter_this != if_not_this)) {
+      df <- data %>%
+        dplyr::filter(!!quo_filter %in% filter_this_no_all)
+    } else {
+      df <- data
+    }
+
   }
 
   df
