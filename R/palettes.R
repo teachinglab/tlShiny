@@ -68,3 +68,19 @@ scale_fill_tl <- function(n, color = c("blue", "orange", "purple", "green", "tea
   # ggplot2::discrete_scale("fill", "tl", tl_pal(), ...)
   ggplot2::scale_fill_manual(values = rev(tlShiny::tl_palette(color = "blue", theme = "dark", n = n)))
 }
+
+#' Teaching Lab Color Palette Maker
+#'
+#' @param n number of colors to generate
+#' @param base_color_start the base color of the palette to start with, ramping from the color option
+#' @param base_color_end the base color of the palette to end with, ramping towards the color option
+#' @return color ramp palette function
+#' @export
+tl_palette2 <- function(n = 6,
+                       base_color_start = NULL,
+                       end_color_start = NULL) {
+
+  col <- grDevices::colorRampPalette(c(base_color_start, end_color_start))
+
+  col(n)
+}
