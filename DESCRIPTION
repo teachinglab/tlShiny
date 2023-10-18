@@ -24,6 +24,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    tidytext
+    tidytext,
+    treemapify,
+    waffle
 Depends: 
     R (>= 2.10)
