@@ -506,6 +506,7 @@ student_bar_chart <- function(data,
       ggplot2::aes(
         label = paste0(round(percent), "%")
       ),
+      size = 9,
       position = ggplot2::position_dodge2(width = 1, preserve = "total"),
       hjust = -0.25,
       family = "Calibri"
@@ -528,7 +529,7 @@ student_bar_chart <- function(data,
       plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold"),
       plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.25),
       legend.key.size = grid::unit(1.2, "cm"),
-      axis.text.y = ggplot2::element_text(size = 17)
+      axis.text.y = ggplot2::element_text(size = 18)
     )
 
   print(p)
