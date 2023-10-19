@@ -596,7 +596,8 @@ session_feedback_graph <- function(data) {
                                                            "Their facilitation or coaching is clear",
                                                            "They seemed fully prepared for the session",
                                                            "They effectively built a safe learning environment",
-                                                           "They made adjustments based on participant needs"))) |>
+                                                           "They made adjustments based on participant needs")),
+                    Response = stringr::str_replace_all(Response, "Neither agree nor disagree", "Neither agree\nnor disagree")) |>
       ggplot2::ggplot(ggplot2::aes(x = Question, y = Percent, fill = factor(Response))) +
       ggplot2::geom_col(color = NA, width = 0.95, position = ggplot2::position_stack(reverse = TRUE)) +
       ggplot2::geom_text(
@@ -610,11 +611,11 @@ session_feedback_graph <- function(data) {
       ) +
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly disagree" = "#040404", "2 - Disagree" = "#032E3F",
-        "3 - Neither agree nor disagree" = "#02587A", "4 - Agree" = "#0182B4", "5 - Strongly agree" = "#00ACF0"
+        "3 - Neither agree\nnor disagree" = "#02587A", "4 - Agree" = "#0182B4", "5 - Strongly agree" = "#00ACF0"
       )) +
       ggplot2::scale_color_manual(values = c(
         "1 - Strongly disagree" = "white", "2 - Disagree" = "white",
-        "3 - Neither agree nor disagree" = "black", "4 - Agree" = "black", "5 - Strongly agree" = "black"
+        "3 - Neither agree\nnor disagree" = "black", "4 - Agree" = "black", "5 - Strongly agree" = "black"
       )) +
       ggplot2::labs(
         fill = "", title = glue::glue("Participant Perceptions of Course Facilitation (n = {format(sum(n_size_agree$n), big.mark = ',')})"),
@@ -707,7 +708,8 @@ course_feedback_graph <- function(data) {
                                                            "The strategies I’ve learned will improve my coaching or\nsupervision of teachers",
                                                            "I have applied or will apply what I have learned to my\npractice",
                                                            "The PL has supported me in being responsive to students'\nbackgrounds, cultures, and points of view.",
-                                                           "I am satisfied with the overall quality of this PL"))) |>
+                                                           "I am satisfied with the overall quality of this PL")),
+                    Response = stringr::str_replace_all(Response, "Neither agree nor disagree", "Neither agree\nnor disagree")) |>
       ggplot2::ggplot(ggplot2::aes(x = Question, y = Percent, fill = factor(Response))) +
       ggplot2::geom_col(color = NA, width = 0.95, position = ggplot2::position_stack(reverse = TRUE)) +
       ggplot2::geom_text(
@@ -721,11 +723,11 @@ course_feedback_graph <- function(data) {
       ) +
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly disagree" = "#040404", "2 - Disagree" = "#032E3F",
-        "3 - Neither agree nor disagree" = "#02587A", "4 - Agree" = "#0182B4", "5 - Strongly agree" = "#00ACF0"
+        "3 - Neither agree\nnor disagree" = "#02587A", "4 - Agree" = "#0182B4", "5 - Strongly agree" = "#00ACF0"
       )) +
       ggplot2::scale_color_manual(values = c(
         "1 - Strongly disagree" = "white", "2 - Disagree" = "white",
-        "3 - Neither agree nor disagree" = "black", "4 - Agree" = "black", "5 - Strongly agree" = "black"
+        "3 - Neither agree\nnor disagree" = "black", "4 - Agree" = "black", "5 - Strongly agree" = "black"
       )) +
       ggplot2::labs(
         fill = "", title = glue::glue("Participant Perceptions of Course (n = {format(sum(n_size_agree$n), big.mark = ',')})"),
@@ -782,10 +784,11 @@ ongoing_coaching_feedback_graph <- function(data) {
     dplyr::group_by(Question) |>
     dplyr::mutate(
       Percent = round(100 * n / sum(n), 2),
+      Response = stringr::str_replace_all(Response, "Neither agree nor disagree", "Neither agree\nnor disagree"),
       Response = factor(Response, levels = c(
         "1 - Strongly disagree",
         "2 - Disagree",
-        "3 - Neither agree nor disagree",
+        "3 - Neither agree\nnor disagree",
         "4 - Agree",
         "5 - Strongly agree"
       )),
@@ -830,14 +833,14 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly disagree" = "#040404",
         "2 - Disagree" = "#032E3F",
-        "3 - Neither agree nor disagree" = "#02587A",
+        "3 - Neither agree\nnor disagree" = "#02587A",
         "4 - Agree" = "#0182B4",
         "5 - Strongly agree" = "#00ACF0"
       )) +
       ggplot2::scale_color_manual(values = c(
         "1 - Strongly disagree" = "white",
         "2 - Disagree" = "black",
-        "3 - Neither agree nor disagree" = "black",
+        "3 - Neither agree\nnor disagree" = "black",
         "4 - Agree" = "black",
         "5 - Strongly agree" = "black"
       )) +
@@ -906,10 +909,11 @@ end_coaching_feedback_graph <- function(data) {
     dplyr::group_by(Question) |>
     dplyr::mutate(
       Percent = round(100 * n / sum(n), 2),
+      Response = stringr::str_replace_all(Response, "Neither agree nor disagree", "Neither agree\nnor disagree"),
       Response = factor(Response, levels = c(
         "1 - Strongly disagree",
         "2 - Disagree",
-        "3 - Neither agree nor disagree",
+        "3 - Neither agree\nnor disagree",
         "4 - Agree",
         "5 - Strongly agree"
       )),
@@ -961,14 +965,14 @@ end_coaching_feedback_graph <- function(data) {
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly disagree" = "#040404",
         "2 - Disagree" = "#032E3F",
-        "3 - Neither agree nor disagree" = "#02587A",
+        "3 - Neither agree\nnor disagree" = "#02587A",
         "4 - Agree" = "#0182B4",
         "5 - Strongly agree" = "#00ACF0"
       )) +
       ggplot2::scale_color_manual(values = c(
         "1 - Strongly disagree" = "white",
         "2 - Disagree" = "black",
-        "3 - Neither agree nor disagree" = "black",
+        "3 - Neither agree\nnor disagree" = "black",
         "4 - Agree" = "black",
         "5 - Strongly agree" = "black"
       )) +
