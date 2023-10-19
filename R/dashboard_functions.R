@@ -272,13 +272,13 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           color = "blue",
           n = length(unique(ggplot_data[[custom_column_name]]))
         )) +
+        ggplot2::guides(fill = ggplot2::guide_legend(override.aes = list(shape = 21, size = 10), reverse = T)) +
         ggplot2::theme_void(base_family = "Calibri") +
         ggplot2::theme(
           legend.position = "bottom",
           legend.title = ggplot2::element_blank(),
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold")
-        ) +
-        ggplot2::guides(fill = ggplot2::guide_legend(override.aes = list(shape = 21, size = 10), reverse = T))
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 20)
+        )
     } else if (viz_type == "waffle") {
       ggplot_data <- df |>
         dplyr::group_by(!!column) |>
@@ -326,10 +326,10 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         ggplot2::theme_void(base_family = "Calibri") +
         ggplot2::theme(
           legend.position = "none",
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 20),
           plot.subtitle = ggtext::element_markdown(
             hjust = 0.5, face = "italic",
-            lineheight = 1.15
+            lineheight = 1.15, size = 18
           )
         )
     } else if (viz_type == "treemap") {
@@ -371,7 +371,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         ggplot2::theme(
           legend.position = "none",
           legend.title = ggplot2::element_blank(),
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold")
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 20)
         )
     }
   } else {
