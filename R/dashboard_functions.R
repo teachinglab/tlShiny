@@ -390,7 +390,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
 grade_ipg <- function(x, type = "character") {
   x <- x[!is.na(x)]
   x <- x[!is.null(x)]
-  x <- x[!stringr::str_detect(x, "Not Observed|Not observed|NULL|NA|N/A")]
+  x <- x[!stringr::str_detect(x, "Not Observed|Not observed|NULL|NA|N/A|Not applicable|Did not observe")]
   # purrr::keep( ~ !is.null(.x)) %>%
   # purrr::keep( ~ !str_detect(.x, "Not Observed"))
 
