@@ -750,7 +750,7 @@ course_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 20),
-        legend.margin = ggplot2::margin(t = 0, l = -15, r = 0, b = 0),
+        legend.margin = ggplot2::margin(t = 0, l = -30, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1.5, "cm"),
         legend.key.height = ggplot2::unit(0.85, "cm"),
         legend.position = "bottom"
