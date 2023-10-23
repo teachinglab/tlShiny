@@ -749,7 +749,8 @@ course_feedback_graph <- function(data) {
         axis.text.y = ggplot2::element_text(size = 19, margin = margin(t = 0, l = 0, r = -20, b = 0)),
         axis.text.x = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 20, margin = margin(t = 0, l = -15, r = 0, b = 0)),
+        legend.text = ggplot2::element_text(size = 20),
+        legend.margin = ggplot2::margin(t = 0, l = -15, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1.5, "cm"),
         legend.key.height = ggplot2::unit(0.85, "cm"),
         legend.position = "bottom"
@@ -866,7 +867,8 @@ ongoing_coaching_feedback_graph <- function(data) {
                                             margin = margin(t = 0, l = 0, r = -80, b = 0)),
         axis.text.x = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 20, margin = margin(t = 0, l = -15, r = 0, b = 0)),
+        legend.text = ggplot2::element_text(size = 20),
+        legend.margin = ggplot2::margin(t = 0, l = -15, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1.5, "cm"),
         legend.key.height = ggplot2::unit(0.85, "cm"),
         legend.position = "bottom"
@@ -999,7 +1001,8 @@ end_coaching_feedback_graph <- function(data) {
         axis.text.y = ggplot2::element_text(size = 19, margin = margin(t = 0, l = 0, r = -80, b = 0)),
         axis.text.x = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 20, margin = margin(t = 0, l = -15, r = 0, b = 0)),
+        legend.text = ggplot2::element_text(size = 20),
+        legend.margin = ggplot2::margin(t = 0, l = -15, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1.5, "cm"),
         legend.key.height = ggplot2::unit(0.85, "cm"),
         legend.position = "bottom"
