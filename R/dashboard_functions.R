@@ -404,6 +404,8 @@ grade_ipg <- function(x, type = "character") {
     x <- 100 * (sum(stringr::str_detect(x, "2|3"), na.rm = T)) /
       (sum(!stringr::str_detect(x, "2|3"), na.rm = T) + sum(str_detect(x, "2|3"), na.rm = T))
   }
+
+  x
 }
 
 #' @title Get the percent of a column that equals specific values
