@@ -457,7 +457,7 @@ student_bar_chart <- function(data,
     dplyr::group_by(prepost) |>
     dplyr::summarise(dplyr::across(dplyr::everything(), ~ tlShiny::tl_select_percent(.x, agree_select))) |>
     tidyr::drop_na(prepost) |>
-    (\(.) dplyr::mutate(., Overall = rowMeans(select(., -prepost))))()
+    (\(.) if (ncol(.) > 2) dplyr::mutate(., Overall = rowMeans(select(., -prepost))) else .)()
 
   ### Reformat dataframe and prep for ggplot2
   student_data_percent <- student_data_summarised |>
@@ -532,8 +532,8 @@ student_bar_chart <- function(data,
     glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
   }
 
-  p <- ggplot2::ggplot(student_data_percent, aes(x = forcats::fct_relevel(question, "Overall", after = length(question)), y = percent, fill = prepost)) +
-    ggplot2::geom_col(position = position_dodge()) +
+  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(question, "Overall", after = length(question)), y = percent, fill = prepost)) +
+    ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_text(
       ggplot2::aes(
         label = paste0(round(percent), "%")
