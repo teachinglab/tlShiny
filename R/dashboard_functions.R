@@ -903,7 +903,7 @@ ongoing_coaching_feedback_graph <- function(data) {
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -25, l = -130, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -25, l = -160, r = 0, b = 0)
       )
 
     print(p)
