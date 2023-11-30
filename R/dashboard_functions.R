@@ -1062,8 +1062,8 @@ end_coaching_feedback_graph <- function(data) {
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = -0.1),
         legend.text = ggplot2::element_text(size = 13.4),
         legend.margin = ggplot2::margin(t = -25, l = -100, r = 0, b = 0),
-        legend.key.width = ggplot2::unit(1, "cm"),
-        legend.key.height = ggplot2::unit(0.5695, "cm"),
+        legend.key.width = ggplot2::unit(0.8, "cm"),
+        legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
       )
 
