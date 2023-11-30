@@ -666,7 +666,7 @@ session_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
         axis.text.x = ggplot2::element_text(size = 10),
-        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = 0.47),
+        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 13.4),
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
@@ -898,7 +898,7 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
         axis.text.x = ggplot2::element_text(size = 10),
-        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = 0.47),
+        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 13.4),
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
