@@ -779,13 +779,13 @@ course_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -20, b = 0)),
+        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -10, b = 0)),
         axis.text.x = ggplot2::element_text(size = 8),
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 13.4),
-        legend.margin = ggplot2::margin(t = -25, l = -110, r = 0, b = 0),
-        legend.key.width = ggplot2::unit(1, "cm"),
-        legend.key.height = ggplot2::unit(0.5695, "cm"),
+        legend.text = ggplot2::element_text(size = 10),
+        legend.margin = ggplot2::margin(t = -25, l = -125, r = 0, b = 0),
+        legend.key.width = ggplot2::unit(0.8, "cm"),
+        legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
       )
 
@@ -832,7 +832,11 @@ ongoing_coaching_feedback_graph <- function(data) {
         "4 - Agree",
         "5 - Strongly\nagree"
       )),
-      Question = stringr::str_wrap(Question, width = 60)
+      Question = stringr::str_replace_all(Question,
+                                          c("They demonstrated deep knowledge of the content they coach" = "They demonstrated deep knowledge\nof the content they coach",
+                                            "They seem fully prepared for the coaching sessions" = "They seem fully prepared for the\ncoaching sessions",
+                                            "They effectively build a safe learning environment" = "They effectively build a safe\nlearning environment",
+                                            "They make necessary adjustments based on my needs" = "They make necessary adjustments based\non my needs"))
     )
 
   if (nrow(coaching_plot_agree) >= 1) {
@@ -843,11 +847,11 @@ ongoing_coaching_feedback_graph <- function(data) {
     p <- coaching_plot_agree |>
       dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
-        Question = factor(Question, levels = c("They demonstrated deep knowledge of the content they coach",
+        Question = factor(Question, levels = c("They demonstrated deep knowledge\nof the content they coach",
                                                "Their coaching is clear",
-                                               "They seem fully prepared for the coaching sessions",
-                                               "They effectively build a safe learning environment",
-                                               "They make necessary adjustments based on my needs"))
+                                               "They seem fully prepared for the\ncoaching sessions",
+                                               "They effectively build a safe\nlearning environment",
+                                               "They make necessary adjustments based\non my needs"))
       ) |>
       ggplot2::ggplot(ggplot2::aes(
         x = Question,
@@ -863,7 +867,7 @@ ongoing_coaching_feedback_graph <- function(data) {
         ),
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        size = 5.5
+        size = 5
       ) +
       ggplot2::labs(
         x = "", y = "",
@@ -896,12 +900,12 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
-        axis.text.x = ggplot2::element_text(size = 10),
+        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -10, b = 0)),
+        axis.text.x = ggplot2::element_text(size = 8),
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 13.4),
-        legend.key.width = ggplot2::unit(1, "cm"),
-        legend.key.height = ggplot2::unit(0.5695, "cm"),
+        legend.text = ggplot2::element_text(size = 11),
+        legend.key.width = ggplot2::unit(0.8, "cm"),
+        legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
         legend.margin = ggplot2::margin(t = -25, l = -160, r = 0, b = 0)
       )
@@ -997,7 +1001,7 @@ end_coaching_feedback_graph <- function(data) {
         ),
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        size = 5.5
+        size = 5
       ) +
       ggplot2::labs(
         x = "", y = "",
