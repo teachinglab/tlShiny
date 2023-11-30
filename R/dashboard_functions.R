@@ -671,7 +671,7 @@ session_feedback_graph <- function(data) {
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -50, l = -80, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -25, l = -100, r = 0, b = 0)
       )
 
     print(p)
@@ -779,11 +779,11 @@ course_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -20, b = 0)),
-        axis.text.x = ggplot2::element_text(size = 10),
+        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -20, b = 0)),
+        axis.text.x = ggplot2::element_text(size = 8),
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 13.4),
-        legend.margin = ggplot2::margin(t = -50, l = -80, r = 0, b = 0),
+        legend.margin = ggplot2::margin(t = -25, l = -110, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom"
@@ -896,14 +896,14 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -80, b = 0)),
+        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
         axis.text.x = ggplot2::element_text(size = 10),
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = 0.47),
         legend.text = ggplot2::element_text(size = 13.4),
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -50, l = -80, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -35, l = -100, r = 0, b = 0)
       )
 
     print(p)
@@ -1030,11 +1030,11 @@ end_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -80, b = 0)),
-        axis.text.x = ggplot2::element_text(size = 10),
+        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -10, b = 0)),
+        axis.text.x = ggplot2::element_text(size = 8),
         plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 13.4),
-        legend.margin = ggplot2::margin(t = -50, l = -80, r = 0, b = 0),
+        legend.margin = ggplot2::margin(t = -50, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(1, "cm"),
         legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom"
