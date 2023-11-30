@@ -607,9 +607,10 @@ session_feedback_graph <- function(data) {
     dplyr::count() |>
     dplyr::ungroup() |>
     dplyr::group_by(Question) |>
-    dplyr::mutate(Question = stringr::str_replace_all(Question, c("They demonstrated deep knowledge of the content they facilitated" = "They demonstrated deep knowledge of the\ncontent they facilitated",
+    dplyr::mutate(Question = stringr::str_replace_all(Question, c("They demonstrated deep knowledge of the content they facilitated" = "They demonstrated deep knowledge of\nthe content they facilitated",
                                                                   "They effectively built a safe learning environment" = "They effectively built a safe learning\nenvironment",
-                                                                  "They made adjustments based on participant needs" = "They made adjustments based on participant\nneeds"))) |>
+                                                                  "They seemed fully prepared for the session" = "They seemed fully prepared for the\nsession",
+                                                                  "They made adjustments based on participant needs" = "They made adjustments based on\nparticipant needs"))) |>
     dplyr::reframe(
       n = n,
       Response = Response,
@@ -626,11 +627,11 @@ session_feedback_graph <- function(data) {
     p <- plot_agree |>
       dplyr::group_by(Question, Response) |>
       dplyr::summarise(Percent = weighted.mean(Percent, n)) |>
-      dplyr::mutate(Question = factor(Question, levels = c("They demonstrated deep knowledge of the\ncontent they facilitated",
+      dplyr::mutate(Question = factor(Question, levels = c("They demonstrated deep knowledge of\nthe content they facilitated",
                                                            "Their facilitation or coaching is clear",
                                                            "They seemed fully prepared for the session",
                                                            "They effectively built a safe learning\nenvironment",
-                                                           "They made adjustments based on participant\nneeds")),
+                                                           "They made adjustments based on\nparticipant needs")),
                     Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
                                                                     "Strongly agree" = "Strongly\nagree",
                                                                     "Strongly disagree" = "Strongly\ndisagree"))) |>
@@ -717,15 +718,15 @@ course_feedback_graph <- function(data) {
     dplyr::ungroup() |>
     dplyr::group_by(Question) |>
     dplyr::mutate(Question = stringr::str_replace_all(Question, c("I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                                                  "The activities were well-designed to help me meet the\nlearning targets" = "The activities were well-designed\nto help me meet the\nlearning targets",
+                                                                  "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the\nlearning targets",
                                                                   "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
                                                                   "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
                                                                   "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
                                                                   "The PL was relevant to my instructional practices" = "The PL was relevant to my instructional\npractices",
                                                                   "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
-                                                                  "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision of teachers",
+                                                                  "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                                   "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
-                                                                  "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds, cultures,\nand points of view.",
+                                                                  "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures, and points of view.",
                                                                   "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"))) |>
     dplyr::reframe(
       n = n,
@@ -752,9 +753,9 @@ course_feedback_graph <- function(data) {
                                                            "I felt a sense of community with\ntheother participants in this course",
                                                            "The PL was relevant to my instructional\npractices",
                                                            "The strategies I’ve learned will\nimprove my instruction",
-                                                           "The strategies I’ve learned will\nimprove my coaching or supervision of teachers",
+                                                           "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                            "I have applied or will apply what\nI have learned to my practice",
-                                                           "The PL has supported me in being\nresponsive to students' backgrounds, cultures,\nand points of view.",
+                                                           "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures,and points of view.",
                                                            "I am satisfied with the overall\nquality of this PL")),
                     Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
                                                                     "Strongly agree" = "Strongly\nagree",
@@ -976,15 +977,15 @@ end_coaching_feedback_graph <- function(data) {
         "5 - Strongly\nagree"
       )),
       Question = stringr::str_replace_all(Question, c("I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                                      "The activities were well-designed to help me meet the\nlearning targets" = "The activities were well-designed\nto help me meet the\nlearning targets",
+                                                      "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the\nlearning targets",
                                                       "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
                                                       "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
                                                       "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
                                                       "The PL was relevant to my instructional practices" = "The PL was relevant to my instructional\npractices",
                                                       "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
-                                                      "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision of teachers",
+                                                      "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                       "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
-                                                      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds, cultures,\nand points of view.",
+                                                      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures, and points of view.",
                                                       "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"))
     )
 
@@ -1004,9 +1005,9 @@ end_coaching_feedback_graph <- function(data) {
                                                "I felt a sense of community with\ntheother participants in this course",
                                                "The PL was relevant to my instructional\npractices",
                                                "The strategies I’ve learned will\nimprove my instruction",
-                                               "The strategies I’ve learned will\nimprove my coaching or supervision of teachers",
+                                               "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                "I have applied or will apply what\nI have learned to my practice",
-                                               "The PL has supported me in being\nresponsive to students' backgrounds, cultures,\nand points of view.",
+                                               "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures,and points of view.",
                                                "I am satisfied with the overall\nquality of this PL"))
       ) |>
       ggplot2::ggplot(ggplot2::aes(
