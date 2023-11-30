@@ -664,12 +664,12 @@ session_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 19, margin = margin(t = 0, l = 0, r = -10, b = 0)),
-        axis.text.x = ggplot2::element_text(size = 15),
-        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold", hjust = 0.47),
-        legend.text = ggplot2::element_text(size = 20),
-        legend.key.width = ggplot2::unit(1.5, "cm"),
-        legend.key.height = ggplot2::unit(0.85, "cm"),
+        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
+        axis.text.x = ggplot2::element_text(size = 10),
+        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = 0.47),
+        legend.text = ggplot2::element_text(size = 13.4),
+        legend.key.width = ggplot2::unit(1, "cm"),
+        legend.key.height = ggplot2::unit(0.5695, "cm"),
         legend.position = "bottom"
       )
 
