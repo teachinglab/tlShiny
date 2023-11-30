@@ -639,7 +639,7 @@ session_feedback_graph <- function(data) {
           label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
           color = Response
         ),
-        size = 5.5,
+        size = 5,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold"
       ) +
@@ -664,14 +664,14 @@ session_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 14.2, margin = margin(t = 0, l = 0, r = -10, b = 0)),
-        axis.text.x = ggplot2::element_text(size = 10),
-        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 13.4),
-        legend.key.width = ggplot2::unit(1, "cm"),
-        legend.key.height = ggplot2::unit(0.5695, "cm"),
+        axis.text.y = ggplot2::element_text(size = 11, margin = margin(t = 0, l = 0, r = -10, b = 0)),
+        axis.text.x = ggplot2::element_text(size = 8),
+        plot.title = ggplot2::element_text(size = 16.75, face = "bold", family = "Calibri Bold", hjust = 0),
+        legend.text = ggplot2::element_text(size = 10),
+        legend.key.width = ggplot2::unit(0.8, "cm"),
+        legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -25, l = -100, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -25, l = -125, r = 0, b = 0)
       )
 
     print(p)
