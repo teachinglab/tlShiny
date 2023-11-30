@@ -655,7 +655,7 @@ session_feedback_graph <- function(data) {
         "3 - Neither agree\nnor disagree" = "black", "4 - Agree" = "black", "5 - Strongly\nagree" = "black"
       )) +
       ggplot2::labs(
-        fill = "", title = glue::glue("Participant Perceptions of Course Facilitation (n = {format(sum(n_size_agree$n), big.mark = ',')})"),
+        fill = "", title = glue::glue("Participant Perceptions of Facilitation (n = {format(sum(n_size_agree$n), big.mark = ',')})"),
         x = "", y = ""
       ) +
       ggplot2::coord_flip() +
@@ -985,7 +985,7 @@ end_coaching_feedback_graph <- function(data) {
                                                       "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
                                                       "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                       "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
-                                                      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures, and points of view.",
+                                                      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures, and points of view",
                                                       "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"))
     )
 
@@ -1002,12 +1002,12 @@ end_coaching_feedback_graph <- function(data) {
                                                "I am satisfied with how the sessions\nwere facilitated",
                                                "This PL was a good use of my time",
                                                "I talk to other teachers about the\nthings I learned in this PL",
-                                               "I felt a sense of community with\ntheother participants in this course",
+                                               "I felt a sense of community with\nthe other participants in this course",
                                                "The PL was relevant to my instructional\npractices",
                                                "The strategies I’ve learned will\nimprove my instruction",
                                                "The strategies I’ve learned will\nimprove my coaching or supervision\nof teachers",
                                                "I have applied or will apply what\nI have learned to my practice",
-                                               "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures,and points of view.",
+                                               "The PL has supported me in being\nresponsive to students' backgrounds,\ncultures, and points of view",
                                                "I am satisfied with the overall\nquality of this PL"))
       ) |>
       ggplot2::ggplot(ggplot2::aes(
