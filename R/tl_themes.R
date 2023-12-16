@@ -171,18 +171,18 @@ theme_tl <- function(base_family = "Calibri",
 #' @importFrom magrittr %>%
 #'
 #' @examples
-#' mtcars %>% utils::head() %>% gt::gt() %>% tlShiny::gt_theme_tl()
+#' mtcars |> utils::head() |> gt::gt() |> tlShiny::gt_theme_tl()
 #' @export
 
 gt_theme_tl <- function(data, all_caps = F, align = "center", base_font = 16, heading_font = 20, ...) {
-  data %>%
-    gt::opt_all_caps(all_caps = all_caps) %>%
+  data |>
+    gt::opt_all_caps(all_caps = all_caps) |>
     gt::opt_table_font(
       font = list(
         gt::google_font("Calibri"),
         gt::default_fonts()
       )
-    ) %>%
+    ) |>
     # gt::tab_style(
     #   style = list(
     #     gt::cell_borders(
@@ -208,9 +208,9 @@ gt_theme_tl <- function(data, all_caps = F, align = "center", base_font = 16, he
       columns = gt::everything(),
       rows = gt::everything()
     )
-  ) %>%
+  ) |>
     # Set default to center align everything
-    gt::cols_align(align = "center") %>%
+    gt::cols_align(align = "center") |>
     gt::tab_options(
       column_labels.background.color = "white",
       table.border.top.width = gt::px(3),
