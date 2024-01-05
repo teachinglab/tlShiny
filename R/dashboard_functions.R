@@ -702,7 +702,7 @@ session_feedback_graph <- function(data) {
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -20, l = -90, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -20, l = -110, r = 0, b = 0)
       )
 
     print(p)
@@ -825,7 +825,7 @@ course_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
         legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
-        legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
+        legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
@@ -950,7 +950,7 @@ ongoing_coaching_feedback_graph <- function(data) {
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0)
       )
 
     print(p)
@@ -1092,7 +1092,7 @@ end_coaching_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
         legend.text = ggplot2::element_text(size = 11, lineheight = 0.6),
-        legend.margin = ggplot2::margin(t = -20, l = -80, r = 0, b = 0),
+        legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
