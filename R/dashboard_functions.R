@@ -669,7 +669,7 @@ session_feedback_graph <- function(data) {
           label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
           color = Response
         ),
-        size = 8,
+        size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         family = "Calibri Bold"
@@ -695,10 +695,10 @@ session_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 16, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
-        axis.text.x = ggplot2::element_text(size = 11),
-        plot.title = ggplot2::element_text(size = 23, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 15, lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.x = ggplot2::element_text(size = 9),
+        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
@@ -795,7 +795,7 @@ course_feedback_graph <- function(data) {
           label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
           color = Response
         ),
-        size = 8,
+        size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         family = "Calibri Bold"
@@ -821,10 +821,10 @@ course_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 18, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
-        axis.text.x = ggplot2::element_text(size = 11),
-        plot.title = ggplot2::element_text(size = 23, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 16, lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.x = ggplot2::element_text(size = 9),
+        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
@@ -909,7 +909,7 @@ ongoing_coaching_feedback_graph <- function(data) {
         ),
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        size = 8,
+        size = 6,
         family = "Calibri Bold"
       ) +
       ggplot2::labs(
@@ -943,10 +943,10 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 18, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
-        axis.text.x = ggplot2::element_text(size = 11),
-        plot.title = ggplot2::element_text(size = 23, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 15, lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.x = ggplot2::element_text(size = 9),
+        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
@@ -1054,7 +1054,7 @@ end_coaching_feedback_graph <- function(data) {
         ),
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        size = 10,
+        size = 6,
         family = "Calibri Bold"
       ) +
       ggplot2::labs(
@@ -1088,10 +1088,10 @@ end_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 18, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
-        axis.text.x = ggplot2::element_text(size = 11),
-        plot.title = ggplot2::element_text(size = 23, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 16, lineheight = 0.6),
+        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.x = ggplot2::element_text(size = 9),
+        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.6),
         legend.margin = ggplot2::margin(t = -20, l = -80, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
