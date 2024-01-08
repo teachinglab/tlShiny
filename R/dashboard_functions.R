@@ -699,14 +699,14 @@ session_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
-        legend.spacing = ggplot2::unit(0.5, "cm"),
+        legend.spacing = ggplot2::unit(0.7, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
-        legend.margin = ggplot2::margin(t = -20, l = -110, r = 0, b = 0)
+        legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0)
       )
 
-    print(p)
+    p
 
   } else {
     tlShiny:::no_data_plot_filters
@@ -826,14 +826,14 @@ course_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
         legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
-        legend.spacing = ggplot2::unit(0.5, "cm"),
+        legend.spacing = ggplot2::unit(0.7, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
       )
 
-    print(p)
+    p
 
   } else {
     tlShiny:::no_data_plot_filters
@@ -949,14 +949,14 @@ ongoing_coaching_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
         legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
-        legend.spacing = ggplot2::unit(0.5, "cm"),
+        legend.spacing = ggplot2::unit(0.7, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom",
         legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0)
       )
 
-    print(p)
+    p
 
   } else {
     tlShiny:::no_data_plot_filters
@@ -1095,14 +1095,14 @@ end_coaching_feedback_graph <- function(data) {
         axis.text.x = ggplot2::element_text(size = 9),
         plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
         legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.6),
-        legend.spacing = ggplot2::unit(0.5, "cm"),
+        legend.spacing = ggplot2::unit(0.7, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
         legend.position = "bottom"
       )
 
-    print(p)
+    p
 
   } else {
     tlShiny:::no_data_plot_filters
