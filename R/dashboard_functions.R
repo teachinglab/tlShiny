@@ -157,14 +157,14 @@ file.path2 <- function(..., fsep = .Platform$file.sep) {
 #' @description A plot that says no data available, and to check your filters
 #' @export
 no_data_plot_filters <- ggplot2::ggplot(data.frame(text = "No data available for this set of filters,\ncheck what you have set!", x = 0, y = 0)) +
-  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10) +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
   ggplot2::theme_void()
 
 #' @title No Data Plot
 #' @description A plot that says no data available yet this year
 #' @export
 no_data_plot_currently <- ggplot2::ggplot(data.frame(text = "No data available yet this year!", x = 0, y = 0)) +
-  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10) +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
   ggplot2::theme_void()
 
 #' @title GT or ggplot maker
@@ -465,6 +465,7 @@ student_bar_chart <- function(data,
     tidyr::pivot_longer(!prepost, names_to = "question", values_to = "percent") |>
     tidyr::drop_na(percent) |>
     dplyr::mutate(
+      negative = ifelse(question %in% c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8", "happiness_belonging_3"), TRUE, FALSE),
       question = stringr::str_replace_all(question, c("crse_1" = "My teacher explains what we are learning in different ways",
                                                       "crse_2" = "My teacher wants students from different cultures to respect one another",
                                                       "crse_3" = "My teacher uses what I already know to help me understand new ideas",
@@ -549,6 +550,7 @@ student_bar_chart <- function(data,
                                                       "overall_experience_2" = "Overall, most of the time, I’m learning a lot in this class.")),
       question = stringr::str_remove_all(question, string_remove),
       question = stringr::str_wrap(question, 40),
+      question = ifelse(negative == TRUE, paste0("<span style = 'color:red;'>", question, "</span>"), question),
       percent = percent * 100
     )
 
@@ -589,8 +591,9 @@ student_bar_chart <- function(data,
       plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30),
       plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.25, size = 24),
       legend.key.size = grid::unit(1.2, "cm"),
-      axis.text.y = ggplot2::element_text(size = 23),
-      axis.text.x = ggplot2::element_text(size = 18)
+      axis.text.y = ggtext::element_markdown(size = 23),
+      axis.text.x = ggplot2::element_text(size = 18),
+      text = ggtext::element_markdown(family = "Calibri")
     )
 
   print(p)
