@@ -593,7 +593,7 @@ student_bar_chart <- function(data,
       plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.25, size = 24),
       legend.key.size = grid::unit(1.2, "cm"),
       axis.text.y = ggtext::element_markdown(size = 23),
-      axis.text.x = ggplot2::element_markdown(size = 18),
+      axis.text.x = ggtext::element_markdown(size = 18),
       text = ggtext::element_markdown(family = "Calibri")
     )
 
