@@ -589,13 +589,16 @@ student_bar_chart <- function(data,
     ggplot2::coord_flip() +
     # tlShiny::theme_tl(legend = F,
     #                   markdown = TRUE) +
-    ggplot2::theme_minimal() +
     ggplot2::theme(
       plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30, hjust = 0.5),
       plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20),
       legend.position = "none",
       axis.text.y = ggtext::element_markdown(size = 23),
-      axis.text.x = ggtext::element_markdown(size = 18)
+      axis.text.x = ggtext::element_markdown(size = 18),
+      plot.background = ggplot2::element_rect(fill = "white"),
+      panel.background = ggplot2::element_rect(fill = "white"),
+      panel.grid.minor.x = ggplot2::element_line(color = "gray40"),
+      panel.grid.major.y = ggplot2::element_line(color = "gray90")
     )
 
   print(p)
