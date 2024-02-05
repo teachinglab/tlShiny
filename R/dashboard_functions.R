@@ -458,7 +458,7 @@ student_bar_chart <- function(data,
     dplyr::group_by(prepost) |>
     dplyr::summarise(dplyr::across(dplyr::everything(), ~ tlShiny::tl_select_percent(.x, agree_select))) |>
     tidyr::drop_na(prepost) |>
-    (\(.) if (ncol(.) > 2) dplyr::mutate(., Overall = rowMeans(select(., -prepost))) else .)()
+    (\(.) if (ncol(.) > 2) dplyr::mutate(., Overall = rowMeans(dplyr::select(., -prepost))) else .)()
 
   ### Reformat dataframe and prep for ggplot2
   student_data_percent <- student_data_summarised |>
@@ -560,7 +560,8 @@ student_bar_chart <- function(data,
     glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
   }
 
-  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(question, "Overall", after = length(question)), y = percent, fill = prepost)) +
+  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "Overall", after = length(question)),
+                                                          y = percent, fill = prepost)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_text(
       ggplot2::aes(
@@ -590,11 +591,10 @@ student_bar_chart <- function(data,
                       markdown = TRUE) +
     ggplot2::theme(
       plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30),
-      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.25, size = 24),
+      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.1, size = 24),
       legend.key.size = grid::unit(1.2, "cm"),
       axis.text.y = ggtext::element_markdown(size = 23),
-      axis.text.x = ggtext::element_markdown(size = 18),
-      text = ggtext::element_markdown(family = "Calibri")
+      axis.text.x = ggtext::element_markdown(size = 18)
     )
 
   print(p)
