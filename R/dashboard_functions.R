@@ -549,7 +549,7 @@ student_bar_chart <- function(data,
                                                       "overall_experience_1" = "Overall, most of the time, I love this class.",
                                                       "overall_experience_2" = "Overall, most of the time, I’m learning a lot in this class.")),
       question = stringr::str_remove_all(question, string_remove),
-      question = stringr::str_wrap(question, 40),
+      question = tlShiny::html_wrap(question, 35),
       question = ifelse(negative == TRUE, paste0("<span style = 'color:red;'>", question, "</span>"), question),
       percent = percent * 100
     )
@@ -589,10 +589,11 @@ student_bar_chart <- function(data,
     ggplot2::coord_flip() +
     # tlShiny::theme_tl(legend = F,
     #                   markdown = TRUE) +
+    ggplot2::theme_minimal() +
     ggplot2::theme(
-      plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30),
-      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0.1, size = 24),
-      legend.key.size = grid::unit(1.2, "cm"),
+      plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30, hjust = 0.5),
+      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20),
+      legend.position = "none",
       axis.text.y = ggtext::element_markdown(size = 23),
       axis.text.x = ggtext::element_markdown(size = 18)
     )
