@@ -453,12 +453,34 @@ student_bar_chart <- function(data,
 
   ### Makes race column, selects relevant columns and gets percent
   ### that selected relevant levels of agreeness
+  negative_data <- data |>
+    (\(.) if (col_select == "mses_a6") dplyr::select(., mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost) else .)() |>
+    (\(.) if (col_select == "happiness_belonging") dplyr::select(., happiness_belonging_3, prepost) else .)() |>
+    dplyr::group_by(prepost) |>
+    dplyr::summarise(dplyr::across(dplyr::everything(), ~ tlShiny::tl_select_percent(.x, c("1 - Not at all like me 👎👎", "2 - Not much like me 👎", "1 - Disagree", "2 - Somewhat disagree")))) |>
+    dplyr::ungroup() |>
+    tidyr::drop_na(prepost)
+
   student_data_summarised <- data |>
     dplyr::select(tidyselect::contains(col_select), prepost) |>
     dplyr::group_by(prepost) |>
     dplyr::summarise(dplyr::across(dplyr::everything(), ~ tlShiny::tl_select_percent(.x, agree_select))) |>
     tidyr::drop_na(prepost) |>
     (\(.) if (ncol(.) > 2) dplyr::mutate(., Overall = rowMeans(dplyr::select(., -prepost))) else .)()
+
+  if (col_select == "happiness_belonging") {
+    student_data_summarised$Overall[student_data_summarised$prepost == "Pre"] <- mean(c(negative_data$happiness_belonging_3[negative_data$prepost == "Pre"], subset(student_data_summarised, select = -c(happiness_belonging_3, prepost))[1, ] |> as.vector() |> as.numeric()))
+    if ("Post" %in% student_data_summarised$prepost) {
+      student_data_summarised$Overall[student_data_summarised$prepost == "Post"] <- mean(c(negative_data$happiness_belonging_3[negative_data$prepost == "Post"], subset(student_data_summarised, select = -c(happiness_belonging_3, prepost))[2, ] |> as.vector() |> as.numeric()))
+    }
+  }
+
+  if (col_select == "mses_a6") {
+    student_data_summarised$Overall[student_data_summarised$prepost == "Pre"] <- mean(c(as.numeric(negative_data[negative_data$prepost == "Pre"][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[1, ] |> as.vector() |> as.numeric()))
+    if ("Post" %in% student_data_summarised$prepost) {
+      student_data_summarised$Overall[student_data_summarised$prepost == "Post"] <- mean(c(as.numeric(negative_data[negative_data$prepost == "Pre"][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[2, ] |> as.vector() |> as.numeric()))
+    }
+  }
 
   ### Reformat dataframe and prep for ggplot2
   student_data_percent <- student_data_summarised |>
