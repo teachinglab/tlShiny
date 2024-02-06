@@ -560,7 +560,7 @@ student_bar_chart <- function(data,
     glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
   }
 
-  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "Overall", after = length(question)),
+  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "<span style = 'color:black;'>Overall</span>", after = length(question)),
                                                           y = percent, fill = prepost)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_text(
@@ -594,14 +594,14 @@ student_bar_chart <- function(data,
       plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20, color = "black"),
       legend.position = "none",
       axis.text.y = ggtext::element_markdown(size = 23),
-      axis.text.x = ggtext::element_markdown(size = 18),
+      axis.text.x = ggtext::element_markdown(size = 18, color = "black"),
       plot.background = ggplot2::element_rect(fill = "white"),
       panel.background = ggplot2::element_rect(fill = "white"),
       panel.grid.minor.x = ggplot2::element_line(color = "gray40"),
       panel.grid.major.y = ggplot2::element_line(color = "gray90")
     )
 
-  print(p)
+  suppressWarnings(print(p))
 
 }
 
