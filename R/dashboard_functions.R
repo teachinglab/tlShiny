@@ -1149,7 +1149,7 @@ end_coaching_feedback_graph <- function(data) {
 get_percent_positive_student_survey <- function(data) {
 
   all_data <- data |>
-    dplyr::select(tidyselect::matches("crse|teacher_student|self_efficacy|happiness_belonging|being_challenged|growth_mindsets|math_enjoyment|mses}math_a7|high_exp|rig_learn|relevance|affirm|connect_one|custom_one|asd_one|asd_two|overall_experience"), prepost) |>
+    dplyr::select(tidyselect::matches("crse|teacher_student|self_efficacy|happiness_belonging|being_challenged|growth_mindsets|math_enjoyment|mses|math_a7|high_exp|rig_learn|relevance|affirm|connect_one|custom_one|asd_one|asd_two|overall_experience"), prepost) |>
     dplyr::group_by(prepost) |>
     dplyr::summarise(dplyr::across(dplyr::matches("crse"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Often", "5 - Always"))),
                      dplyr::across(dplyr::matches("happiness_belonging_3"), ~ TeachingLab:::tl_select_percent(.x, c("1 - Disagree", "2 - Somewhat disagree"))),
