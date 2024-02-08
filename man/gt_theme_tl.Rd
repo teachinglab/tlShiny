@@ -33,5 +33,5 @@ Creates a gt theme as a pipeable function
 Create Teaching Lab theme to a gt table
 }
 \examples{
-mtcars \%>\% utils::head() \%>\% gt::gt() \%>\% tlShiny::gt_theme_tl()
+mtcars |> utils::head() |> gt::gt() |> tlShiny::gt_theme_tl()
 }

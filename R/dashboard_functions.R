@@ -1138,3 +1138,43 @@ end_coaching_feedback_graph <- function(data) {
     tlShiny:::no_data_plot_filters
   }
 }
+
+
+
+#' @title Get % positive on any of the student surveys
+#' @description Uses column names and finds the % in each attributed to positive answers (or negative if reverse coded), summarises by prepost
+#' @param data the data to use
+#' @return a tibble
+#' @export
+get_percent_positive_student_survey <- function(data) {
+
+  all_data <- data |>
+    dplyr::select(tidyselect::matches("crse|teacher_student|self_efficacy|happiness_belonging|being_challenged|growth_mindsets|math_enjoyment|mses}math_a7|high_exp|rig_learn|relevance|affirm|connect_one|custom_one|asd_one|asd_two|overall_experience"), prepost) |>
+    dplyr::group_by(prepost) |>
+    dplyr::summarise(dplyr::across(dplyr::matches("crse"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Often", "5 - Always"))),
+                     dplyr::across(dplyr::matches("happiness_belonging_3"), ~ TeachingLab:::tl_select_percent(.x, c("1 - Disagree", "2 - Somewhat disagree"))),
+                     dplyr::across(dplyr::matches("teacher_student_rel|self_efficacy|happiness_belonging_1|happiness_belonging_2|happiness_belonging_4|happiness_belonging_5|happiness_belonging_6"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Somewhat agree", "5 - Agree", "5 - Agree 👍", "6 - Strongly agree 👍👍"))),
+                     dplyr::across(dplyr::matches("being_challenged"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Mostly true", "5 - Totally true"))),
+                     dplyr::across(dplyr::matches("growth_mindsets_a1"), ~ TeachingLab:::tl_select_percent(.x, c("1 - Strongly Disagree  👎👎", "2 - Disagree 👎"))),
+                     dplyr::across(dplyr::matches("growth_mindsets_a2"), ~ TeachingLab:::tl_select_percent(.x, c("Very true 👍", "Extremely true 👍👍"))),
+                     dplyr::across(dplyr::matches("growth_mindsets_a3"), ~ TeachingLab:::tl_select_percent(.x, c("Agree 👍", "Strongly agree 👍👍"))),
+                     dplyr::across(dplyr::matches("math_enjoyment_a5"), ~ TeachingLab:::tl_select_percent(.x, c("1 - Agree a lot 👍👍", "2 - Agree a little 👍"))),
+                     dplyr::across(c("mses_a6_3", "mses_a6_9", "mses_a6_8", "mses_a6_1"), ~ TeachingLab:::tl_select_percent(.x, c("1 - Not at all like me 👎👎", "2 - Not much like me 👎"))),
+                     dplyr::across(c("mses_a6_2", "mses_a6_4", "mses_a6_5", "mses_a6_6", "mses_a6_7", "mses_a6_9", , "mses_a6_10", , "mses_a6_11", "mses_a6_12", "mses_a6_13"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Mostly like me 👍", "5 - Very much like me 👍👍"))),
+                     dplyr::across(dplyr::matches("math_a7"), ~ TeachingLab:::tl_select_percent(.x, c("3 - Some of the time 👍", "4 - Most or all of the time 👍👍"))),
+                     dplyr::across(dplyr::matches("high_exp_one|rig_learn_one|relevance_two|affirm|connect_one|custom_two|asd_two|overall_experience"), ~ TeachingLab:::tl_select_percent(.x, c("4 - Agree 👍", "5 - Strongly Agree 👍 👍"))),
+                     dplyr::across(dplyr::matches("high_exp_two"), ~ TeachingLab:::tl_select_percent(.x, c("Very likely 👍", "Extremely likely 👍👍"))),
+                     dplyr::across(dplyr::matches("rig_learn_two|relevance_one|custom_one|asd_one"), ~ TeachingLab:::tl_select_percent(.x, c("Often 👍", "Almost always 👍👍"))),
+                     dplyr::across(dplyr::matches("connect_two"), ~ TeachingLab:::tl_select_percent(.x, c("Mostly belong 👍", "Completely belong 👍👍"))),
+                     n = dplyr::n()) |>
+    tidyr::drop_na(prepost) |>
+    tidyr::pivot_longer(!c(prepost, n), names_to = "grouping", values_to = "score")
+
+  all_data |>
+    dplyr::group_by(prepost) |>
+    dplyr::reframe(
+      score = round(100 * mean(score), 2),
+      n = dplyr::first(n)
+    )
+
+}
