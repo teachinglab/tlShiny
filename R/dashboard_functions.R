@@ -1173,7 +1173,7 @@ get_percent_positive_student_survey <- function(data) {
   all_data |>
     dplyr::group_by(prepost) |>
     dplyr::reframe(
-      score = round(100 * mean(score), 2),
+      score = round(100 * mean(score, na.rm = TRUE), 2),
       n = dplyr::first(n)
     )
 
