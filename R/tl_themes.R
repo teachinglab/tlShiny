@@ -1,7 +1,6 @@
 #' @title Teaching Lab Custom Ggplot2 Theme
 #'
-#'
-#' It requires installing Roboto, Calibri fonts unless you change the font parameters
+#' @note It requires installing Roboto, Calibri fonts unless you change the font parameters
 #'
 #' \url{https://www.google.com/fonts}
 #'
@@ -168,8 +167,6 @@ theme_tl <- function(base_family = "Calibri",
 #' @param ... Optional additional arguments to gt::table_options()
 #' @return Creates a gt theme as a pipeable function
 #'
-#' @importFrom magrittr %>%
-#'
 #' @examples
 #' mtcars |> utils::head() |> gt::gt() |> tlShiny::gt_theme_tl()
 #' @export
@@ -195,7 +192,7 @@ gt_theme_tl <- function(data, all_caps = F, align = "center", base_font = 16, he
     #     # Regardless of data size
     #     rows = nrow(data)
   #   )
-  # ) %>%
+  # ) |>
   # Set Table Text Size
   gt::tab_style(
     style = list(

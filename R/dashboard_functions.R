@@ -1,3 +1,5 @@
+.datatable.aware <- TRUE
+
 #' @title Remove Empty Rows
 #' @description Filters out all rows that contain entirely NA
 #' @param data the dataframe to apply filter
@@ -28,7 +30,7 @@ neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
 
   # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
   if (any(filter_this != if_not_this)) {
-    df <- data %>%
+    df <- data |>
       dplyr::filter(!!quo_filter %in% filter_this_no_all)
   } else {
     df <- data

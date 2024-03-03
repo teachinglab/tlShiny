@@ -147,8 +147,8 @@ quote_viz <- function(data,
 
   if (viz_type == "ggplot") {
     data |>
-      dplyr::mutate(text = stringr::str_replace_all(stringr::str_wrap(.data[[text_col]], width = 60), "\n", "<br>")) %>%
-      dplyr::mutate(text = paste0("\"<i>", text, "\"")) %>%
+      dplyr::mutate(text = stringr::str_replace_all(stringr::str_wrap(.data[[text_col]], width = 60), "\n", "<br>")) |>
+      dplyr::mutate(text = paste0("\"<i>", text, "\"")) |>
       dplyr::mutate(
         x = 0,
         y = dplyr::row_number()
@@ -169,10 +169,10 @@ quote_viz <- function(data,
 
     # If not custom highlighting, find a specified number of words to highlight, n = 3 by default
     if (is.null(custom_highlight)) {
-      highlight <- purrr::map_dfc(selecting_cols, ~ tlShiny::find_highlight(string = data %>%
-                                                                                  dplyr::pull(.x), n = n)) %>%
+      highlight <- purrr::map_dfc(selecting_cols, ~ tlShiny::find_highlight(string = data |>
+                                                                                  dplyr::pull(.x), n = n)) |>
         suppressMessages()
-      highlight <- purrr::map_chr(1:length(highlight), ~ paste0("highlight", .x)) %>%
+      highlight <- purrr::map_chr(1:length(highlight), ~ paste0("highlight", .x)) |>
         stats::setNames(highlight, nm = .)
     } else if (is.character(custom_highlight)) {
       highlight <- custom_highlight # Custom highlighting
@@ -210,7 +210,7 @@ quote_viz <- function(data,
     } else {
       # Make gt table with all HTML Formatting
       data_final |>
-        janitor::remove_empty("rows") |>
+        tlShiny::remove_empty_tl() |>
         dplyr::filter(dplyr::if_any(dplyr::everything(), ~ .x %!in% tlShiny::na_df)) |>
         gt::gt() %>%
         {
