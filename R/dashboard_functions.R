@@ -1,3 +1,13 @@
+#' @title Remove Empty Rows
+#' @description Filters out all rows that contain entirely NA
+#' @param data the dataframe to apply filter
+#' @return a dataframe with no empty rows
+#' @export
+remove_empty_tl <- function(data) {
+  data |>
+    tidytable::select(tidytable::where( ~ !all(is.na(.x))))
+}
+
 
 #' @title Negative Conditional Filter
 #' @description Conditionally filters value given that it is not the first parameter,
