@@ -288,7 +288,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         ggplot2::theme_void(base_family = "Calibri") +
         ggplot2::theme(
           legend.position = "bottom",
-          legend.text = element_text(size = 20),
+          legend.text = ggplot2::element_text(size = 20),
           legend.title = ggplot2::element_blank(),
           plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold")
         )
