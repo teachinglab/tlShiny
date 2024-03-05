@@ -260,7 +260,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           x = "", y = Percent,
           fill = !!rlang::ensym(custom_column_name)
         )) +
-        ggplot2::geom_col(key_glyph = draw_key_point) +
+        ggplot2::geom_col(key_glyph = ggplot2::draw_key_point) +
         ggplot2::geom_text(
           ggplot2::aes(
             label = paste0(Percent, "%"),
@@ -364,7 +364,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           area = Percent,
           fill = !!rlang::ensym(custom_column_name)
         )) +
-        treemapify::geom_treemap(key_glyph = draw_key_point) +
+        treemapify::geom_treemap(key_glyph = ggplot2::draw_key_point) +
         treemapify::geom_treemap_text(ggplot2::aes(label = paste0(!!rlang::ensym(custom_column_name), ": ", Percent, "%")),
                                       family = "Calibri Bold",
                                       fontface = "bold",
