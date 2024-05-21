@@ -7,7 +7,7 @@
 #' @export
 remove_empty_tl <- function(data) {
   data |>
-    tidytable::select(tidytable::where( ~ !all(is.na(.x))))
+    tidytable::select(tidytable::where(~ !all(is.na(.x))))
 }
 
 
@@ -21,7 +21,6 @@ remove_empty_tl <- function(data) {
 #' @return filtered dataframe
 #' @export
 neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
-
   # Get quo for filtering the data
   quo_filter <- rlang::enquo(dat_filter)
 
@@ -37,7 +36,6 @@ neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
   }
 
   df
-
 }
 
 #' @title Verify email domain
@@ -71,19 +69,19 @@ check_email_approved <- function(email, approved_emails_list) {
 #' @return html wrapper
 #' @export
 drop1 <- function(before = T, options, envir, name) {
-
   if (before) {
     paste(
-      '<p>',
+      "<p>",
       glue::glue('<button class="btn btn-primary collapsed" data-toggle="collapse" data-target="{name}">'),
-      '</button>',
-      '</p>',
+      "</button>",
+      "</p>",
       glue::glue('<div class="collapse" id="{name}">'),
-      '<div class="card card-body">',  sep = "\n")
+      '<div class="card card-body">',
+      sep = "\n"
+    )
   } else {
     paste("</div>", "</div>", sep = "\n")
   }
-
 }
 
 #' @title HTML Text Wrapping
@@ -99,7 +97,8 @@ drop1 <- function(before = T, options, envir, name) {
 html_wrap <- function(string, n = 40) {
   stringr::str_replace_all(
     stringr::str_wrap(string = string, width = n),
-    "\n", "<br>")
+    "\n", "<br>"
+  )
 }
 
 
@@ -112,8 +111,8 @@ html_wrap <- function(string, n = 40) {
 #' @return Returns elements not in vector
 #' @export
 
-'%!in%' <- function (x, y) {
-  !('%in%'(x, y))
+"%!in%" <- function(x, y) {
+  !("%in%"(x, y))
 }
 
 
@@ -141,7 +140,7 @@ calc_nps <- function(x) {
 #' @examples
 #' \dontrun{
 #' plot_agree |>
-#' agree_strongly_agree(question = "x")
+#'   agree_strongly_agree(question = "x")
 #' }
 #' @return a string
 #' @export
@@ -193,7 +192,6 @@ no_data_plot_currently <- ggplot2::ggplot(data.frame(text = "No data available y
 #' @export
 gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
                          heading_font = 14, custom_column_name = "", viz_type = "gt") {
-
   if (nrow(df) >= 1) {
     column <- rlang::sym(column)
 
@@ -247,7 +245,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         tidyr::drop_na(!!column) |>
         dplyr::ungroup() |>
         dplyr::mutate(!!(column) := stringr::str_wrap(!!rlang::sym(column), width = 10),
-                      Percent = round(100 * n / sum(n), 2)
+          Percent = round(100 * n / sum(n), 2)
         ) |>
         dplyr::rename({{ custom_column_name }} := {{ column }}) |>
         dplyr::mutate(
@@ -269,12 +267,12 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           family = "Calibri Bold",
           fontface = "bold",
           color = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent | ggplot_data$Percent < 10,
-                         "white",
-                         "black"
+            "white",
+            "black"
           ),
           size = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent | ggplot_data$Percent < 10,
-                        8,
-                        11
+            8,
+            11
           ),
           vjust = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent, -1.5, 0.5)
         ) +
@@ -366,15 +364,15 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         )) +
         treemapify::geom_treemap(key_glyph = ggplot2::draw_key_point) +
         treemapify::geom_treemap_text(ggplot2::aes(label = paste0(!!rlang::ensym(custom_column_name), ": ", Percent, "%")),
-                                      family = "Calibri Bold",
-                                      fontface = "bold",
-                                      # grow = T,
-                                      reflow = T,
-                                      color = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent | ggplot_data$Percent < 10,
-                                                     "white",
-                                                     "black"
-                                      ),
-                                      place = "center"
+          family = "Calibri Bold",
+          fontface = "bold",
+          # grow = T,
+          reflow = T,
+          color = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent | ggplot_data$Percent < 10,
+            "white",
+            "black"
+          ),
+          place = "center"
         ) +
         ggplot2::labs(title = paste0(custom_column_name, " (n = ", format(sum(ggplot_data$n, na.rm = T), big.mark = ","), ")\n")) +
         ggplot2::scale_fill_manual(values = tlShiny::tl_palette(
@@ -429,7 +427,6 @@ grade_ipg <- function(x, type = "character") {
 #' @export
 
 tl_select_percent <- function(data, percent_equal) {
-
   sum_correct <- data |>
     table() |>
     magrittr::extract(percent_equal) |>
@@ -438,7 +435,6 @@ tl_select_percent <- function(data, percent_equal) {
   sum_table <- sum(!is.na(data))
 
   sum_correct / sum_table
-
 }
 
 
@@ -459,7 +455,6 @@ student_bar_chart <- function(data,
                               string_remove,
                               title,
                               legend_position = c(0.8, 0.25)) {
-
   n_size_1 <- format(sum(!is.na(data |> dplyr::filter(prepost == "Pre") |> dplyr::select(tidyselect::contains(col_select)) |> dplyr::pull(1))), big.mark = ",")
   n_size_2 <- format(sum(!is.na(data |> dplyr::filter(prepost == "Post") |> dplyr::select(tidyselect::contains(col_select)) |> dplyr::pull(1))), big.mark = ",")
 
@@ -500,88 +495,90 @@ student_bar_chart <- function(data,
     tidyr::drop_na(percent) |>
     dplyr::mutate(
       negative = ifelse(question %in% c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8", "happiness_belonging_3"), TRUE, FALSE),
-      question = stringr::str_replace_all(question, c("crse_1" = "My teacher explains what we are learning in different ways",
-                                                      "crse_2" = "My teacher wants students from different cultures to respect one another",
-                                                      "crse_3" = "My teacher uses what I already know to help me understand new ideas",
-                                                      "crse_4" = "My teacher uses examples from my culture when teaching",
-                                                      "crse_5" = "My teacher asks about ways that students’ cultures may be different from others",
-                                                      "crse_6" = "My teacher helps students learn about other students and their cultures",
-                                                      "crse_7" = "My teacher asks about students’ home life",
-                                                      "crse_8" = "My teacher treats all students like they are important members of the classroom",
-                                                      "teacher_student_rel_1" = "My teacher makes me feel that he/she really cares about me",
-                                                      "teacher_student_rel_2" = "I like the way my teacher treats me when I need help",
-                                                      "teacher_student_rel_3" = "My teacher seems to know if something is bothering me",
-                                                      "self_efficacy_1" = "I can do almost all the work in this class if I don’t give up",
-                                                      "self_efficacy_2" = "Even when work is hard, I know I can learn it",
-                                                      "self_efficacy_3" = "I'm certain I can master the skills taught in this class",
-                                                      "self_efficacy_4" = "When doing work for this class, I focus on learning, not the time work takes",
-                                                      "self_efficacy_5" = "I have been able to figure out the most difficult work in this class",
-                                                      "happiness_belonging_1" = "This class is a happy place for me to be",
-                                                      "happiness_belonging_2" = "In this class, I feel like I belong",
-                                                      "happiness_belonging_3" = "Being in this class makes me feel sad or angry",
-                                                      "happiness_belonging_4" = "The things we have done in class this year are interesting",
-                                                      "happiness_belonging_5" = "Because of this teacher, I am learning to love this subject",
-                                                      "happiness_belonging_6" = "I enjoy this subject this year",
-                                                      "being_challenged_1" = "My teacher makes sure that I try to do my best",
-                                                      "being_challenged_2" = "In this class, we learn a lot almost every day",
-                                                      "being_challenged_3" = "In this class, we learn to correct our mistakes",
-                                                      "being_challenged_4" = "In this class, my teacher accepts nothing less than our full effort",
-                                                      "being_challenged_5" = "My teacher wants us to use our thinking skills, not just memorize things",
-                                                      "growth_mindsets_a1_1" = "If you want to succeed in math, hard work alone just won’t cut it; you need to have a natural gift or talent",
-                                                      "growth_mindsets_a1_2" = "You have a certain amount of intelligence, and you really can’t do much to change it",
-                                                      "growth_mindsets_a1_3" = "When you have to try really hard in a subject in school, it means you can’t be good at that subject",
-                                                      "growth_mindsets_a1_4" = "Being a “math person” or not is something that you really can’t change. Some people are good at math and other people aren’t",
-                                                      "growth_mindsets_a2" = "My math teacher thinks failure helps us learn and grow",
-                                                      "growth_mindsets_a3" = "My math teacher believes that everybody in my class can be very good at math",
-                                                      "self_efficacy_a4_1" = "I usually do well in math",
-                                                      "self_efficacy_a4_2" = "I am good at working out difficult math problems",
-                                                      "self_efficacy_a4_3" = "I believe that I can be successful in my math class",
-                                                      "self_efficacy_a4_4" = "I am confident that I can understand the material in my math class",
-                                                      "self_efficacy_a4_5" = "I know I can learn the materials in my math class",
-                                                      "math_enjoyment_a5_1" = "I enjoy learning math",
-                                                      "math_enjoyment_a5_2" = "I learn many interesting things in math",
-                                                      "math_enjoyment_a5_3" = "I like to solve math problems",
-                                                      "math_enjoyment_a5_4" = "I like math",
-                                                      "mses_a6_11" = "I stay focused in math class",
-                                                      "mses_a6_12" = "I feel good when I am in math class",
-                                                      "mses_a6_13" = "I try to understand my mistakes when I get something wrong",
-                                                      "mses_a6_4" = "I think about different ways to solve a problem",
-                                                      "mses_a6_5" = "I try to connect what I am learning to things I have learned before",
-                                                      "mses_a6_6" = "I want to understand what is learned in math",
-                                                      "mses_a6_7" = "I talk about math outside of class",
-                                                      "mses_a6_8" = "I do other things when I am supposed to be paying attention",
-                                                      "mses_a6_9" = "I would rather be told the answer than have to do the work",
-                                                      "mses_a6_10" = "I keep trying even if something is hard",
-                                                      "mses_a6_1" = "I don't think that hard when I am doing work for class",
-                                                      "mses_a6_2" = "I go through the work for math class and make sure that it's right",
-                                                      "mses_a6_3" = "When work is hard, I only study the easy parts",
-                                                      "math_a7_1" = "My math teacher uses examples of students’ different cultures/backgrounds/families in their lessons",
-                                                      "math_a7_2" = "My math teacher respects my culture and background",
-                                                      "high_exp_one_1" = "In this class, people don't give up when the work gets hard.",
-                                                      "high_exp_one_2" = "I feel like I have access to all of the opportunities this class offers.",
-                                                      "high_exp_one_3" = "In this class, it feels like I’m expected -- and supported -- to learn a ton.",
-                                                      "high_exp_two" = "When you feel like giving up on a difficult task, how likely is it that your teacher will help you keep trying?",
-                                                      "rig_learn_one_1" = "In this class we use our thinking skills, in addition to memorizing things.",
-                                                      "rig_learn_one_2" = "In this class we have time to explain our ideas.",
-                                                      "rig_learn_two" = "In this class I get to develop my own ideas.",
-                                                      "relevance_one" = "In this class what I’m learning matters a lot to me.",
-                                                      "relevance_two_1" = "In this class what we learn is often connected to life outside the classroom.",
-                                                      "relevance_two_2" = "In this class I get to learn things I'm interested in.",
-                                                      "affirm_1" = "In this class it feels like being yourself is a great thing. I feel safe and appreciated for who I am.",
-                                                      "affirm_2" = "In this class I feel proud of who I am.",
-                                                      "affirm_3" = "I can be myself in this class",
-                                                      "connect_one_1" = "I feel part of the community [in this class].",
-                                                      "connect_one_2" = "In this class I feel included by other students.",
-                                                      "connect_two" = "Overall, how much do you feel like you belong in this class?",
-                                                      "custom_one" = "In this class, I have the resources I need to support my learning.",
-                                                      "custom_two_1" = "In this class, I do work that meets me where I am in my learning.",
-                                                      "custom_two_2" = "In this class I am able to catch up if I am behind.",
-                                                      "asd_one" = "In this class I feel like I have a say about what happens to me.",
-                                                      "asd_two_1" = "In this class I can choose how to do my work.",
-                                                      "asd_two_2" = "In this class I have goals for my learning, and I have choices about how I pursue those goals.",
-                                                      "asd_two_3" = "My teacher(s) respect(s) my ideas and suggestions.",
-                                                      "overall_experience_1" = "Overall, most of the time, I love this class.",
-                                                      "overall_experience_2" = "Overall, most of the time, I’m learning a lot in this class.")),
+      question = stringr::str_replace_all(question, c(
+        "crse_1" = "My teacher explains what we are learning in different ways",
+        "crse_2" = "My teacher wants students from different cultures to respect one another",
+        "crse_3" = "My teacher uses what I already know to help me understand new ideas",
+        "crse_4" = "My teacher uses examples from my culture when teaching",
+        "crse_5" = "My teacher asks about ways that students’ cultures may be different from others",
+        "crse_6" = "My teacher helps students learn about other students and their cultures",
+        "crse_7" = "My teacher asks about students’ home life",
+        "crse_8" = "My teacher treats all students like they are important members of the classroom",
+        "teacher_student_rel_1" = "My teacher makes me feel that he/she really cares about me",
+        "teacher_student_rel_2" = "I like the way my teacher treats me when I need help",
+        "teacher_student_rel_3" = "My teacher seems to know if something is bothering me",
+        "self_efficacy_1" = "I can do almost all the work in this class if I don’t give up",
+        "self_efficacy_2" = "Even when work is hard, I know I can learn it",
+        "self_efficacy_3" = "I'm certain I can master the skills taught in this class",
+        "self_efficacy_4" = "When doing work for this class, I focus on learning, not the time work takes",
+        "self_efficacy_5" = "I have been able to figure out the most difficult work in this class",
+        "happiness_belonging_1" = "This class is a happy place for me to be",
+        "happiness_belonging_2" = "In this class, I feel like I belong",
+        "happiness_belonging_3" = "Being in this class makes me feel sad or angry",
+        "happiness_belonging_4" = "The things we have done in class this year are interesting",
+        "happiness_belonging_5" = "Because of this teacher, I am learning to love this subject",
+        "happiness_belonging_6" = "I enjoy this subject this year",
+        "being_challenged_1" = "My teacher makes sure that I try to do my best",
+        "being_challenged_2" = "In this class, we learn a lot almost every day",
+        "being_challenged_3" = "In this class, we learn to correct our mistakes",
+        "being_challenged_4" = "In this class, my teacher accepts nothing less than our full effort",
+        "being_challenged_5" = "My teacher wants us to use our thinking skills, not just memorize things",
+        "growth_mindsets_a1_1" = "If you want to succeed in math, hard work alone just won’t cut it; you need to have a natural gift or talent",
+        "growth_mindsets_a1_2" = "You have a certain amount of intelligence, and you really can’t do much to change it",
+        "growth_mindsets_a1_3" = "When you have to try really hard in a subject in school, it means you can’t be good at that subject",
+        "growth_mindsets_a1_4" = "Being a “math person” or not is something that you really can’t change. Some people are good at math and other people aren’t",
+        "growth_mindsets_a2" = "My math teacher thinks failure helps us learn and grow",
+        "growth_mindsets_a3" = "My math teacher believes that everybody in my class can be very good at math",
+        "self_efficacy_a4_1" = "I usually do well in math",
+        "self_efficacy_a4_2" = "I am good at working out difficult math problems",
+        "self_efficacy_a4_3" = "I believe that I can be successful in my math class",
+        "self_efficacy_a4_4" = "I am confident that I can understand the material in my math class",
+        "self_efficacy_a4_5" = "I know I can learn the materials in my math class",
+        "math_enjoyment_a5_1" = "I enjoy learning math",
+        "math_enjoyment_a5_2" = "I learn many interesting things in math",
+        "math_enjoyment_a5_3" = "I like to solve math problems",
+        "math_enjoyment_a5_4" = "I like math",
+        "mses_a6_11" = "I stay focused in math class",
+        "mses_a6_12" = "I feel good when I am in math class",
+        "mses_a6_13" = "I try to understand my mistakes when I get something wrong",
+        "mses_a6_4" = "I think about different ways to solve a problem",
+        "mses_a6_5" = "I try to connect what I am learning to things I have learned before",
+        "mses_a6_6" = "I want to understand what is learned in math",
+        "mses_a6_7" = "I talk about math outside of class",
+        "mses_a6_8" = "I do other things when I am supposed to be paying attention",
+        "mses_a6_9" = "I would rather be told the answer than have to do the work",
+        "mses_a6_10" = "I keep trying even if something is hard",
+        "mses_a6_1" = "I don't think that hard when I am doing work for class",
+        "mses_a6_2" = "I go through the work for math class and make sure that it's right",
+        "mses_a6_3" = "When work is hard, I only study the easy parts",
+        "math_a7_1" = "My math teacher uses examples of students’ different cultures/backgrounds/families in their lessons",
+        "math_a7_2" = "My math teacher respects my culture and background",
+        "high_exp_one_1" = "In this class, people don't give up when the work gets hard.",
+        "high_exp_one_2" = "I feel like I have access to all of the opportunities this class offers.",
+        "high_exp_one_3" = "In this class, it feels like I’m expected -- and supported -- to learn a ton.",
+        "high_exp_two" = "When you feel like giving up on a difficult task, how likely is it that your teacher will help you keep trying?",
+        "rig_learn_one_1" = "In this class we use our thinking skills, in addition to memorizing things.",
+        "rig_learn_one_2" = "In this class we have time to explain our ideas.",
+        "rig_learn_two" = "In this class I get to develop my own ideas.",
+        "relevance_one" = "In this class what I’m learning matters a lot to me.",
+        "relevance_two_1" = "In this class what we learn is often connected to life outside the classroom.",
+        "relevance_two_2" = "In this class I get to learn things I'm interested in.",
+        "affirm_1" = "In this class it feels like being yourself is a great thing. I feel safe and appreciated for who I am.",
+        "affirm_2" = "In this class I feel proud of who I am.",
+        "affirm_3" = "I can be myself in this class",
+        "connect_one_1" = "I feel part of the community [in this class].",
+        "connect_one_2" = "In this class I feel included by other students.",
+        "connect_two" = "Overall, how much do you feel like you belong in this class?",
+        "custom_one" = "In this class, I have the resources I need to support my learning.",
+        "custom_two_1" = "In this class, I do work that meets me where I am in my learning.",
+        "custom_two_2" = "In this class I am able to catch up if I am behind.",
+        "asd_one" = "In this class I feel like I have a say about what happens to me.",
+        "asd_two_1" = "In this class I can choose how to do my work.",
+        "asd_two_2" = "In this class I have goals for my learning, and I have choices about how I pursue those goals.",
+        "asd_two_3" = "My teacher(s) respect(s) my ideas and suggestions.",
+        "overall_experience_1" = "Overall, most of the time, I love this class.",
+        "overall_experience_2" = "Overall, most of the time, I’m learning a lot in this class."
+      )),
       question = stringr::str_remove_all(question, string_remove),
       question = tlShiny::html_wrap(question, 35),
       question = ifelse(negative == TRUE, paste0("<span style = 'color:red;'>", question, "</span>"), paste0("<span style = 'color:black;'>", question, "</span>")),
@@ -594,8 +591,10 @@ student_bar_chart <- function(data,
     glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
   }
 
-  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "<span style = 'color:black;'>Overall</span>", after = length(question)),
-                                                          y = percent, fill = prepost)) +
+  p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(
+    x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "<span style = 'color:black;'>Overall</span>", after = length(question)),
+    y = percent, fill = prepost
+  )) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_text(
       ggplot2::aes(
@@ -636,7 +635,6 @@ student_bar_chart <- function(data,
     )
 
   suppressWarnings(print(p))
-
 }
 
 #' @title End of session feedback graph dependent on race and content area
@@ -645,7 +643,6 @@ student_bar_chart <- function(data,
 #' @return prints a ggplot object
 #' @export
 session_feedback_graph <- function(data) {
-
   session_survey <- data |>
     tidyr::drop_na(coach_ongoing_feed_1)
 
@@ -676,10 +673,12 @@ session_feedback_graph <- function(data) {
     dplyr::count() |>
     dplyr::ungroup() |>
     dplyr::group_by(Question) |>
-    dplyr::mutate(Question = stringr::str_replace_all(Question, c("They demonstrated deep knowledge of the content they facilitated" = "They demonstrated deep knowledge of\nthe content they facilitated",
-                                                                  "They effectively built a safe learning environment" = "They effectively built a safe learning\nenvironment",
-                                                                  "They seemed fully prepared for the session" = "They seemed fully prepared for the\nsession",
-                                                                  "They made adjustments based on participant needs" = "They made adjustments based on\nparticipant needs"))) |>
+    dplyr::mutate(Question = stringr::str_replace_all(Question, c(
+      "They demonstrated deep knowledge of the content they facilitated" = "They demonstrated deep knowledge of\nthe content they facilitated",
+      "They effectively built a safe learning environment" = "They effectively built a safe learning\nenvironment",
+      "They seemed fully prepared for the session" = "They seemed fully prepared for the\nsession",
+      "They made adjustments based on participant needs" = "They made adjustments based on\nparticipant needs"
+    ))) |>
     dplyr::reframe(
       n = n,
       Response = Response,
@@ -687,7 +686,6 @@ session_feedback_graph <- function(data) {
     )
 
   if (nrow(plot_agree) >= 1) {
-
     ### Calculate n size ###
     n_size_agree <- session_survey |>
       dplyr::count(sort = T)
@@ -696,14 +694,20 @@ session_feedback_graph <- function(data) {
     p <- plot_agree |>
       dplyr::group_by(Question, Response) |>
       dplyr::summarise(Percent = weighted.mean(Percent, n)) |>
-      dplyr::mutate(Question = factor(Question, levels = c("They demonstrated deep knowledge of\nthe content they facilitated",
-                                                           "Their facilitation or coaching is clear",
-                                                           "They seemed fully prepared for the\nsession",
-                                                           "They effectively built a safe learning\nenvironment",
-                                                           "They made adjustments based on\nparticipant needs")),
-                    Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
-                                                                    "Strongly agree" = "Strongly\nagree",
-                                                                    "Strongly disagree" = "Strongly\ndisagree"))) |>
+      dplyr::mutate(
+        Question = factor(Question, levels = c(
+          "They demonstrated deep knowledge of\nthe content they facilitated",
+          "Their facilitation or coaching is clear",
+          "They seemed fully prepared for the\nsession",
+          "They effectively built a safe learning\nenvironment",
+          "They made adjustments based on\nparticipant needs"
+        )),
+        Response = stringr::str_replace_all(Response, c(
+          "Neither agree nor disagree" = "Neither agree\nnor disagree",
+          "Strongly agree" = "Strongly\nagree",
+          "Strongly disagree" = "Strongly\ndisagree"
+        ))
+      ) |>
       ggplot2::ggplot(ggplot2::aes(x = Question, y = Percent, fill = factor(Response))) +
       ggplot2::geom_col(color = NA, width = 0.95, position = ggplot2::position_stack(reverse = TRUE)) +
       ggplot2::geom_text(
@@ -737,10 +741,10 @@ session_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 14.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
+        plot.title = ggplot2::element_text(size = 18, face = "bold", family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
@@ -749,7 +753,6 @@ session_feedback_graph <- function(data) {
       )
 
     p
-
   } else {
     tlShiny:::no_data_plot_filters
   }
@@ -761,7 +764,6 @@ session_feedback_graph <- function(data) {
 #' @return prints a ggplot object
 #' @export
 course_feedback_graph <- function(data) {
-
   course_survey <- data |>
     tidyr::drop_na(coach_end_feed_1)
 
@@ -788,17 +790,19 @@ course_feedback_graph <- function(data) {
     dplyr::count() |>
     dplyr::ungroup() |>
     dplyr::group_by(Question) |>
-    dplyr::mutate(Question = stringr::str_replace_all(Question, c("I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                                                  "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the learning targets",
-                                                                  "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
-                                                                  "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
-                                                                  "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
-                                                                  "The PL was relevant to my instructional practices" = "The PL was relevant to my\ninstructional practices",
-                                                                  "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
-                                                                  "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision",
-                                                                  "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
-                                                                  "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds",
-                                                                  "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"))) |>
+    dplyr::mutate(Question = stringr::str_replace_all(Question, c(
+      "I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
+      "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the learning targets",
+      "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
+      "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
+      "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
+      "The PL was relevant to my instructional practices" = "The PL was relevant to my\ninstructional practices",
+      "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
+      "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision",
+      "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
+      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds",
+      "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"
+    ))) |>
     dplyr::reframe(
       n = n,
       Response = Response,
@@ -806,7 +810,6 @@ course_feedback_graph <- function(data) {
     )
 
   if (nrow(plot_agree) >= 1) {
-
     ### Calculate n size ###
     n_size_agree <- course_survey |>
       dplyr::count(sort = T)
@@ -815,22 +818,28 @@ course_feedback_graph <- function(data) {
     p <- plot_agree |>
       dplyr::group_by(Question, Response) |>
       dplyr::summarise(Percent = weighted.mean(Percent, n)) |>
-      dplyr::mutate(Question = factor(Question, levels = c("I looked forward to attending this PL",
-                                                           "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                                           "The activities were well-designed\nto help me meet the learning targets",
-                                                           "I am satisfied with how the sessions\nwere facilitated",
-                                                           "This PL was a good use of my time",
-                                                           "I talk to other teachers about the\nthings I learned in this PL",
-                                                           "I felt a sense of community with\nthe other participants in this course",
-                                                           "The PL was relevant to my\ninstructional practices",
-                                                           "The strategies I’ve learned will\nimprove my instruction",
-                                                           "The strategies I’ve learned will\nimprove my coaching or supervision",
-                                                           "I have applied or will apply what\nI have learned to my practice",
-                                                           "The PL has supported me in being\nresponsive to students' backgrounds",
-                                                           "I am satisfied with the overall\nquality of this PL")),
-                    Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
-                                                                    "Strongly agree" = "Strongly\nagree",
-                                                                    "Strongly disagree" = "Strongly\ndisagree"))) |>
+      dplyr::mutate(
+        Question = factor(Question, levels = c(
+          "I looked forward to attending this PL",
+          "I was fully present/\"minds-on\"\nduring these PL sessions",
+          "The activities were well-designed\nto help me meet the learning targets",
+          "I am satisfied with how the sessions\nwere facilitated",
+          "This PL was a good use of my time",
+          "I talk to other teachers about the\nthings I learned in this PL",
+          "I felt a sense of community with\nthe other participants in this course",
+          "The PL was relevant to my\ninstructional practices",
+          "The strategies I’ve learned will\nimprove my instruction",
+          "The strategies I’ve learned will\nimprove my coaching or supervision",
+          "I have applied or will apply what\nI have learned to my practice",
+          "The PL has supported me in being\nresponsive to students' backgrounds",
+          "I am satisfied with the overall\nquality of this PL"
+        )),
+        Response = stringr::str_replace_all(Response, c(
+          "Neither agree nor disagree" = "Neither agree\nnor disagree",
+          "Strongly agree" = "Strongly\nagree",
+          "Strongly disagree" = "Strongly\ndisagree"
+        ))
+      ) |>
       ggplot2::ggplot(ggplot2::aes(x = Question, y = Percent, fill = factor(Response))) +
       ggplot2::geom_col(color = NA, width = 0.95, position = ggplot2::position_stack(reverse = TRUE)) +
       ggplot2::geom_text(
@@ -864,10 +873,10 @@ course_feedback_graph <- function(data) {
       ggplot2::scale_x_discrete(limits = rev) +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 14.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
+        plot.title = ggplot2::element_text(size = 18, face = "bold", family = "Calibri Bold", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
@@ -876,11 +885,9 @@ course_feedback_graph <- function(data) {
       )
 
     p
-
   } else {
     tlShiny:::no_data_plot_filters
   }
-
 }
 
 #' @title Ongoing Coaching feedback graph dependent on race and content area
@@ -908,9 +915,11 @@ ongoing_coaching_feedback_graph <- function(data) {
     dplyr::group_by(Question) |>
     dplyr::mutate(
       Percent = round(100 * n / sum(n), 2),
-      Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
-                                                      "Strongly agree" = "Strongly\nagree",
-                                                      "Strongly disagree" = "Strongly\ndisagree")),
+      Response = stringr::str_replace_all(Response, c(
+        "Neither agree nor disagree" = "Neither agree\nnor disagree",
+        "Strongly agree" = "Strongly\nagree",
+        "Strongly disagree" = "Strongly\ndisagree"
+      )),
       Response = factor(Response, levels = c(
         "1 - Strongly\ndisagree",
         "2 - Disagree",
@@ -918,11 +927,15 @@ ongoing_coaching_feedback_graph <- function(data) {
         "4 - Agree",
         "5 - Strongly\nagree"
       )),
-      Question = stringr::str_replace_all(Question,
-                                          c("They demonstrated deep knowledge of the content they coach" = "They demonstrated deep knowledge\nof the content they coach",
-                                            "They seem fully prepared for the coaching sessions" = "They seem fully prepared for the\ncoaching sessions",
-                                            "They effectively build a safe learning environment" = "They effectively build a safe\nlearning environment",
-                                            "They make necessary adjustments based on my needs" = "They make necessary adjustments based\non my needs"))
+      Question = stringr::str_replace_all(
+        Question,
+        c(
+          "They demonstrated deep knowledge of the content they coach" = "They demonstrated deep knowledge\nof the content they coach",
+          "They seem fully prepared for the coaching sessions" = "They seem fully prepared for the\ncoaching sessions",
+          "They effectively build a safe learning environment" = "They effectively build a safe\nlearning environment",
+          "They make necessary adjustments based on my needs" = "They make necessary adjustments based\non my needs"
+        )
+      )
     )
 
   if (nrow(coaching_plot_agree) >= 1) {
@@ -933,11 +946,13 @@ ongoing_coaching_feedback_graph <- function(data) {
     p <- coaching_plot_agree |>
       dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
-        Question = factor(Question, levels = c("They demonstrated deep knowledge\nof the content they coach",
-                                               "Their coaching is clear",
-                                               "They seem fully prepared for the\ncoaching sessions",
-                                               "They effectively build a safe\nlearning environment",
-                                               "They make necessary adjustments based\non my needs"))
+        Question = factor(Question, levels = c(
+          "They demonstrated deep knowledge\nof the content they coach",
+          "Their coaching is clear",
+          "They seem fully prepared for the\ncoaching sessions",
+          "They effectively build a safe\nlearning environment",
+          "They make necessary adjustments based\non my needs"
+        ))
       ) |>
       ggplot2::ggplot(ggplot2::aes(
         x = Question,
@@ -987,10 +1002,10 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 14.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.7),
+        plot.title = ggplot2::element_text(size = 18, face = "bold", family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.7),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
@@ -999,11 +1014,9 @@ ongoing_coaching_feedback_graph <- function(data) {
       )
 
     p
-
   } else {
     tlShiny:::no_data_plot_filters
   }
-
 }
 
 #' @title End of Coaching feedback graph dependent on race and content area
@@ -1012,7 +1025,6 @@ ongoing_coaching_feedback_graph <- function(data) {
 #' @return prints a ggplot object
 #' @export
 end_coaching_feedback_graph <- function(data) {
-
   end_coaching <- data |>
     tidyr::drop_na(coach_end_feed_1)
 
@@ -1041,9 +1053,11 @@ end_coaching_feedback_graph <- function(data) {
     dplyr::group_by(Question) |>
     dplyr::mutate(
       Percent = round(100 * n / sum(n), 2),
-      Response = stringr::str_replace_all(Response, c("Neither agree nor disagree" = "Neither agree\nnor disagree",
-                                                      "Strongly agree" = "Strongly\nagree",
-                                                      "Strongly disagree" = "Strongly\ndisagree")),
+      Response = stringr::str_replace_all(Response, c(
+        "Neither agree nor disagree" = "Neither agree\nnor disagree",
+        "Strongly agree" = "Strongly\nagree",
+        "Strongly disagree" = "Strongly\ndisagree"
+      )),
       Response = factor(Response, levels = c(
         "1 - Strongly\ndisagree",
         "2 - Disagree",
@@ -1051,17 +1065,19 @@ end_coaching_feedback_graph <- function(data) {
         "4 - Agree",
         "5 - Strongly\nagree"
       )),
-      Question = stringr::str_replace_all(Question, c("I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                                      "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the learning targets",
-                                                      "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
-                                                      "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
-                                                      "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
-                                                      "The PL was relevant to my instructional practices" = "The PL was relevant to my\ninstructional practices",
-                                                      "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
-                                                      "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision",
-                                                      "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
-                                                      "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds",
-                                                      "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"))
+      Question = stringr::str_replace_all(Question, c(
+        "I was fully present/\"minds-on\" during these PL sessions" = "I was fully present/\"minds-on\"\nduring these PL sessions",
+        "The activities were well-designed to help me meet the learning targets" = "The activities were well-designed\nto help me meet the learning targets",
+        "I am satisfied with how the sessions were facilitated" = "I am satisfied with how the sessions\nwere facilitated",
+        "I talk to other teachers about the things I learned in this PL" = "I talk to other teachers about the\nthings I learned in this PL",
+        "I felt a sense of community with the other participants in this course" = "I felt a sense of community with\nthe other participants in this course",
+        "The PL was relevant to my instructional practices" = "The PL was relevant to my\ninstructional practices",
+        "The strategies I’ve learned will improve my instruction" = "The strategies I’ve learned will\nimprove my instruction",
+        "The strategies I’ve learned will improve my coaching or supervision of teachers" = "The strategies I’ve learned will\nimprove my coaching or supervision",
+        "I have applied or will apply what I have learned to my practice" = "I have applied or will apply what\nI have learned to my practice",
+        "The PL has supported me in being responsive to students' backgrounds, cultures, and points of view." = "The PL has supported me in being\nresponsive to students' backgrounds",
+        "I am satisfied with the overall quality of this PL" = "I am satisfied with the overall\nquality of this PL"
+      ))
     )
 
   if (nrow(coaching_plot_agree) >= 1) {
@@ -1071,19 +1087,21 @@ end_coaching_feedback_graph <- function(data) {
     p <- coaching_plot_agree |>
       dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
-        Question = factor(Question, levels = c("I looked forward to attending this PL",
-                                               "I was fully present/\"minds-on\"\nduring these PL sessions",
-                                               "The activities were well-designed\nto help me meet the learning targets",
-                                               "I am satisfied with how the sessions\nwere facilitated",
-                                               "This PL was a good use of my time",
-                                               "I talk to other teachers about the\nthings I learned in this PL",
-                                               "I felt a sense of community with\nthe other participants in this course",
-                                               "The PL was relevant to my\ninstructional practices",
-                                               "The strategies I’ve learned will\nimprove my instruction",
-                                               "The strategies I’ve learned will\nimprove my coaching or supervision",
-                                               "I have applied or will apply what\nI have learned to my practice",
-                                               "The PL has supported me in being\nresponsive to students' backgrounds",
-                                               "I am satisfied with the overall\nquality of this PL"))
+        Question = factor(Question, levels = c(
+          "I looked forward to attending this PL",
+          "I was fully present/\"minds-on\"\nduring these PL sessions",
+          "The activities were well-designed\nto help me meet the learning targets",
+          "I am satisfied with how the sessions\nwere facilitated",
+          "This PL was a good use of my time",
+          "I talk to other teachers about the\nthings I learned in this PL",
+          "I felt a sense of community with\nthe other participants in this course",
+          "The PL was relevant to my\ninstructional practices",
+          "The strategies I’ve learned will\nimprove my instruction",
+          "The strategies I’ve learned will\nimprove my coaching or supervision",
+          "I have applied or will apply what\nI have learned to my practice",
+          "The PL has supported me in being\nresponsive to students' backgrounds",
+          "I am satisfied with the overall\nquality of this PL"
+        ))
       ) |>
       ggplot2::ggplot(ggplot2::aes(
         x = Question,
@@ -1133,10 +1151,10 @@ end_coaching_feedback_graph <- function(data) {
       ggplot2::coord_flip() +
       tlShiny::theme_tl(legend = TRUE) +
       ggplot2::theme(
-        axis.text.y = ggplot2::element_text(size = 12, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
+        axis.text.y = ggplot2::element_text(size = 14.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 16, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 9.5, lineheight = 0.6),
+        plot.title = ggplot2::element_text(size = 18, face = "bold", family = "Calibri Bold", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 11, lineheight = 0.6),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
@@ -1145,7 +1163,6 @@ end_coaching_feedback_graph <- function(data) {
       )
 
     p
-
   } else {
     tlShiny:::no_data_plot_filters
   }
@@ -1159,26 +1176,26 @@ end_coaching_feedback_graph <- function(data) {
 #' @return a tibble
 #' @export
 get_percent_positive_student_survey <- function(data) {
-
   all_data <- data |>
     dplyr::select(tidyselect::matches("crse|teacher_student|self_efficacy|happiness_belonging|being_challenged|growth_mindsets|math_enjoyment|mses|math_a7|high_exp|rig_learn|relevance|affirm|connect_one|custom_one|asd_one|asd_two|overall_experience"), prepost) |>
     dplyr::group_by(prepost) |>
     dplyr::summarise(dplyr::across(dplyr::matches("crse"), ~ tlShiny:::tl_select_percent(.x, c("4 - Often", "5 - Always"))),
-                     dplyr::across(dplyr::matches("happiness_belonging_3"), ~ tlShiny:::tl_select_percent(.x, c("1 - Disagree", "2 - Somewhat disagree"))),
-                     dplyr::across(dplyr::matches("teacher_student_rel|self_efficacy|happiness_belonging_1|happiness_belonging_2|happiness_belonging_4|happiness_belonging_5|happiness_belonging_6"), ~ tlShiny:::tl_select_percent(.x, c("4 - Somewhat agree", "5 - Agree", "5 - Agree 👍", "6 - Strongly agree 👍👍"))),
-                     dplyr::across(dplyr::matches("being_challenged"), ~ tlShiny:::tl_select_percent(.x, c("4 - Mostly true", "5 - Totally true"))),
-                     dplyr::across(dplyr::matches("growth_mindsets_a1"), ~ tlShiny:::tl_select_percent(.x, c("1 - Strongly Disagree  👎👎", "2 - Disagree 👎"))),
-                     dplyr::across(dplyr::matches("growth_mindsets_a2"), ~ tlShiny:::tl_select_percent(.x, c("Very true 👍", "Extremely true 👍👍"))),
-                     dplyr::across(dplyr::matches("growth_mindsets_a3"), ~ tlShiny:::tl_select_percent(.x, c("Agree 👍", "Strongly agree 👍👍"))),
-                     dplyr::across(dplyr::matches("math_enjoyment_a5"), ~ tlShiny:::tl_select_percent(.x, c("1 - Agree a lot 👍👍", "2 - Agree a little 👍"))),
-                     dplyr::across(c("mses_a6_3", "mses_a6_9", "mses_a6_8", "mses_a6_1"), ~ tlShiny:::tl_select_percent(.x, c("1 - Not at all like me 👎👎", "2 - Not much like me 👎"))),
-                     dplyr::across(c("mses_a6_2", "mses_a6_4", "mses_a6_5", "mses_a6_6", "mses_a6_7", "mses_a6_9", , "mses_a6_10", , "mses_a6_11", "mses_a6_12", "mses_a6_13"), ~ tlShiny:::tl_select_percent(.x, c("4 - Mostly like me 👍", "5 - Very much like me 👍👍"))),
-                     dplyr::across(dplyr::matches("math_a7"), ~ tlShiny:::tl_select_percent(.x, c("3 - Some of the time 👍", "4 - Most or all of the time 👍👍"))),
-                     dplyr::across(dplyr::matches("high_exp_one|rig_learn_one|relevance_two|affirm|connect_one|custom_two|asd_two|overall_experience"), ~ tlShiny:::tl_select_percent(.x, c("4 - Agree 👍", "5 - Strongly Agree 👍 👍"))),
-                     dplyr::across(dplyr::matches("high_exp_two"), ~ tlShiny:::tl_select_percent(.x, c("Very likely 👍", "Extremely likely 👍👍"))),
-                     dplyr::across(dplyr::matches("rig_learn_two|relevance_one|custom_one|asd_one"), ~ tlShiny:::tl_select_percent(.x, c("Often 👍", "Almost always 👍👍"))),
-                     dplyr::across(dplyr::matches("connect_two"), ~ tlShiny:::tl_select_percent(.x, c("Mostly belong 👍", "Completely belong 👍👍"))),
-                     n = dplyr::n()) |>
+      dplyr::across(dplyr::matches("happiness_belonging_3"), ~ tlShiny:::tl_select_percent(.x, c("1 - Disagree", "2 - Somewhat disagree"))),
+      dplyr::across(dplyr::matches("teacher_student_rel|self_efficacy|happiness_belonging_1|happiness_belonging_2|happiness_belonging_4|happiness_belonging_5|happiness_belonging_6"), ~ tlShiny:::tl_select_percent(.x, c("4 - Somewhat agree", "5 - Agree", "5 - Agree 👍", "6 - Strongly agree 👍👍"))),
+      dplyr::across(dplyr::matches("being_challenged"), ~ tlShiny:::tl_select_percent(.x, c("4 - Mostly true", "5 - Totally true"))),
+      dplyr::across(dplyr::matches("growth_mindsets_a1"), ~ tlShiny:::tl_select_percent(.x, c("1 - Strongly Disagree  👎👎", "2 - Disagree 👎"))),
+      dplyr::across(dplyr::matches("growth_mindsets_a2"), ~ tlShiny:::tl_select_percent(.x, c("Very true 👍", "Extremely true 👍👍"))),
+      dplyr::across(dplyr::matches("growth_mindsets_a3"), ~ tlShiny:::tl_select_percent(.x, c("Agree 👍", "Strongly agree 👍👍"))),
+      dplyr::across(dplyr::matches("math_enjoyment_a5"), ~ tlShiny:::tl_select_percent(.x, c("1 - Agree a lot 👍👍", "2 - Agree a little 👍"))),
+      dplyr::across(c("mses_a6_3", "mses_a6_9", "mses_a6_8", "mses_a6_1"), ~ tlShiny:::tl_select_percent(.x, c("1 - Not at all like me 👎👎", "2 - Not much like me 👎"))),
+      dplyr::across(c("mses_a6_2", "mses_a6_4", "mses_a6_5", "mses_a6_6", "mses_a6_7", "mses_a6_9", , "mses_a6_10", , "mses_a6_11", "mses_a6_12", "mses_a6_13"), ~ tlShiny:::tl_select_percent(.x, c("4 - Mostly like me 👍", "5 - Very much like me 👍👍"))),
+      dplyr::across(dplyr::matches("math_a7"), ~ tlShiny:::tl_select_percent(.x, c("3 - Some of the time 👍", "4 - Most or all of the time 👍👍"))),
+      dplyr::across(dplyr::matches("high_exp_one|rig_learn_one|relevance_two|affirm|connect_one|custom_two|asd_two|overall_experience"), ~ tlShiny:::tl_select_percent(.x, c("4 - Agree 👍", "5 - Strongly Agree 👍 👍"))),
+      dplyr::across(dplyr::matches("high_exp_two"), ~ tlShiny:::tl_select_percent(.x, c("Very likely 👍", "Extremely likely 👍👍"))),
+      dplyr::across(dplyr::matches("rig_learn_two|relevance_one|custom_one|asd_one"), ~ tlShiny:::tl_select_percent(.x, c("Often 👍", "Almost always 👍👍"))),
+      dplyr::across(dplyr::matches("connect_two"), ~ tlShiny:::tl_select_percent(.x, c("Mostly belong 👍", "Completely belong 👍👍"))),
+      n = dplyr::n()
+    ) |>
     tidyr::drop_na(prepost) |>
     tidyr::pivot_longer(!c(prepost, n), names_to = "grouping", values_to = "score")
 
@@ -1188,5 +1205,122 @@ get_percent_positive_student_survey <- function(data) {
       score = round(100 * mean(score, na.rm = TRUE), 2),
       n = dplyr::first(n)
     )
+}
 
+
+
+#' @title Contact Lead Graph Summary
+#' @description Returns a barchart for selections in the relevant questions of the contact lead survey
+#' @param data the data to use
+#' @return prints a ggplot object
+#' @export
+contact_lead_graph <- function(data) {
+  contact_lead <- data
+
+  contact_lead |>
+    tidytable::select(
+      `I am satisfied with the overall quality of Teaching Lab’s professional learning and/or coaching sessions.` = mid_year_likert_qs_1,
+      `I am satisfied with the overall quality of facilitation of the professional learning and/or coaching sessions.` = mid_year_likert_qs_2,
+      `Teaching Lab’s professional learning has been responsive to the needs of our educators/partnership.` = mid_year_likert_qs_3,
+      `I am satisfied with the logistics and communication from Teaching Lab.` = mid_year_likert_qs_4,
+      `I believe Teaching Lab’s professional learning work has improved the ability of teachers and educators in my school system to deliver high-quality instruction.` = mid_year_likert_qs_5,
+      `Teaching Lab is helping us to advance our goals.` = mid_year_likert_qs_6,
+      `I believe teachers in my school system better understand their curriculum because of Teaching Lab’s professional learning work.` = curriculum
+    ) |>
+    tidytable::pivot_longer(tidytable::everything(), names_to = "Question", values_to = "Response") |>
+    tidytable::drop_na(Response) |>
+    tidytable::group_by(Question, Response) |>
+    tidytable::count(sort = T) |>
+    tidytable::ungroup() |>
+    tidytable::group_by(Question) |>
+    tidytable::mutate(
+      Percent = round(100 * n / sum(n), 2)
+    ) |>
+    tidytable::ungroup()
+
+  contact_lead_agree <- contact_lead |>
+    tidytable::count(sort = T)
+
+  contact_lead_likert_final <- contact_lead_likert |>
+    tidytable::mutate(
+      Question = factor(Question),
+      Response = stringr::str_replace_all(Response, c(
+        "3- Neither agree nor disagree" = "3- Neither agree\nnor disagree",
+        "5- Strongly agree" = "5- Strongly\nagree"
+      )),
+      Response = factor(Response, levels = c(
+        "1- Strongly disagree",
+        "2- Disagree",
+        "3- Neither agree\nnor disagree",
+        "4- Agree",
+        "5- Strongly\nagree"
+      )),
+      Question = str_wrap(Question, width = 50)
+    )
+
+  if (nrow(contact_lead_likert_data) >= 1) {
+    p <- contact_lead_likert_data |>
+      ggplot2::ggplot(aes(
+        x = forcats::fct_reorder(Question, Percent, .desc = T),
+        y = Percent,
+        color = Response,
+        fill = Response
+      )) +
+      ggplot2::geom_col(color = NA, position = ggplot2::position_stack(reverse = TRUE)) +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
+          color = Response
+        ),
+        position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
+        fontface = "bold",
+        family = "Calibri Bold",
+        size = 11
+      ) +
+      ggplot2::labs(
+        x = "", y = "",
+        title = glue::glue("Mid/End Year Contact Lead Feedback (n = {sum(contact_lead_agree$n, na.rm = T)})"),
+        fill = ""
+      ) +
+      ggplot2::scale_fill_manual(values = c(
+        "1- Strongly disagree" = "#040404",
+        "2- Disagree" = "#032E3F",
+        "3- Neither agree\nnor disagree" = "#02587A",
+        "4- Agree" = "#0182B4",
+        "5- Strongly\nagree" = "#00ACF0"
+      )) +
+      ggplot2::scale_color_manual(values = c(
+        "1- Strongly disagree" = "white",
+        "2- Disagree" = "black",
+        "3- Neither agree\nnor disagree" = "black",
+        "4- Agree" = "black",
+        "5- Strongly\nagree" = "black"
+      )) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(),
+        color = "none"
+      ) +
+      ggplot2::scale_y_continuous(
+        labels = scales::label_percent(scale = 1),
+        expand = c(0.14, 0)
+      ) +
+      ggplot2::coord_flip() +
+      tlShiny::theme_tl(legend = TRUE) +
+      ggplot2::theme(
+        axis.text.y = ggplot2::element_text(
+          size = 18,
+          margin = ggplot2::margin(r = -80)
+        ),
+        plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
+        legend.margin = ggplot2::margin(-10, 0, 0, -40),
+        legend.text = ggplot2::element_text(size = 23),
+        legend.key.width = ggplot2::unit(2, "cm"),
+        legend.key.height = ggplot2::unit(0.5, "cm"),
+        legend.position = "bottom"
+      )
+
+    p
+  } else {
+    tlShiny:::no_data_plot_filters
+  }
 }

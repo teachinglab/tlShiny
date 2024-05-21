@@ -20,6 +20,6 @@ Gets the percent that agree and strongly agree
 \examples{
 \dontrun{
 plot_agree |>
-agree_strongly_agree(question = "x")
+  agree_strongly_agree(question = "x")
 }
 }

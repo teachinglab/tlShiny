@@ -149,8 +149,8 @@ know_assess_summary_detailed <- function(data, know_assess) {
 
 }
 
-#' @title Knowledge Assessment Graph Question-level Summary
-#' @description Creates a graph specifically for Knowledge Assessments Scored by Question from Qualtrics
+#' @title ELA IPG Chart Summary Maker
+#' @description Creates a chart to summarise the ELA IPG based on the round selected
 #' @param data the data
 #' @param round the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")
 #' @return a ggplot
@@ -295,4 +295,307 @@ make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observatio
     )
 
   ela_plot
+}
+
+
+#' @title FSOT IPG Chart Summary Maker
+#' @description Creates a chart to summarise the FSOT IPG based on the round selected
+#' @param data the data
+#' @param round the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")
+#' @return a ggplot
+#' @export
+
+make_ipg_fsot_summary_chart <- function(data, round = "Baseline (first observation of the year)") {
+
+  base_color <- "#040404"
+  end_color <- "#04abeb"
+
+  ipg_adjust <- data |>
+    dplyr::filter(direct_to_ts_obs == round)
+
+  fsot <- ipg_adjust |>
+    dplyr::select(
+      fsot_ac1, fsot_ac2, # AC1/AC2, 1-4, Q69 is not 1-4
+      fsot_td1, fsot_td2, fsot_td3, fsot_td4, # TD, 1-4
+      fsot_sp1, fsot_sp2, fsot_sp3, fsot_sp4, # SP, 1-4
+      fsot_ad1, fsot_ad2
+    ) |> # AD1/AD2, 1-3
+    dplyr::mutate(
+      dplyr::across(dplyr::everything(), ~ as.character(.x))
+    ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      overall_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_ac1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_ac2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td4, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp4, type = "numeric"),
+          tlShiny::grade_ipg(fsot_ad1, type = "numeric_low"),
+          tlShiny::grade_ipg(fsot_ad2, type = "numeric_low")
+        ),
+        na.rm = TRUE
+      ),
+      ac_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_ac1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_ac2, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ad_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_ad1, type = "numeric_low"),
+          tlShiny::grade_ipg(fsot_ad2, type = "numeric_low")
+        ),
+        na.rm = TRUE
+      ),
+      sp_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_sp1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp4, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      td_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_td1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td4, type = "numeric")
+        ),
+        na.rm = TRUE
+      )
+    ) |>
+    dplyr::ungroup() |>
+    tidyr::drop_na(overall_score) |>
+    dplyr::summarise(
+      ac_n = sum(!is.na(ac_score)),
+      ac_score = mean(ac_score, na.rm = TRUE),
+      ad_n = sum(!is.na(ad_score)),
+      ad_score = mean(ad_score, na.rm = TRUE),
+      sp_n = sum(!is.na(sp_score)),
+      sp_score = mean(sp_score, na.rm = TRUE),
+      td_n = sum(!is.na(td_score)),
+      td_score = mean(td_score, na.rm = TRUE),
+      n = sum(!is.na(overall_score)),
+      overall_score = mean(overall_score, na.rm = TRUE)
+    ) |>
+    tidyr::pivot_longer(cols = tidyr::ends_with("score"), names_to = "Core Action", values_to = "Score") |>
+    dplyr::mutate(
+      n = dplyr::case_when(
+        `Core Action` == "ac_score" ~ ac_n,
+        `Core Action` == "ad_score" ~ ad_n,
+        `Core Action` == "sp_score" ~ sp_n,
+        `Core Action` == "td_score" ~ td_n,
+        `Core Action` == "overall_score" ~ n
+      ),
+      `Core Action` = stringr::str_replace_all(`Core Action`, c(
+        "overall_score" = "Overall",
+        "ac_score" = "Aligned\nContent",
+        "ad_score" = "Assessment\n& Differentiation",
+        "sp_score" = "Student\nPractice",
+        "td_score" = "Teacher-Directed\nInstruction"
+      ))
+    ) |>
+    dplyr::select(-dplyr::ends_with("_n")) |>
+    dplyr::mutate(
+      `Core Action` = factor(`Core Action`, c(
+        "Overall",
+        "Aligned\nContent",
+        "Assessment\n& Differentiation",
+        "Student\nPractice",
+        "Teacher-Directed\nInstruction"
+      ))
+    )
+
+  fsot_plot <- fsot |>
+    ggplot2::ggplot(ggplot2::aes(x = `Core Action`, y = Score, fill = `Core Action`)) +
+    ggplot2::geom_col() +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score), "% (n = ", n, ")")),
+                       fontface = "bold",
+                       vjust = -0.25,
+                       size = 7
+    ) +
+    ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = length(unique(fsot$`Core Action`)), base_color_start = base_color, end_color_start = end_color)) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 100),
+      expand = c(0, 12),
+      breaks = seq(10, 100, 10)
+    ) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = dplyr::case_when(round == "Baseline (first observation of the year)" ~ "% Positive Indicators Baseline FSOT IPG",
+                               round == "Mid-year (middle of service, if applicable)" ~ "% Positive Indicators Mid-year FSOT IPG",
+                               round == "End of year (last observation of the year)" ~ "% Positive Indicators End of Year FSOT IPG",
+                               round == "Ongoing" ~ "% Positive Indicators Ongoing FSOT IPG",
+                               round == "Other" ~ "% Positive Indicators Other FSOT IPG"),
+      caption = "Note that n sizes represent the number of overall scores per grouping, the actual number of responses that qualify for scores may vary"
+    ) +
+    tlShiny::theme_tl() +
+    ggplot2::theme(
+      strip.text = ggplot2::element_text(face = "bold", hjust = 0.5),
+      axis.text.x = ggplot2::element_text(size = 17),
+      axis.text.y = ggplot2::element_text(size = 17),
+      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold"),
+      plot.caption = ggplot2::element_text(size = 12, face = "italic")
+    )
+
+  fsot_plot
+}
+
+#' @title Math IPG Chart Summary Maker
+#' @description Creates a chart to summarise the Math IPG based on the round selected
+#' @param data the data
+#' @param round the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")
+#' @return a ggplot
+#' @export
+
+
+make_ipg_math_summary_chart <- function(round = "Baseline (first observation of the year)") {
+
+  base_color <- "#040404"
+  end_color <- "#04abeb"
+
+  ipg_adjust <- data |>
+    dplyr::filter(direct_to_ts_obs == round)
+
+  k_12_math <- ipg_adjust |>
+    dplyr::select(
+      k12_m_ca1a, k12_m_ca1b, k12_m_ca1c, # Core Action 1 yes-no
+      k12_m_ca2a, k12_m_ca2b, k12_m_ca2c, k12_m_ca2d, # Core Action 2 1-4
+      k12_m_ca3a, k12_m_ca3b, k12_m_ca3c, k12_m_ca3d, k12_m_ca3e
+    ) |> # Core Action 3 1-4
+    dplyr::mutate(
+      dplyr::across(dplyr::everything(), ~ as.character(.x))
+    ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      overall_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1c, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2d, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3e, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca1_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1c, type = "character")
+        ),
+        na.rm = TRUE
+      ),
+      ca2_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2d, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca3_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3e, type = "numeric")
+        ),
+        na.rm = TRUE
+      )
+    ) |>
+    dplyr::ungroup() |>
+    tidyr::drop_na(overall_score) |>
+    dplyr::summarise(
+      ca1_n = sum(!is.na(ca1_score)),
+      ca1_score = mean(ca1_score, na.rm = TRUE),
+      ca2_n = sum(!is.na(ca2_score)),
+      ca2_score = mean(ca2_score, na.rm = TRUE),
+      ca3_n = sum(!is.na(ca3_score)),
+      ca3_score = mean(ca3_score, na.rm = TRUE),
+      n = sum(!is.na(overall_score)),
+      overall_score = mean(overall_score, na.rm = TRUE)
+    ) |>
+    tidyr::pivot_longer(cols = tidyr::ends_with("score"), names_to = "Core Action", values_to = "Score") |>
+    dplyr::mutate(
+      n = case_when(
+        `Core Action` == "ca1_score" ~ ca1_n,
+        `Core Action` == "ca2_score" ~ ca2_n,
+        `Core Action` == "ca3_score" ~ ca3_n,
+        `Core Action` == "overall_score" ~ n
+      ),
+      `Core Action` = stringr::str_replace_all(`Core Action`, c(
+        "overall_score" = "Overall",
+        "ca1_score" = "Core Action 1",
+        "ca2_score" = "Core Action 2",
+        "ca3_score" = "Core Action 3"
+      ))
+    ) |>
+    dplyr::select(-dplyr::ends_with("_n")) |>
+    dplyr::mutate(
+      `Core Action` = factor(`Core Action`, c(
+        "Overall",
+        "Core Action 1",
+        "Core Action 2",
+        "Core Action 3"
+      ))
+    )
+
+  unique_color_n <- length(unique(k_12_math$`Core Action`))
+
+  math_plot <- k_12_math |>
+    ggplot2::ggplot(aes(x = `Core Action`, y = Score, fill = `Core Action`)) +
+    ggplot2::geom_col() +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score), "% (n = ", n, ")")),
+              fontface = "bold",
+              vjust = -0.25,
+              size = 7
+    ) +
+    ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 105),
+      expand = c(0, 12),
+      breaks = seq(10, 100, 10)
+    ) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = dplyr::case_when(round == "Baseline (first observation of the year)" ~ "% Positive Indicators Baseline K-12 Math IPG",
+                               round == "Mid-year (middle of service, if applicable)" ~ "% Positive Indicators Mid-year K-12 Math IPG",
+                               round == "End of year (last observation of the year)" ~ "% Positive Indicators End of Year K-12 Math IPG",
+                               round == "Ongoing" ~ "% Positive Indicators Ongoing K-12 Math IPG",
+                               round == "Other" ~ "% Positive Indicators Other K-12 Math IPG"),
+      caption = "Note that n sizes represent the number of overall scores per grouping, the actual number of responses that qualify for scores may vary"
+    ) +
+    tlShiny::theme_tl() +
+    ggplot2::theme(
+      strip.text = ggplot2::element_text(face = "bold", hjust = 0.5),
+      axis.text.x = ggplot2::element_text(size = 16),
+      axis.text.y = ggplot2::element_text(size = 16),
+      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold"),
+      plot.caption = ggplot2::element_text(size = 12, face = "italic")
+    )
+
+  math_plot
 }
