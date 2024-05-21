@@ -148,3 +148,151 @@ know_assess_summary_detailed <- function(data, know_assess) {
   return(p)
 
 }
+
+#' @title Knowledge Assessment Graph Question-level Summary
+#' @description Creates a graph specifically for Knowledge Assessments Scored by Question from Qualtrics
+#' @param data the data
+#' @param round the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")
+#' @return a ggplot
+#' @export
+
+make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observation of the year)") {
+
+  base_color <- "#040404"
+  end_color <- "#04abeb"
+
+  ipg_adjust <- data |>
+    dplyr::filter(direct_to_ts_obs == round)
+
+  k_12_ela <- ipg_adjust |>
+    dplyr::select(
+      k12_ela_ca1a, k12_ela_ca1b, k12_ela_ca1c, # Core Action 1, Yes/No
+      k12_ela_ca2a, k12_ela_ca2b, k12_ela_ca2c, k12_ela_ca2d, # Core Action 2, 1-4
+      k12_ela_ca3a, k12_ela_ca3b, k12_ela_ca3c, k12_ela_ca3d, k12_ela_ca3e, k12_ela_ca3f
+    ) |> # Core Action 3, 1-4
+    dplyr::mutate(
+      dplyr::across(everything(), ~ as.character(.x))
+    ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      overall_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_ela_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1c, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2d, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3e, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3f, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca1_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_ela_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1c, type = "character")
+        ),
+        na.rm = TRUE
+      ),
+      ca2_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_ela_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2d, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca3_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_ela_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3e, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3f, type = "numeric")
+        ),
+        na.rm = TRUE
+      )
+    ) |>
+    dplyr::ungroup() |>
+    tidyr::drop_na(overall_score) |>
+    dplyr::summarise(
+      ca1_n = sum(!is.na(ca1_score)),
+      ca1_score = mean(ca1_score, na.rm = TRUE),
+      ca2_n = sum(!is.na(ca2_score)),
+      ca2_score = mean(ca2_score, na.rm = TRUE),
+      ca3_n = sum(!is.na(ca3_score)),
+      ca3_score = mean(ca3_score, na.rm = TRUE),
+      n = sum(!is.na(overall_score)),
+      overall_score = mean(overall_score, na.rm = TRUE)
+    ) |>
+    tidyr::pivot_longer(cols = dplyr::ends_with("score"), names_to = "Core Action", values_to = "Score") |>
+    dplyr::mutate(
+      n = case_when(
+        `Core Action` == "ca1_score" ~ ca1_n,
+        `Core Action` == "ca2_score" ~ ca2_n,
+        `Core Action` == "ca3_score" ~ ca3_n,
+        `Core Action` == "overall_score" ~ n
+      ),
+      `Core Action` = stringr::str_replace_all(`Core Action`, c(
+        "overall_score" = "Overall",
+        "ca1_score" = "Core Action 1",
+        "ca2_score" = "Core Action 2",
+        "ca3_score" = "Core Action 3"
+      ))
+    ) |>
+    dplyr::select(-dplyr::ends_with("_n")) |>
+    dplyr::mutate(
+      `Core Action` = factor(`Core Action`, c(
+        "Overall",
+        "Core Action 1",
+        "Core Action 2",
+        "Core Action 3"
+      ))
+    )
+
+  unique_color_n <- length(unique(k_12_ela$`Core Action`))
+
+  ela_plot <- k_12_ela |>
+    ggplot2::ggplot(aes(x = `Core Action`, y = Score, fill = `Core Action`)) +
+    ggplot2::geom_col() +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score), "% (n = ", n, ")")),
+              fontface = "bold",
+              vjust = -0.25,
+              size = 7
+    ) +
+    ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 105),
+      expand = c(0, 12),
+      breaks = seq(10, 100, 10)
+    ) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = dplyr::case_when(round == "Baseline (first observation of the year)" ~ "% Positive Indicators Baseline K-12 ELA IPG",
+                               round == "Mid-year (middle of service, if applicable)" ~ "% Positive Indicators Mid-year K-12 ELA IPG",
+                               round == "End of year (last observation of the year)" ~ "% Positive Indicators End of Year K-12 ELA IPG",
+                               round == "Ongoing" ~ "% Positive Indicators Ongoing K-12 ELA IPG",
+                               round == "Other" ~ "% Positive Indicators Other K-12 ELA IPG"),
+      caption = "Note that n sizes represent the number of overall scores per grouping, the actual number of responses that qualify for scores may vary"
+    ) +
+    tlShiny::theme_tl() +
+    ggplot2::theme(
+      strip.text = ggplot2::element_text(face = "bold", hjust = 0.5),
+      axis.text.x = ggplot2::element_text(size = 16),
+      axis.text.y = ggplot2::element_text(size = 16),
+      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold"),
+      plot.caption = ggplot2::element_text(size = 12, face = "italic")
+    )
+
+  ela_plot
+}
