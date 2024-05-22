@@ -613,8 +613,8 @@ make_teacher_curriculum_usage <- function(data) {
       n = sum(n)
     )
 
-  n_size_1 <- sum(!is.na(data$materials_1[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$materials_1[data$prepost == "Post"]))
+  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
   curriculum_usage |>
     ggplot2::ggplot(aes(
@@ -700,8 +700,8 @@ make_teacher_lesson_usage <- function(data) {
       ))
     )
 
-  n_size_1 <- sum(!is.na(data$lesson_modifications[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$lesson_modifications[data$prepost == "Post"]))
+  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
   lesson_usage |>
     ggplot2::ggplot(ggplot2::aes(
@@ -812,8 +812,8 @@ make_teacher_curriculum_perceptions <- function(data) {
     tidytable::ungroup() |>
     tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
 
-  n_size_1 <- sum(!is.na(data$curriculum_sch_dist_1[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$curriculum_sch_dist_1[data$prepost == "Post"]))
+  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
   curriculum_perc |>
     ggplot2::ggplot(ggplot2::aes(
