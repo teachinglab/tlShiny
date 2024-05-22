@@ -4,12 +4,15 @@
 \alias{make_ipg_math_summary_chart}
 \title{Math IPG Chart Summary Maker}
 \usage{
-make_ipg_math_summary_chart(round = "Baseline (first observation of the year)")
+make_ipg_math_summary_chart(
+  data,
+  round = "Baseline (first observation of the year)"
+)
 }
 \arguments{
-\item{round}{the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")}
-
 \item{data}{the data}
+
+\item{round}{the round of the IPG for which data should be pulled (can be one of "Baseline (first observation of the year)", "Mid-year (middle of service, if applicable)", "End of year (last observation of the year)", "Other", or "Ongoing")}
 }
 \value{
 a ggplot
