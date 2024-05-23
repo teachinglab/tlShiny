@@ -6,55 +6,59 @@
 #' @export
 know_assess_summary <- function(data, know_assess_filter) {
 
-  plot_data <- data |>
-    dplyr::filter(question1 == "Score" & know_assess == know_assess_filter) |>
-    dplyr::mutate(percent = 100 * score / max_score) |>
-    dplyr::group_by(prepost, know_assess) |>
-    dplyr::summarise(
-      percent = round(mean(percent, na.rm = T), 2),
-      n = dplyr::n()
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::mutate(
-      prepost = ifelse(prepost == "pre",
-                       "Before",
-                       "After"
-      ),
-      prepost = factor(prepost, levels = c("Before", "After")),
-      know_assess = paste0(know_assess, " % Correct")
-    ) |>
-    print()
+  if (nrow(data) >= 1) {
+    plot_data <- data |>
+      dplyr::filter(question1 == "Score" & know_assess == know_assess_filter) |>
+      dplyr::mutate(percent = 100 * score / max_score) |>
+      dplyr::group_by(prepost, know_assess) |>
+      dplyr::summarise(
+        percent = round(mean(percent, na.rm = T), 2),
+        n = dplyr::n()
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::mutate(
+        prepost = ifelse(prepost == "pre",
+                         "Before",
+                         "After"
+        ),
+        prepost = factor(prepost, levels = c("Before", "After")),
+        know_assess = paste0(know_assess, " % Correct")
+      ) |>
+      print()
 
-  n1 <- plot_data$n[plot_data$prepost == "Before"]
-  if (length(plot_data$n[plot_data$prepost == "After"]) != 0) {
-    n2 <- plot_data$n[plot_data$prepost == "After"]
+    n1 <- plot_data$n[plot_data$prepost == "Before"]
+    if (length(plot_data$n[plot_data$prepost == "After"]) != 0) {
+      n2 <- plot_data$n[plot_data$prepost == "After"]
+    } else {
+      n2 <- 0
+    }
+
+    p <- plot_data |>
+      ggplot2::ggplot(ggplot2::aes(x = prepost, y = percent, fill = prepost)) +
+      ggplot2::geom_col() +
+      ggplot2::geom_text(ggplot2::aes(label = paste0(round(percent), "%")),
+                         vjust = -1,
+                         color = "black",
+                         fontface = "bold",
+                         family = "Calibri Bold",
+                         size = 12) +
+      ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
+      ggplot2::labs(x = "", y = "",
+                    title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
+      ) +
+      ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
+                                  limits = c(0, 100)) +
+      tlShiny::theme_tl() +
+      ggplot2::theme(
+        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, family = "Calibri Bold"),
+        legend.position = "none",
+        axis.text.x = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"),
+        axis.text.y = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"))
+
+    return(p)
   } else {
-    n2 <- 0
+    return(tlShiny::no_data_plot_currently)
   }
-
-  p <- plot_data |>
-    ggplot2::ggplot(ggplot2::aes(x = prepost, y = percent, fill = prepost)) +
-    ggplot2::geom_col() +
-    ggplot2::geom_text(ggplot2::aes(label = paste0(round(percent), "%")),
-                       vjust = -1,
-                       color = "black",
-                       fontface = "bold",
-                       family = "Calibri Bold",
-                       size = 10) +
-    ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
-    ggplot2::labs(x = "", y = "",
-                  title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
-    ) +
-    ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1), expand = c(0.1, 0),
-                                limits = c(0, 100)) +
-    tlShiny::theme_tl() +
-    ggplot2::theme(
-      plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, family = "Calibri Bold"),
-      legend.position = "none",
-      axis.text.x = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"),
-      axis.text.y = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"))
-
-  return(p)
 
 }
 
@@ -579,97 +583,101 @@ make_ipg_math_summary_chart <- function(data, round = "Baseline (first observati
 
 make_teacher_curriculum_usage <- function(data) {
 
-  curriculum_usage <- data |>
-    tidytable::select(prepost, tidytable::contains("materials")) |>
-    tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-    tidytable::drop_na(value) |>
-    tidytable::mutate(name = stringr::str_replace_all(name, c(
-      "materials_1" = "curriculum materials adopted by your district",
-      "materials_2" = "materials developed by your school or district",
-      "materials_3" = "materials you found on the internet",
-      "materials_4" = "materials developed by yourself or with colleagues"
-    ))) |>
-    tidytable::group_by(name, value, prepost) |>
-    tidytable::count(sort = T) |>
-    tidytable::ungroup() |>
-    tidytable::drop_na(value) |>
-    tidytable::mutate(
-      name = stringr::str_wrap(name, 25),
-      value = stringr::str_wrap(value, 20)
-    ) |>
-    tidytable::group_by(name, prepost) |>
-    tidytable::mutate(
-      Percent = round(100 * n / sum(n), 2),
-      value = factor(value, levels = c(
-        "Never use",
-        "Sometimes (once a\nmonth)",
-        "Use often (once or\ntwice weekly)",
-        "Use everyday"
-      ))
-    ) |>
-    tidytable::filter(value %in% c("Use often (once or\ntwice weekly)", "Use everyday")) |>
-    tidytable::summarise(
-      Percent = sum(Percent),
-      n = sum(n)
-    )
+  if (nrow(data) >= 1) {
+    curriculum_usage <- data |>
+      tidytable::select(prepost, tidytable::contains("materials")) |>
+      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      tidytable::drop_na(value) |>
+      tidytable::mutate(name = stringr::str_replace_all(name, c(
+        "materials_1" = "curriculum materials adopted by your district",
+        "materials_2" = "materials developed by your school or district",
+        "materials_3" = "materials you found on the internet",
+        "materials_4" = "materials developed by yourself or with colleagues"
+      ))) |>
+      tidytable::group_by(name, value, prepost) |>
+      tidytable::count(sort = T) |>
+      tidytable::ungroup() |>
+      tidytable::drop_na(value) |>
+      tidytable::mutate(
+        name = stringr::str_wrap(name, 25),
+        value = stringr::str_wrap(value, 20)
+      ) |>
+      tidytable::group_by(name, prepost) |>
+      tidytable::mutate(
+        Percent = round(100 * n / sum(n), 2),
+        value = factor(value, levels = c(
+          "Never use",
+          "Sometimes (once a\nmonth)",
+          "Use often (once or\ntwice weekly)",
+          "Use everyday"
+        ))
+      ) |>
+      tidytable::filter(value %in% c("Use often (once or\ntwice weekly)", "Use everyday")) |>
+      tidytable::summarise(
+        Percent = sum(Percent),
+        n = sum(n)
+      )
 
-  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
+    n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+    n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
-  curriculum_usage |>
-    ggplot2::ggplot(aes(
-    x = forcats::fct_reorder(name, Percent, .desc = T),
-    y = Percent
-  )) +
-    ggplot2::geom_col(ggplot2::aes(fill = prepost, group = prepost),
-             color = NA, position = ggplot2::position_dodge2(width = 1, reverse = TRUE)
-    ) +
-    ggplot2::geom_text(
-      ggplot2::aes(
-        color = prepost,
-        label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
-      ),
-      position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
-      hjust = -0.25,
-      fontface = "bold",
-      size = 6
-    ) +
-    ggplot2::labs(
-      x = "Please indicate the extent to which you use...", y = "",
-      title = glue::glue("Teacher Curriculum Usage\n% selected use everyday or use often"),
-      fill = ""
-    ) +
-    ggplot2::scale_fill_manual(values = c(
-      "#00ACF0", "black"
-    ), labels = c(glue::glue("Pre (n = {n_size_1})"), glue::glue("Post (n = {n_size_2})"))) +
-    ggplot2::scale_color_manual(values = c(
-      "#00ACF0", "black"
-    )) +
-    ggplot2::guides(
-      fill = guide_legend()
-    ) +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_percent(scale = 1),
-      expand = c(0.14, 0)
-    ) +
-    ggplot2::coord_flip() +
-    ggplot2::guides(color = "none") +
-    tlShiny::theme_tl(legend = FALSE) +
-    ggplot2::theme(
-      axis.text.y = ggplot2::element_text(
-        margin = margin(t = 0, l = 0, r = -110, b = 0),
-        size = 19
-      ),
-      axis.title.y = ggplot2::element_text(size = 19),
-      axis.text.x = ggplot2::element_blank(),
-      plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
-      legend.position = "bottom",
-      legend.key.height = ggplot2::unit(1.3, "cm"),
-      legend.key.width = ggplot2::unit(1.3, "cm"),
-      legend.key.size = ggplot2::unit(0.75, "cm"),
-      legend.text = ggplot2::element_text(size = 18),
-      legend.margin = ggplot2::margin(-25, 0, 0, -150)
-    )
+    curriculum_usage |>
+      ggplot2::ggplot(aes(
+        x = forcats::fct_reorder(name, Percent, .desc = T),
+        y = Percent
+      )) +
+      ggplot2::geom_col(ggplot2::aes(fill = prepost, group = prepost),
+                        color = NA, position = ggplot2::position_dodge2(width = 1, reverse = TRUE)
+      ) +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          color = prepost,
+          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+        ),
+        position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
+        hjust = -0.25,
+        fontface = "bold",
+        size = 6
+      ) +
+      ggplot2::labs(
+        x = "Please indicate the extent to which you use...", y = "",
+        title = glue::glue("Teacher Curriculum Usage\n% selected use everyday or use often"),
+        fill = ""
+      ) +
+      ggplot2::scale_fill_manual(values = c(
+        "#00ACF0", "black"
+      ), labels = c(glue::glue("Pre (n = {n_size_1})"), glue::glue("Post (n = {n_size_2})"))) +
+      ggplot2::scale_color_manual(values = c(
+        "#00ACF0", "black"
+      )) +
+      ggplot2::guides(
+        fill = guide_legend()
+      ) +
+      ggplot2::scale_y_continuous(
+        labels = scales::label_percent(scale = 1),
+        expand = c(0.14, 0)
+      ) +
+      ggplot2::coord_flip() +
+      ggplot2::guides(color = "none") +
+      tlShiny::theme_tl(legend = FALSE) +
+      ggplot2::theme(
+        axis.text.y = ggplot2::element_text(
+          margin = margin(t = 0, l = 0, r = -110, b = 0),
+          size = 19
+        ),
+        axis.title.y = ggplot2::element_text(size = 19),
+        axis.text.x = ggplot2::element_blank(),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        legend.position = "bottom",
+        legend.key.height = ggplot2::unit(1.3, "cm"),
+        legend.key.width = ggplot2::unit(1.3, "cm"),
+        legend.key.size = ggplot2::unit(0.75, "cm"),
+        legend.text = ggplot2::element_text(size = 18),
+        legend.margin = ggplot2::margin(-25, 0, 0, -150)
+      )
+  } else {
+    tlShiny::no_data_plot_currently
+  }
 
 }
 
@@ -681,88 +689,96 @@ make_teacher_curriculum_usage <- function(data) {
 
 make_teacher_lesson_usage <- function(data) {
 
-  lesson_usage <- data |>
-    tidytable::select(prepost, lesson_modifications) |>
-    tidytable::mutate(lesson_modifications = as.character(lesson_modifications)) |>
-    tidytable::drop_na(lesson_modifications) |>
-    tidytable::group_by(lesson_modifications, prepost) |>
-    tidytable::count(sort = T) |>
-    tidytable::ungroup() |>
-    tidytable::group_by(prepost) |>
-    tidytable::mutate(
-      lesson_modifications = stringr::str_wrap(lesson_modifications, 20),
-      Percent = round(100 * n / sum(n), 2),
-      lesson_modifications = factor(lesson_modifications, levels = c(
-        "with no or few\nmodifications",
-        "with modifications\nto less than half of\na lesson plan",
-        "with modifications\nto more than half of\na lesson plan",
-        "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans"
-      ))
-    )
+  if (nrow(data) >= 1) {
+    lesson_usage <- data |>
+      tidytable::select(prepost, lesson_modifications) |>
+      tidytable::mutate(lesson_modifications = as.character(lesson_modifications)) |>
+      tidytable::drop_na(lesson_modifications) |>
+      tidytable::group_by(lesson_modifications, prepost) |>
+      tidytable::count(sort = T) |>
+      tidytable::ungroup() |>
+      tidytable::group_by(prepost) |>
+      tidytable::mutate(
+        lesson_modifications = stringr::str_wrap(lesson_modifications, 20),
+        Percent = round(100 * n / sum(n), 2),
+        lesson_modifications = factor(lesson_modifications, levels = c(
+          "with no or few\nmodifications",
+          "with modifications\nto less than half of\na lesson plan",
+          "with modifications\nto more than half of\na lesson plan",
+          "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans"
+        ))
+      )
 
-  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
+    n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+    n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
-  lesson_usage |>
-    ggplot2::ggplot(ggplot2::aes(
-      x = prepost,
-      y = Percent,
-      fill = lesson_modifications
-    )) +
-    ggplot2::geom_col(ggplot2::aes(group = lesson_modifications), color = NA, position = ggplot2::position_stack(), width = 0.7) +
-    ggplot2::geom_text(
-      ggplot2::aes(
-        color = lesson_modifications,
-        label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
-      ),
-      position = ggplot2::position_stack(vjust = 0.5),
-      fontface = "bold",
-      family = "Calibri Bold",
-      size = 6
-    ) +
-    ggplot2::labs(
-      y = "I typically use lessons with...", x = "",
-      title = glue::glue("Teachers' use of lessons from district or\nschool-adopted materials (pre n = {format(n_size_1, big.mark = ',')}, post n = {format(n_size_2, big.mark = ',')})"),
-      fill = ""
-    ) +
-    ggplot2::scale_fill_manual(values = c(
-      "with no or few\nmodifications" = "#032E3F",
-      "with modifications\nto less than half of\na lesson plan" = "#02587A",
-      "with modifications\nto more than half of\na lesson plan" = "#0182B4",
-      "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans" = "gray30"
-    )) +
-    ggplot2::scale_color_manual(values = c(
-      "with no or few\nmodifications" = "white",
-      "with modifications\nto less than half of\na lesson plan" = "white",
-      "with modifications\nto more than half of\na lesson plan" = "black",
-      "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans" = "white"
-    )) +
-    ggplot2::guides(
-      fill = ggplot2::guide_legend(reverse = TRUE),
-      color = "none"
-    ) +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_percent(scale = 1),
-      expand = c(0.14, 0)
-    ) +
-    ggplot2::coord_flip() +
-    tlShiny::theme_tl(legend = TRUE) +
-    ggplot2::theme(
-      axis.title.y = ggplot2::element_blank(),
-      axis.text.y = ggplot2::element_text(
-        size = 20.5,
-        margin = ggplot2::margin(t = 0, l = 0, r = -115, b = 0)
-      ),
-      axis.text.x = ggplot2::element_blank(),
-      axis.title.x = ggplot2::element_text(size = 19, face = "bold", family = "Calibri Bold"),
-      legend.position = "bottom",
-      legend.text = ggplot2::element_text(size = 19.5, family = "Calibri Bold"),
-      legend.key.width = ggplot2::unit(3, "cm"),
-      legend.key.height = ggplot2::unit(1, "cm"),
-      plot.title = ggplot2::element_text(size = 26.5, face = "bold", family = "Calibri Bold"),
-      panel.grid.major = ggplot2::element_blank(),
-      panel.grid.minor = ggplot2::element_blank()
-    )
+    lesson_usage |>
+      ggplot2::ggplot(ggplot2::aes(
+        x = prepost,
+        y = forcats::fct_reorder(Percent, lesson_modifications),
+        fill = lesson_modifications
+      )) +
+      ggplot2::geom_col(ggplot2::aes(group = lesson_modifications),
+                        color = NA,
+                        position = ggplot2::position_stack(),
+                        width = 0.7) +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          color = lesson_modifications,
+          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+        ),
+        position = ggplot2::position_stack(vjust = 0.5),
+        fontface = "bold",
+        family = "Calibri Bold",
+        size = 6
+      ) +
+      ggplot2::labs(
+        y = "I typically use lessons with...", x = "",
+        title = glue::glue("Teachers' use of lessons from district or\nschool-adopted materials (pre n = {format(n_size_1, big.mark = ',')}, post n = {format(n_size_2, big.mark = ',')})"),
+        fill = ""
+      ) +
+      ggplot2::scale_fill_manual(values = c(
+        "with no or few\nmodifications" = "#032E3F",
+        "with modifications\nto less than half of\na lesson plan" = "#02587A",
+        "with modifications\nto more than half of\na lesson plan" = "#0182B4",
+        "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans" = "gray30"
+      )) +
+      ggplot2::scale_color_manual(values = c(
+        "with no or few\nmodifications" = "white",
+        "with modifications\nto less than half of\na lesson plan" = "white",
+        "with modifications\nto more than half of\na lesson plan" = "black",
+        "my main materials do\nnot include lesson\nplans or I typically\ncreate my own lesson\nplans" = "white"
+      )) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(reverse = TRUE),
+        color = "none"
+      ) +
+      ggplot2::scale_y_continuous(
+        labels = scales::label_percent(scale = 1),
+        expand = c(0.14, 0)
+      ) +
+      ggplot2::coord_flip() +
+      tlShiny::theme_tl(legend = TRUE) +
+      ggplot2::theme(
+        axis.title.y = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_text(
+          size = 20.5,
+          margin = ggplot2::margin(t = 0, l = 0, r = -115, b = 0)
+        ),
+        axis.text.x = ggplot2::element_blank(),
+        axis.title.x = ggplot2::element_text(size = 19, face = "bold", family = "Calibri Bold"),
+        legend.position = "bottom",
+        legend.text = ggplot2::element_text(size = 19.5, family = "Calibri Bold"),
+        legend.key.width = ggplot2::unit(3, "cm"),
+        legend.key.height = ggplot2::unit(1, "cm"),
+        plot.title = ggplot2::element_text(size = 26.5, face = "bold", family = "Calibri Bold"),
+        panel.grid.major = ggplot2::element_blank(),
+        panel.grid.minor = ggplot2::element_blank()
+      )
+  } else {
+    tlShiny::no_data_plot_currently
+  }
+
 
 }
 
@@ -775,101 +791,105 @@ make_teacher_lesson_usage <- function(data) {
 
 make_teacher_curriculum_perceptions <- function(data) {
 
-  curriculum_perc <- data |>
-    tidytable::select(prepost, tidytable::contains("curriculum_sch_dist")) |>
-    tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-    tidytable::mutate(name = stringr::str_replace_all(name, c(
-      "curriculum_sch_dist_1" = "The curriculum materials adopted by my school or district are well-suited to the needs of my students",
-      "curriculum_sch_dist_2" = "The  curriculum materials adopted by my school or district offer students high-quality opportunities to learn.",
-      "curriculum_sch_dist_3" = "The  curriculum materials adopted by my school or district are well-organized and easy to use.",
-      "curriculum_sch_dist_4" = "I like the  curriculum materials adopted by my school or district.",
-      "curriculum_sch_dist_5" = "The  curriculum materials adopted by my school or district will help my students learn.",
-      "curriculum_sch_dist_6" = "The  curriculum materials adopted by my school are too scripted and don't provide me with enough autonomy."
-    ))) |>
-    tidytable::group_by(name, value, prepost) |>
-    tidytable::count(sort = T) |>
-    tidytable::ungroup() |>
-    tidytable::drop_na(value) |>
-    tidytable::mutate(name = stringr::str_wrap(name, 25)) |>
-    tidytable::group_by(name, prepost) |>
-    tidytable::mutate(
-      Percent = round(100 * n / sum(n), 2),
-      value = factor(value, levels = c(
-        "Strongly disagree",
-        "Disagree",
-        "Neither agree nor disagree",
-        "Agree",
-        "Strongly agree"
-      ))
-    ) |>
-    tidytable::filter(value %in% c("Agree", "Strongly agree")) |>
-    tidytable::ungroup() |>
-    tidytable::group_by(name, prepost) |>
-    tidytable::summarise(
-      Percent = sum(Percent),
-      n = sum(n)
-    ) |>
-    tidytable::ungroup() |>
-    tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
+  if (nrow(data) >= 1) {
+    curriculum_perc <- data |>
+      tidytable::select(prepost, tidytable::contains("curriculum_sch_dist")) |>
+      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      tidytable::mutate(name = stringr::str_replace_all(name, c(
+        "curriculum_sch_dist_1" = "The curriculum materials adopted by my school or district are well-suited to the needs of my students",
+        "curriculum_sch_dist_2" = "The  curriculum materials adopted by my school or district offer students high-quality opportunities to learn.",
+        "curriculum_sch_dist_3" = "The  curriculum materials adopted by my school or district are well-organized and easy to use.",
+        "curriculum_sch_dist_4" = "I like the  curriculum materials adopted by my school or district.",
+        "curriculum_sch_dist_5" = "The  curriculum materials adopted by my school or district will help my students learn.",
+        "curriculum_sch_dist_6" = "The  curriculum materials adopted by my school are too scripted and don't provide me with enough autonomy."
+      ))) |>
+      tidytable::group_by(name, value, prepost) |>
+      tidytable::count(sort = T) |>
+      tidytable::ungroup() |>
+      tidytable::drop_na(value) |>
+      tidytable::mutate(name = stringr::str_wrap(name, 25)) |>
+      tidytable::group_by(name, prepost) |>
+      tidytable::mutate(
+        Percent = round(100 * n / sum(n), 2),
+        value = factor(value, levels = c(
+          "Strongly disagree",
+          "Disagree",
+          "Neither agree nor disagree",
+          "Agree",
+          "Strongly agree"
+        ))
+      ) |>
+      tidytable::filter(value %in% c("Agree", "Strongly agree")) |>
+      tidytable::ungroup() |>
+      tidytable::group_by(name, prepost) |>
+      tidytable::summarise(
+        Percent = sum(Percent),
+        n = sum(n)
+      ) |>
+      tidytable::ungroup() |>
+      tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
 
-  n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
-  n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
+    n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
+    n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
-  curriculum_perc |>
-    ggplot2::ggplot(ggplot2::aes(
-      x = forcats::fct_reorder(name, Percent, .desc = T),
-      y = Percent
-    )) +
-    ggplot2::geom_col(ggplot2::aes(fill = prepost),
-             color = NA, position = ggplot2::position_dodge2(width = 1, reverse = TRUE)
-    ) +
-    ggplot2::geom_text(
-      ggplot2::aes(
-        color = prepost,
-        label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
-      ),
-      position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
-      hjust = -0.25,
-      fontface = "bold",
-      family = "Calibri Bold",
-      size = 8
-    ) +
-    ggplot2::labs(
-      x = "", y = "",
-      title = glue::glue("Teacher perceptions of curriculum % that agree or strongly agree"),
-      fill = ""
-    ) +
-    ggplot2::scale_fill_manual(values = c(
-      "Pre" = "#00ACF0",
-      "Post" = "black"
-    ), labels = c(glue::glue("Pre (n = {format(n_size_1, big.mark = ',')})"), glue::glue("Post (n = {n_size_2})"))) +
-    ggplot2::scale_color_manual(values = c(
-      "Pre" = "#00ACF0",
-      "Post" = "black"
-    )) +
-    ggplot2::guides(
-      fill = ggplot2::guide_legend(),
-      color = "none"
-    ) +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_percent(scale = 1),
-      expand = c(0.14, 0)
-    ) +
-    ggplot2::coord_flip() +
-    tlShiny::theme_tl(legend = T) +
-    ggplot2::theme(
-      axis.text.y = ggplot2::element_text(
-        margin = ggplot2::margin(t = 0, l = 0, r = -100, b = 0),
-        size = 19
-      ),
-      axis.text.x = ggplot2::element_blank(),
-      plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
-      legend.position = "bottom",
-      legend.key.height = ggplot2::unit(1.3, "cm"),
-      legend.key.width = ggplot2::unit(1.3, "cm"),
-      legend.key.size = ggplot2::unit(0.75, "cm"),
-      legend.text = ggplot2::element_text(size = 22, family = "Calibri Bold"),
-      legend.margin = ggplot2::margin(-25, 0, 0, -80)
-    )
+    curriculum_perc |>
+      ggplot2::ggplot(ggplot2::aes(
+        x = forcats::fct_reorder(name, Percent, .desc = T),
+        y = Percent
+      )) +
+      ggplot2::geom_col(ggplot2::aes(fill = prepost),
+                        color = NA, position = ggplot2::position_dodge2(width = 1, reverse = TRUE)
+      ) +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          color = prepost,
+          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+        ),
+        position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
+        hjust = -0.25,
+        fontface = "bold",
+        family = "Calibri Bold",
+        size = 8
+      ) +
+      ggplot2::labs(
+        x = "", y = "",
+        title = glue::glue("Teacher perceptions of curriculum % that agree or strongly agree"),
+        fill = ""
+      ) +
+      ggplot2::scale_fill_manual(values = c(
+        "Pre" = "#00ACF0",
+        "Post" = "black"
+      ), labels = c(glue::glue("Pre (n = {format(n_size_1, big.mark = ',')})"), glue::glue("Post (n = {n_size_2})"))) +
+      ggplot2::scale_color_manual(values = c(
+        "Pre" = "#00ACF0",
+        "Post" = "black"
+      )) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(),
+        color = "none"
+      ) +
+      ggplot2::scale_y_continuous(
+        labels = scales::label_percent(scale = 1),
+        expand = c(0.14, 0)
+      ) +
+      ggplot2::coord_flip() +
+      tlShiny::theme_tl(legend = T) +
+      ggplot2::theme(
+        axis.text.y = ggplot2::element_text(
+          margin = ggplot2::margin(t = 0, l = 0, r = -100, b = 0),
+          size = 19
+        ),
+        axis.text.x = ggplot2::element_blank(),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        legend.position = "bottom",
+        legend.key.height = ggplot2::unit(1.3, "cm"),
+        legend.key.width = ggplot2::unit(1.3, "cm"),
+        legend.key.size = ggplot2::unit(0.75, "cm"),
+        legend.text = ggplot2::element_text(size = 22, family = "Calibri Bold"),
+        legend.margin = ggplot2::margin(-25, 0, 0, -80)
+      )
+  } else {
+    tlShiny::no_data_plot_currently
+  }
 
 }
