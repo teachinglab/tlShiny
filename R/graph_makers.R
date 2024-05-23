@@ -41,7 +41,7 @@ know_assess_summary <- function(data, know_assess_filter) {
                          color = "black",
                          fontface = "bold",
                          family = "Calibri Bold",
-                         size = 12) +
+                         size = 45) +
       ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
       ggplot2::labs(x = "", y = "",
                     title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
@@ -50,10 +50,10 @@ know_assess_summary <- function(data, know_assess_filter) {
                                   limits = c(0, 100)) +
       tlShiny::theme_tl() +
       ggplot2::theme(
-        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, family = "Calibri Bold"),
+        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 80, family = "Calibri Bold"),
         legend.position = "none",
-        axis.text.x = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"),
-        axis.text.y = ggplot2::element_text(face = "bold", size = 18, family = "Calibri"))
+        axis.text.x = ggplot2::element_text(face = "bold", size = 55, family = "Calibri"),
+        axis.text.y = ggplot2::element_text(face = "bold", size = 55, family = "Calibri"))
 
     return(p)
   } else {
@@ -715,7 +715,7 @@ make_teacher_lesson_usage <- function(data) {
     lesson_usage |>
       ggplot2::ggplot(ggplot2::aes(
         x = prepost,
-        y = forcats::fct_reorder(Percent, lesson_modifications),
+        y = Percent,
         fill = lesson_modifications
       )) +
       ggplot2::geom_col(ggplot2::aes(group = lesson_modifications),

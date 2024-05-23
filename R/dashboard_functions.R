@@ -1256,7 +1256,7 @@ contact_lead_graph <- function(data) {
         "4- Agree",
         "5- Strongly\nagree"
       )),
-      Question = str_wrap(Question, width = 50)
+      Question = stringr::str_wrap(Question, width = 50)
     )
 
   if (nrow(contact_lead_likert_final) >= 1) {
@@ -1799,7 +1799,7 @@ make_student_work_chart_people <- function(data) {
         ggplot2::aes(color = grades),
         flip = TRUE,
         n_rows = 10,
-        size = 40,
+        size = 20,
         alpha = 0.85,
         make_proportional = TRUE,
         na.rm = TRUE
@@ -1817,15 +1817,15 @@ make_student_work_chart_people <- function(data) {
       ggplot2::theme_void(base_family = "Calibri") +
       ggplot2::theme(
         legend.position = "none",
-        plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 96, family = "Calibri Bold"),
+        plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 48, family = "Calibri Bold"),
         plot.subtitle = ggtext::element_markdown(
           hjust = 0.5,
           face = "italic",
           family = "Calibri",
           lineheight = 0.3,
-          size = 75
+          size = 38
         ),
-        strip.text = ggplot2::element_text(face = "bold", size = 82, family = "Calibri Bold", color = "black", margin = ggplot2::margin(t = 15))
+        strip.text = ggplot2::element_text(face = "bold", size = 41, family = "Calibri Bold", color = "black", margin = ggplot2::margin(t = 15))
       )
 
     student_work_plot_2
