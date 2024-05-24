@@ -1465,75 +1465,82 @@ make_student_work_chart_people <- function(data) {
       ) |>
       suppressWarnings()
 
-    grade_breakdown$Prepost <- factor(grade_breakdown$Prepost, levels = c(grade_breakdown$Prepost[1], grade_breakdown$Prepost[6]))
+    if (nrow(grade_breakdown) >= 1) {
+      grade_breakdown$Prepost <- factor(grade_breakdown$Prepost, levels = c(grade_breakdown$Prepost[1], grade_breakdown$Prepost[6]))
 
 
-    zero_grade_pre <- ifelse("0" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
-                             glue::glue("<b style='color:#040404'>{grade_breakdown$percent[grade_breakdown$grades == '0' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 0.</b>"),
-                             "no scores received a 0."
-    )
-    one_grade_pre <- ifelse("1" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
-                            glue::glue("<b style='color:#02587A'>{grade_breakdown$percent[grade_breakdown$grades == '1' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 1,</b> and"),
-                            "no scores received a 1."
-    )
-    two_grade_pre <- ifelse("2" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
-                            glue::glue("<b style='color:#04abeb'>{grade_breakdown$percent[grade_breakdown$grades == '2' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 2,</b>"),
-                            "no scores received a 2."
-    )
-
-    zero_grade_post <- ifelse("0" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
-                              glue::glue("<b style='color:#040404'>{grade_breakdown$percent[grade_breakdown$grades == '0' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 0.</b>"),
-                              "no scores received a 0."
-    )
-    one_grade_post <- ifelse("1" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
-                             glue::glue("<b style='color:#02587A'>{grade_breakdown$percent[grade_breakdown$grades == '1' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 1,</b> and"),
-                             "no scores received a 1."
-    )
-    two_grade_post <- ifelse("2" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
-                             glue::glue("<b style='color:#04abeb'>{grade_breakdown$percent[grade_breakdown$grades == '2' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 2,</b>"),
-                             "no scores received a 2."
-    )
-
-    student_work_plot_2 <- grade_breakdown |>
-      tidytable::mutate(grades = factor(grades, levels = c("0", "1", "2"))) |>
-      tidytable::arrange(grades) |>
-      ggplot2::ggplot(ggplot2::aes(label = grades, values = n)) +
-      ggplot2::geom_text(
-        stat = "waffle",
-        family = "Font Awesome 5 Free",
-        ggplot2::aes(color = grades),
-        flip = TRUE,
-        n_rows = 10,
-        size = 20,
-        alpha = 0.85,
-        make_proportional = TRUE,
-        na.rm = TRUE
-      ) +
-      ggplot2::facet_wrap(~Prepost) +
-      ggplot2::scale_color_manual(values = c("0" = "#040404", "1" = "#02587A", "2" = "#00ACF0")) +
-      waffle::scale_label_pictogram(
-        name = NULL,
-        values = c("0" = "male", "1" = "male", "2" = "male")
-      ) +
-      ggplot2::labs(
-        title = paste0("Student Performance On Grade-Level Tasks"),
-        subtitle = glue::glue("<br>Of <b>pre</b> on grade-level tasks, {two_grade_pre} {one_grade_pre} {zero_grade_pre}<br>Of <b>post</b> on grade-level tasks, {two_grade_post} {one_grade_post} {zero_grade_post}")
-      ) +
-      ggplot2::theme_void(base_family = "Calibri") +
-      ggplot2::theme(
-        legend.position = "none",
-        plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 48, family = "Calibri Bold"),
-        plot.subtitle = ggtext::element_markdown(
-          hjust = 0.5,
-          face = "italic",
-          family = "Calibri",
-          lineheight = 0.3,
-          size = 38
-        ),
-        strip.text = ggplot2::element_text(face = "bold", size = 41, family = "Calibri Bold", color = "black", margin = ggplot2::margin(t = 15))
+      zero_grade_pre <- ifelse("0" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
+                               glue::glue("<b style='color:#040404'>{grade_breakdown$percent[grade_breakdown$grades == '0' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 0.</b>"),
+                               "no scores received a 0."
+      )
+      one_grade_pre <- ifelse("1" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
+                              glue::glue("<b style='color:#02587A'>{grade_breakdown$percent[grade_breakdown$grades == '1' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 1,</b> and"),
+                              "no scores received a 1."
+      )
+      two_grade_pre <- ifelse("2" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
+                              glue::glue("<b style='color:#04abeb'>{grade_breakdown$percent[grade_breakdown$grades == '2' & stringr::str_detect(grade_breakdown$Prepost, 'Pre')]}% received a 2,</b>"),
+                              "no scores received a 2."
       )
 
-    student_work_plot_2
+      zero_grade_post <- ifelse("0" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
+                                glue::glue("<b style='color:#040404'>{grade_breakdown$percent[grade_breakdown$grades == '0' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 0.</b>"),
+                                "no scores received a 0."
+      )
+      one_grade_post <- ifelse("1" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
+                               glue::glue("<b style='color:#02587A'>{grade_breakdown$percent[grade_breakdown$grades == '1' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 1,</b> and"),
+                               "no scores received a 1."
+      )
+      two_grade_post <- ifelse("2" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Post")],
+                               glue::glue("<b style='color:#04abeb'>{grade_breakdown$percent[grade_breakdown$grades == '2' & stringr::str_detect(grade_breakdown$Prepost, 'Post')]}% received a 2,</b>"),
+                               "no scores received a 2."
+      )
+
+      student_work_plot_2 <- grade_breakdown |>
+        tidytable::mutate(grades = factor(grades, levels = c("0", "1", "2"))) |>
+        tidytable::arrange(grades) |>
+        ggplot2::ggplot(ggplot2::aes(label = grades, values = n)) +
+        ggplot2::geom_text(
+          stat = "waffle",
+          family = "Font Awesome 5 Free",
+          ggplot2::aes(color = grades),
+          flip = TRUE,
+          n_rows = 10,
+          size = 20,
+          alpha = 0.85,
+          make_proportional = TRUE,
+          na.rm = TRUE
+        ) +
+        ggplot2::facet_wrap(~Prepost) +
+        ggplot2::scale_color_manual(values = c("0" = "#040404", "1" = "#02587A", "2" = "#00ACF0")) +
+        waffle::scale_label_pictogram(
+          name = NULL,
+          values = c("0" = "male", "1" = "male", "2" = "male")
+        ) +
+        ggplot2::labs(
+          title = paste0("Student Performance On Grade-Level Tasks"),
+          subtitle = glue::glue("<br>Of <b>pre</b> on grade-level tasks, {two_grade_pre} {one_grade_pre} {zero_grade_pre}<br>Of <b>post</b> on grade-level tasks, {two_grade_post} {one_grade_post} {zero_grade_post}")
+        ) +
+        ggplot2::theme_void(base_family = "Calibri") +
+        ggplot2::theme(
+          legend.position = "none",
+          plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 48, family = "Calibri Bold"),
+          plot.subtitle = ggtext::element_markdown(
+            hjust = 0.5,
+            face = "italic",
+            family = "Calibri",
+            lineheight = 0.3,
+            size = 38
+          ),
+          strip.text = ggplot2::element_text(face = "bold", size = 41, family = "Calibri Bold", color = "black", margin = ggplot2::margin(t = 15))
+        )
+
+      student_work_plot_2
+    } else {
+      ggplot2::ggplot(data.frame(text = "No submitted student work was graded as asking for mathematical thinking or responding/writing from evidence.", x = 0, y = 0)) +
+        ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+        ggplot2::theme_void()
+    }
+
   } else {
     tlShiny::no_data_plot_currently
   }
