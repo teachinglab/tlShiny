@@ -1311,6 +1311,11 @@ make_overall_mindsets <- function(data) {
                       scale_values = TRUE
       ) |>
       gt::fmt_markdown(` `) |>
+      (\(.) if ("Post" %in% colnames(overall_mindsets)) {
+        gt::cols_move_to_end(., columns = gt::matches("Post"))
+      } else {
+        .
+      })() |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
         fn = scales::col_bin(
@@ -1336,7 +1341,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      gt::cols_move_to_end(columns = gt::matches("Post")) |>
+      (\(.) if ("Post" %in% colnames(mindsets)) {
+        gt::cols_move_to_end(., columns = gt::matches("Post"))
+      } else {
+        .
+      })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
@@ -1363,7 +1372,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      gt::cols_move_to_end(columns = gt::matches("Post")) |>
+      (\(.) if ("Post" %in% colnames(mindsets)) {
+        gt::cols_move_to_end(., columns = gt::matches("Post"))
+      } else {
+        .
+      })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
@@ -1390,7 +1403,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      gt::cols_move_to_end(columns = gt::matches("Post")) |>
+      (\(.) if ("Post" %in% colnames(mindsets)) {
+        gt::cols_move_to_end(., columns = gt::matches("Post"))
+      } else {
+        .
+      })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
