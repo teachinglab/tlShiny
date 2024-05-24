@@ -178,6 +178,15 @@ no_data_plot_currently <- ggplot2::ggplot(data.frame(text = "No data available y
   ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
   ggplot2::theme_void()
 
+#' @title No Data Plot Adjustable Title
+#' @description A plot that says no data available by default, but can be adjusted to say whatever you want
+#' @export
+no_data_plot_custom <- function(title = "No data available!") {
+  ggplot2::ggplot(data.frame(text = title, x = 0, y = 0)) +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+  ggplot2::theme_void()
+}
+
 #' @title GT or ggplot maker
 #' @description makes a gt table with percent and n colored
 #' @param df the data frame

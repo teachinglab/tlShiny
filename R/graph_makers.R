@@ -41,7 +41,7 @@ know_assess_summary <- function(data, know_assess_filter) {
                          color = "black",
                          fontface = "bold",
                          family = "Calibri Bold",
-                         size = 25) +
+                         size = 22.5) +
       ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
       ggplot2::labs(x = "", y = "",
                     title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
@@ -50,14 +50,14 @@ know_assess_summary <- function(data, know_assess_filter) {
                                   limits = c(0, 100)) +
       tlShiny::theme_tl() +
       ggplot2::theme(
-        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 40, family = "Calibri Bold"),
+        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, family = "Calibri Bold"),
         legend.position = "none",
-        axis.text.x = ggplot2::element_text(face = "bold", size = 40, family = "Calibri"),
-        axis.text.y = ggplot2::element_text(face = "bold", size = 40, family = "Calibri"))
+        axis.text.x = ggplot2::element_text(face = "bold", size = 25, family = "Calibri"),
+        axis.text.y = ggplot2::element_text(face = "bold", size = 25, family = "Calibri"))
 
     return(p)
   } else {
-    return(tlShiny::no_data_plot_currently)
+    tlShiny::no_data_plot_custom(title = paste0("No Course Assessment Data Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 }
@@ -676,7 +676,7 @@ make_teacher_curriculum_usage <- function(data) {
         legend.margin = ggplot2::margin(-25, 0, 0, -150)
       )
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Teacher Curriculum Usage\nData Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 }
@@ -776,7 +776,7 @@ make_teacher_lesson_usage <- function(data) {
         panel.grid.minor = ggplot2::element_blank()
       )
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Teacher Lesson Usage\nData Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 
@@ -889,7 +889,7 @@ make_teacher_curriculum_perceptions <- function(data) {
         legend.margin = ggplot2::margin(-25, 0, 0, -80)
       )
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Teacher Curriculum Perceptions\nData Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 }
@@ -995,7 +995,7 @@ contact_lead_graph <- function(data) {
         ggplot2::theme(
           axis.text.y = ggplot2::element_text(
             size = 18,
-            margin = ggplot2::margin(r = -80)
+            margin = ggplot2::margin(r = -120)
           ),
           plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
           legend.margin = ggplot2::margin(-10, 0, 0, -40),
@@ -1007,7 +1007,7 @@ contact_lead_graph <- function(data) {
 
       p
   } else {
-    tlShiny:::no_data_plot_filters
+    tlShiny::no_data_plot_custom(title = paste0("No Contact Lead Data Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 
@@ -1115,7 +1115,7 @@ make_teacher_perceptions_school_leaders <- function(data) {
         legend.margin = ggplot2::margin(-25, 0, 0, -50)
       )
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Teacher School Leader Perceptions\nData Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 }
@@ -1210,7 +1210,7 @@ make_teacher_perceptions_peer_relationships <- function(data) {
         legend.margin = ggplot2::margin(-25, 0, 0, -150)
       )
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Teacher Peer Perceptions\nData Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 
 }
@@ -1426,7 +1426,8 @@ make_overall_mindsets <- function(data) {
     return(list(main_table = main_table, growth_mindsets = growth_mindsets, high_expectations = high_expectations, recognition_race_culture = recognition_race_culture))
 
   } else {
-    tlShiny::no_data_plot_currently
+    main_table <- tlShiny::no_data_plot_custom(title = paste0("No Mindsets Data Available as of ", format.Date(Sys.Date(), "%b %d, %Y")))
+    return(list(main_table = main_table, growth_mindsets = main_table, high_expectations = main_table, recognition_race_culture = main_table))
   }
 
 }
@@ -1542,7 +1543,7 @@ make_student_work_chart_people <- function(data) {
     }
 
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Student Work Data has been submitted\nas of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 
@@ -1586,7 +1587,7 @@ make_student_work_chart_circle <- function(data) {
                         x = -2,
                         y = 0
       ) +
-      ggplot2::labs(title = paste0("% of analyzed student work samples on Grade Level (Pre n = ", format(sum(on_grade_level$n[on_grade_level$Prepost == "Pre"], na.rm = T), big.mark = ","), ")")) +
+      ggplot2::labs(title = paste0("% of analyzed student work samples on\nGrade Level (Pre n = ", format(sum(on_grade_level$n[on_grade_level$Prepost == "Pre"], na.rm = T), big.mark = ","), ")")) +
       ggplot2::scale_fill_identity() +
       ggplot2::coord_polar(theta = "y", direction = 1) +
       ggplot2::xlim(c(-2, 2)) +
@@ -1594,7 +1595,7 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme(
         plot.title = ggplot2::element_text(
           hjust = 0.5, family = "Calibri Bold", face = "bold", size = 42,
-          vjust = -4
+          vjust = -3
         ),
         panel.background = ggplot2::element_rect(fill = "white", color = "white"),
         plot.background = ggplot2::element_rect(fill = "white", color = "white")
@@ -1618,7 +1619,7 @@ make_student_work_chart_circle <- function(data) {
                         x = -2,
                         y = 0
       ) +
-      ggplot2::labs(title = paste0("% of analyzed student work samples on Grade Level (Post n = ", format(sum(on_grade_level$n[on_grade_level$Prepost == "Post"], na.rm = T), big.mark = ","), ")")) +
+      ggplot2::labs(title = paste0("% of analyzed student work samples on\nGrade Level (Post n = ", format(sum(on_grade_level$n[on_grade_level$Prepost == "Post"], na.rm = T), big.mark = ","), ")")) +
       ggplot2::scale_fill_identity() +
       ggplot2::coord_polar(theta = "y", direction = 1) +
       ggplot2::xlim(c(-2, 2)) +
@@ -1626,7 +1627,7 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme(
         plot.title = ggplot2::element_text(
           hjust = 0.5, family = "Calibri Bold", face = "bold", size = 42,
-          vjust = -4
+          vjust = -3
         ),
         panel.background = ggplot2::element_rect(fill = "white", color = "white"),
         plot.background = ggplot2::element_rect(fill = "white", color = "white")
@@ -1636,6 +1637,6 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white", color = "white"),
                      plot.background = ggplot2::element_rect(fill = "white", color = "white"))
   } else {
-    tlShiny::no_data_plot_currently
+    tlShiny::no_data_plot_custom(title = paste0("No Student Work Data has been submitted\nas of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
