@@ -37,11 +37,11 @@ know_assess_summary <- function(data, know_assess_filter) {
       ggplot2::ggplot(ggplot2::aes(x = prepost, y = percent, fill = prepost)) +
       ggplot2::geom_col() +
       ggplot2::geom_text(ggplot2::aes(label = paste0(round(percent), "%")),
-                         vjust = -1,
+                         vjust = -0.8,
                          color = "black",
                          fontface = "bold",
                          family = "Calibri Bold",
-                         size = 22.5) +
+                         size = 20) +
       ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
       ggplot2::labs(x = "", y = "",
                     title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
@@ -995,11 +995,11 @@ contact_lead_graph <- function(data) {
         ggplot2::theme(
           axis.text.y = ggplot2::element_text(
             size = 18,
-            margin = ggplot2::margin(r = -120)
+            margin = ggplot2::margin(r = -80)
           ),
           plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
           legend.margin = ggplot2::margin(-10, 0, 0, -40),
-          legend.text = ggplot2::element_text(size = 23),
+          legend.text = ggplot2::element_text(size = 23, margin = ggplot2::margin(l = -25)),
           legend.key.width = ggplot2::unit(2, "cm"),
           legend.key.height = ggplot2::unit(0.5, "cm"),
           legend.position = "bottom"
@@ -1334,6 +1334,16 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "Growth mindsets") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        tidytable::relocate(., Post, .after = Pre)
+      } else {
+        .
+      })() |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+      } else {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+      })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
                       scale_values = TRUE
@@ -1341,11 +1351,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      (\(.) if ("Post" %in% colnames(mindsets)) {
-        gt::cols_move_to_end(., columns = gt::matches("Post"))
-      } else {
-        .
-      })() |>
+      # (\(.) if ("Post" %in% colnames(mindsets)) {
+      #   gt::cols_move_to_end(., columns = gt::matches("Post"))
+      # } else {
+      #   .
+      # })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
@@ -1365,6 +1375,16 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "High expectations") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        tidytable::relocate(., Post, .after = Pre)
+      } else {
+        .
+      })() |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+      } else {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+      })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
                       scale_values = TRUE
@@ -1372,11 +1392,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      (\(.) if ("Post" %in% colnames(mindsets)) {
-        gt::cols_move_to_end(., columns = gt::matches("Post"))
-      } else {
-        .
-      })() |>
+      # (\(.) if ("Post" %in% colnames(mindsets)) {
+      #   gt::cols_move_to_end(., columns = gt::matches("Post"))
+      # } else {
+      #   .
+      # })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
@@ -1396,6 +1416,16 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "Recognition of Race & Culture") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        tidytable::relocate(., Post, .after = Pre)
+      } else {
+        .
+      })() |>
+      (\(.) if ("Post" %in% colnames(.)) {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+      } else {
+        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+      })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
                       scale_values = TRUE
@@ -1403,11 +1433,11 @@ make_overall_mindsets <- function(data) {
       gt::cols_label(
         name = " "
       ) |>
-      (\(.) if ("Post" %in% colnames(mindsets)) {
-        gt::cols_move_to_end(., columns = gt::matches("Post"))
-      } else {
-        .
-      })() |>
+      # (\(.) if ("Post" %in% colnames(mindsets)) {
+      #   gt::cols_move_to_end(., columns = gt::matches("Post"))
+      # } else {
+      #   .
+      # })() |>
       gt::fmt_markdown(name) |>
       gt::data_color(
         columns = gt::matches("Pre|Post"),
