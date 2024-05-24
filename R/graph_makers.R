@@ -998,8 +998,8 @@ contact_lead_graph <- function(data) {
             margin = ggplot2::margin(r = -80)
           ),
           plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
-          legend.margin = ggplot2::margin(-10, 0, 0, -40),
-          legend.text = ggplot2::element_text(size = 23, margin = ggplot2::margin(l = -25)),
+          legend.box.margin = ggplot2::margin(t = -10, 0, 0, l = -50),
+          legend.text = ggplot2::element_text(size = 23),
           legend.key.width = ggplot2::unit(2, "cm"),
           legend.key.height = ggplot2::unit(0.5, "cm"),
           legend.position = "bottom"
@@ -1340,9 +1340,9 @@ make_overall_mindsets <- function(data) {
         .
       })() |>
       (\(.) if ("Post" %in% colnames(.)) {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
       } else {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
       })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
@@ -1381,9 +1381,9 @@ make_overall_mindsets <- function(data) {
         .
       })() |>
       (\(.) if ("Post" %in% colnames(.)) {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
       } else {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
       })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
@@ -1422,9 +1422,9 @@ make_overall_mindsets <- function(data) {
         .
       })() |>
       (\(.) if ("Post" %in% colnames(.)) {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), !!!colMeans(.[, 3]), .before = 1)
       } else {
-        dplyr::add_row(., ` ` = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
+        dplyr::add_row(., name = "<b>Overall score</b>", !!!colMeans(.[, 2]), .before = 1)
       })() |>
       gt::gt() |>
       gt::fmt_percent(columns = gt::matches("Pre|Post"),
@@ -1497,7 +1497,7 @@ make_student_work_chart_people <- function(data) {
       suppressWarnings()
 
     if (nrow(grade_breakdown) >= 1) {
-      grade_breakdown$Prepost <- factor(grade_breakdown$Prepost, levels = c(grade_breakdown$Prepost[1], grade_breakdown$Prepost[6]))
+      grade_breakdown$Prepost <- factor(grade_breakdown$Prepost, levels = c(sort(grade_breakdown$Prepost)[6], sort(grade_breakdown$Prepost)[1]))
 
 
       zero_grade_pre <- ifelse("0" %in% grade_breakdown$grades[stringr::str_detect(grade_breakdown$Prepost, "Pre")],
