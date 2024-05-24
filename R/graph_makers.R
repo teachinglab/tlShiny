@@ -41,7 +41,7 @@ know_assess_summary <- function(data, know_assess_filter) {
                          color = "black",
                          fontface = "bold",
                          family = "Calibri Bold",
-                         size = 45) +
+                         size = 25) +
       ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
       ggplot2::labs(x = "", y = "",
                     title = paste0("<b>", plot_data$know_assess[1], "<br>% Correct <span style='color:#d17df7'>before (n = ", n1, ")</span> and <span style='color:#55bbc7'>after (n = ", n2, ")</span></b>")
@@ -50,10 +50,10 @@ know_assess_summary <- function(data, know_assess_filter) {
                                   limits = c(0, 100)) +
       tlShiny::theme_tl() +
       ggplot2::theme(
-        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 80, family = "Calibri Bold"),
+        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 40, family = "Calibri Bold"),
         legend.position = "none",
-        axis.text.x = ggplot2::element_text(face = "bold", size = 55, family = "Calibri"),
-        axis.text.y = ggplot2::element_text(face = "bold", size = 55, family = "Calibri"))
+        axis.text.x = ggplot2::element_text(face = "bold", size = 40, family = "Calibri"),
+        axis.text.y = ggplot2::element_text(face = "bold", size = 40, family = "Calibri"))
 
     return(p)
   } else {
@@ -903,109 +903,109 @@ make_teacher_curriculum_perceptions <- function(data) {
 contact_lead_graph <- function(data) {
   contact_lead <- data
 
-  contact_lead_likert <- contact_lead |>
-    tidytable::select(
-      `I am satisfied with the overall quality of Teaching Lab’s professional learning and/or coaching sessions.` = mid_year_likert_qs_1,
-      `I am satisfied with the overall quality of facilitation of the professional learning and/or coaching sessions.` = mid_year_likert_qs_2,
-      `Teaching Lab’s professional learning has been responsive to the needs of our educators/partnership.` = mid_year_likert_qs_3,
-      `I am satisfied with the logistics and communication from Teaching Lab.` = mid_year_likert_qs_4,
-      `I believe Teaching Lab’s professional learning work has improved the ability of teachers and educators in my school system to deliver high-quality instruction.` = mid_year_likert_qs_5,
-      `Teaching Lab is helping us to advance our goals.` = mid_year_likert_qs_6,
-      `I believe teachers in my school system better understand their curriculum because of Teaching Lab’s professional learning work.` = curriculum
-    ) |>
-    tidytable::pivot_longer(tidytable::everything(), names_to = "Question", values_to = "Response") |>
-    tidytable::drop_na(Response) |>
-    tidytable::group_by(Question, Response) |>
-    tidytable::count(sort = T) |>
-    tidytable::ungroup() |>
-    tidytable::group_by(Question) |>
-    tidytable::mutate(
-      Percent = round(100 * n / sum(n), 2)
-    ) |>
-    tidytable::ungroup()
+  if (nrow(contact_lead) >= 1) {
+    contact_lead_likert <- contact_lead |>
+      tidytable::select(
+        `I am satisfied with the overall quality of Teaching Lab’s professional learning and/or coaching sessions.` = mid_year_likert_qs_1,
+        `I am satisfied with the overall quality of facilitation of the professional learning and/or coaching sessions.` = mid_year_likert_qs_2,
+        `Teaching Lab’s professional learning has been responsive to the needs of our educators/partnership.` = mid_year_likert_qs_3,
+        `I am satisfied with the logistics and communication from Teaching Lab.` = mid_year_likert_qs_4,
+        `I believe Teaching Lab’s professional learning work has improved the ability of teachers and educators in my school system to deliver high-quality instruction.` = mid_year_likert_qs_5,
+        `Teaching Lab is helping us to advance our goals.` = mid_year_likert_qs_6,
+        `I believe teachers in my school system better understand their curriculum because of Teaching Lab’s professional learning work.` = curriculum
+      ) |>
+      tidytable::pivot_longer(tidytable::everything(), names_to = "Question", values_to = "Response") |>
+      tidytable::drop_na(Response) |>
+      tidytable::group_by(Question, Response) |>
+      tidytable::count(sort = T) |>
+      tidytable::ungroup() |>
+      tidytable::group_by(Question) |>
+      tidytable::mutate(
+        Percent = round(100 * n / sum(n), 2)
+      ) |>
+      tidytable::ungroup()
 
-  contact_lead_agree <- contact_lead |>
-    tidytable::count(sort = T)
+    contact_lead_agree <- contact_lead |>
+      tidytable::count(sort = T)
 
-  contact_lead_likert_final <- contact_lead_likert |>
-    tidytable::mutate(
-      Question = factor(Question),
-      Response = stringr::str_replace_all(Response, c(
-        "3- Neither agree nor disagree" = "3- Neither agree\nnor disagree",
-        "5- Strongly agree" = "5- Strongly\nagree"
-      )),
-      Response = factor(Response, levels = c(
-        "1- Strongly disagree",
-        "2- Disagree",
-        "3- Neither agree\nnor disagree",
-        "4- Agree",
-        "5- Strongly\nagree"
-      )),
-      Question = stringr::str_wrap(Question, width = 50)
-    )
-
-  if (nrow(contact_lead_likert_final) >= 1) {
-    p <- contact_lead_likert_final |>
-      ggplot2::ggplot(aes(
-        x = forcats::fct_reorder(Question, Percent, .desc = T),
-        y = Percent,
-        color = Response,
-        fill = Response
-      )) +
-      ggplot2::geom_col(color = NA, position = ggplot2::position_stack(reverse = TRUE)) +
-      ggplot2::geom_text(
-        ggplot2::aes(
-          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
-          color = Response
-        ),
-        position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
-        fontface = "bold",
-        family = "Calibri Bold",
-        size = 11
-      ) +
-      ggplot2::labs(
-        x = "", y = "",
-        title = glue::glue("Mid/End Year Contact Lead Feedback (n = {sum(contact_lead_agree$n, na.rm = T)})"),
-        fill = ""
-      ) +
-      ggplot2::scale_fill_manual(values = c(
-        "1- Strongly disagree" = "#040404",
-        "2- Disagree" = "#032E3F",
-        "3- Neither agree\nnor disagree" = "#02587A",
-        "4- Agree" = "#0182B4",
-        "5- Strongly\nagree" = "#00ACF0"
-      )) +
-      ggplot2::scale_color_manual(values = c(
-        "1- Strongly disagree" = "white",
-        "2- Disagree" = "black",
-        "3- Neither agree\nnor disagree" = "black",
-        "4- Agree" = "black",
-        "5- Strongly\nagree" = "black"
-      )) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(),
-        color = "none"
-      ) +
-      ggplot2::scale_y_continuous(
-        labels = scales::label_percent(scale = 1),
-        expand = c(0.14, 0)
-      ) +
-      ggplot2::coord_flip() +
-      tlShiny::theme_tl(legend = TRUE) +
-      ggplot2::theme(
-        axis.text.y = ggplot2::element_text(
-          size = 18,
-          margin = ggplot2::margin(r = -80)
-        ),
-        plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
-        legend.margin = ggplot2::margin(-10, 0, 0, -40),
-        legend.text = ggplot2::element_text(size = 23),
-        legend.key.width = ggplot2::unit(2, "cm"),
-        legend.key.height = ggplot2::unit(0.5, "cm"),
-        legend.position = "bottom"
+    contact_lead_likert_final <- contact_lead_likert |>
+      tidytable::mutate(
+        Question = factor(Question),
+        Response = stringr::str_replace_all(Response, c(
+          "3- Neither agree nor disagree" = "3- Neither agree\nnor disagree",
+          "5- Strongly agree" = "5- Strongly\nagree"
+        )),
+        Response = factor(Response, levels = c(
+          "1- Strongly disagree",
+          "2- Disagree",
+          "3- Neither agree\nnor disagree",
+          "4- Agree",
+          "5- Strongly\nagree"
+        )),
+        Question = stringr::str_wrap(Question, width = 50)
       )
 
-    p
+      p <- contact_lead_likert_final |>
+        ggplot2::ggplot(aes(
+          x = forcats::fct_reorder(Question, Percent, .desc = T),
+          y = Percent,
+          color = Response,
+          fill = Response
+        )) +
+        ggplot2::geom_col(color = NA, position = ggplot2::position_stack(reverse = TRUE)) +
+        ggplot2::geom_text(
+          ggplot2::aes(
+            label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), ""),
+            color = Response
+          ),
+          position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
+          fontface = "bold",
+          family = "Calibri Bold",
+          size = 11
+        ) +
+        ggplot2::labs(
+          x = "", y = "",
+          title = glue::glue("Mid/End Year Contact Lead Feedback (n = {sum(contact_lead_agree$n, na.rm = T)})"),
+          fill = ""
+        ) +
+        ggplot2::scale_fill_manual(values = c(
+          "1- Strongly disagree" = "#040404",
+          "2- Disagree" = "#032E3F",
+          "3- Neither agree\nnor disagree" = "#02587A",
+          "4- Agree" = "#0182B4",
+          "5- Strongly\nagree" = "#00ACF0"
+        )) +
+        ggplot2::scale_color_manual(values = c(
+          "1- Strongly disagree" = "white",
+          "2- Disagree" = "black",
+          "3- Neither agree\nnor disagree" = "black",
+          "4- Agree" = "black",
+          "5- Strongly\nagree" = "black"
+        )) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(),
+          color = "none"
+        ) +
+        ggplot2::scale_y_continuous(
+          labels = scales::label_percent(scale = 1),
+          expand = c(0.14, 0)
+        ) +
+        ggplot2::coord_flip() +
+        tlShiny::theme_tl(legend = TRUE) +
+        ggplot2::theme(
+          axis.text.y = ggplot2::element_text(
+            size = 18,
+            margin = ggplot2::margin(r = -80)
+          ),
+          plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
+          legend.margin = ggplot2::margin(-10, 0, 0, -40),
+          legend.text = ggplot2::element_text(size = 23),
+          legend.key.width = ggplot2::unit(2, "cm"),
+          legend.key.height = ggplot2::unit(0.5, "cm"),
+          legend.position = "bottom"
+        )
+
+      p
   } else {
     tlShiny:::no_data_plot_filters
   }
