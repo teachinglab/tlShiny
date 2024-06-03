@@ -503,6 +503,7 @@ student_bar_chart <- function(data,
     tidyr::pivot_longer(!prepost, names_to = "question", values_to = "percent") |>
     tidyr::drop_na(percent) |>
     dplyr::mutate(
+      prepost = factor(prepost, levels = c("Pre", "Post")),
       negative = ifelse(question %in% c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8", "happiness_belonging_3"), TRUE, FALSE),
       question = stringr::str_replace_all(question, c(
         "crse_1" = "My teacher explains what we are learning in different ways",
@@ -763,7 +764,7 @@ session_feedback_graph <- function(data) {
 
     p
   } else {
-    tlShiny:::no_data_plot_filters
+    tlShiny::no_data_plot_custom(title = paste0("No End of Session Data as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 
@@ -895,7 +896,7 @@ course_feedback_graph <- function(data) {
 
     p
   } else {
-    tlShiny:::no_data_plot_filters
+    tlShiny::no_data_plot_custom(title = paste0("No End of Course Data as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 
@@ -1024,7 +1025,7 @@ ongoing_coaching_feedback_graph <- function(data) {
 
     p
   } else {
-    tlShiny:::no_data_plot_filters
+    tlShiny::no_data_plot_custom(title = paste0("No Ongoing Coaching Data as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 
@@ -1173,7 +1174,7 @@ end_coaching_feedback_graph <- function(data) {
 
     p
   } else {
-    tlShiny:::no_data_plot_filters
+    tlShiny::no_data_plot_custom(title = paste0("No End of Coaching Data as of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
 

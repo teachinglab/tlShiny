@@ -622,7 +622,7 @@ make_teacher_curriculum_usage <- function(data) {
     n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
 
     curriculum_usage |>
-      ggplot2::ggplot(aes(
+      ggplot2::ggplot(ggplot2::aes(
         x = forcats::fct_reorder(name, Percent, .desc = T),
         y = Percent
       )) +
@@ -651,7 +651,7 @@ make_teacher_curriculum_usage <- function(data) {
         "#00ACF0", "black"
       )) +
       ggplot2::guides(
-        fill = guide_legend()
+        fill = ggplot2::guide_legend()
       ) +
       ggplot2::scale_y_continuous(
         labels = scales::label_percent(scale = 1),
