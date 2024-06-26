@@ -241,7 +241,7 @@ make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observatio
               color = "black",
               family = "Calibri Bold",
               vjust = -0.4,
-              size = 8
+              size = 7.25
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
     ggplot2::scale_y_continuous(
@@ -398,7 +398,7 @@ make_ipg_fsot_summary_chart <- function(data, round = "Baseline (first observati
                        color = "black",
                        family = "Calibri Bold",
                        vjust = -0.4,
-                       size = 9
+                       size = 7.25
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = length(unique(fsot$`Core Action`)), base_color_start = base_color, end_color_start = end_color)) +
     ggplot2::scale_y_continuous(
@@ -546,7 +546,7 @@ make_ipg_math_summary_chart <- function(data, round = "Baseline (first observati
               vjust = -0.4,
               color = "black",
               family = "Calibri Bold",
-              size = 8
+              size = 7.25
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
     ggplot2::scale_y_continuous(
@@ -1656,7 +1656,7 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme_void() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(
-          hjust = 0.5, family = "Calibri Bold", face = "bold", size = 42,
+          hjust = 0.5, family = "Calibri Bold", face = "bold", size = 35,
           vjust = -3
         ),
         panel.background = ggplot2::element_rect(fill = "white", color = "white"),
