@@ -1334,7 +1334,7 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "Growth mindsets") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
-      (\(.) if ("Post" %in% colnames(.)) {
+      (\(.) if ("Post" %in% colnames(.) & "Pre" %in% colnames(.)) {
         tidytable::relocate(., Post, .after = Pre)
       } else {
         .
@@ -1375,7 +1375,7 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "High expectations") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
-      (\(.) if ("Post" %in% colnames(.)) {
+      (\(.) if ("Post" %in% colnames(.) & "Pre" %in% colnames(.)) {
         tidytable::relocate(., Post, .after = Pre)
       } else {
         .
@@ -1416,7 +1416,7 @@ make_overall_mindsets <- function(data) {
       dplyr::filter(` ` == "Recognition of Race & Culture") |>
       tidytable::select(-` `) |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
-      (\(.) if ("Post" %in% colnames(.)) {
+      (\(.) if ("Post" %in% colnames(.) & "Pre" %in% colnames(.)) {
         tidytable::relocate(., Post, .after = Pre)
       } else {
         .
