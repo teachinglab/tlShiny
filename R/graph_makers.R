@@ -241,7 +241,7 @@ make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observatio
               color = "black",
               family = "Calibri Bold",
               vjust = -0.4,
-              size = 9
+              size = 8
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
     ggplot2::scale_y_continuous(
@@ -409,11 +409,11 @@ make_ipg_fsot_summary_chart <- function(data, round = "Baseline (first observati
     ) +
     ggplot2::labs(
       x = "", y = "",
-      title = dplyr::case_when(round == "Baseline (first observation of the year)" ~ "% Positive Indicators Baseline FSOT IPG",
-                               round == "Mid-year (middle of service, if applicable)" ~ "% Positive Indicators Mid-year FSOT IPG",
-                               round == "End of year (last observation of the year)" ~ "% Positive Indicators End of Year FSOT IPG",
-                               round == "Ongoing" ~ "% Positive Indicators Ongoing FSOT IPG",
-                               round == "Other" ~ "% Positive Indicators Other FSOT IPG"),
+      title = dplyr::case_when(round == "Baseline (first observation of the year)" ~ "% Positive Indicators\nBaseline FSOT IPG",
+                               round == "Mid-year (middle of service, if applicable)" ~ "% Positive Indicators\nMid-year FSOT IPG",
+                               round == "End of year (last observation of the year)" ~ "% Positive Indicators\nEnd of Year FSOT IPG",
+                               round == "Ongoing" ~ "% Positive Indicators\nOngoing FSOT IPG",
+                               round == "Other" ~ "% Positive Indicators\nOther FSOT IPG"),
       caption = "Note that n sizes represent the number of overall scores per grouping, the actual number of responses that qualify for scores may vary"
     ) +
     tlShiny::theme_tl() +
@@ -546,7 +546,7 @@ make_ipg_math_summary_chart <- function(data, round = "Baseline (first observati
               vjust = -0.4,
               color = "black",
               family = "Calibri Bold",
-              size = 9
+              size = 8
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
     ggplot2::scale_y_continuous(
@@ -1294,7 +1294,7 @@ make_overall_mindsets <- function(data) {
       tidytable::summarise(score = mean(score)) |>
       tidytable::ungroup() |>
       tidytable::pivot_wider(names_from = prepost, values_from = score) |>
-      (\(.) if ("Post" %in% colnames(.)) {
+      (\(.) if ("Post" %in% colnames(.) & "Pre" %in% colnames(.)) {
         tidytable::relocate(., Post, .after = Pre)
       } else {
         .
