@@ -492,9 +492,9 @@ student_bar_chart <- function(data,
   }
 
   if (col_select == "mses_a6") {
-    student_data_summarised$Overall[student_data_summarised$prepost == "Pre"] <- mean(c(as.numeric(negative_data[negative_data$prepost == "Pre"][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[1, ] |> as.vector() |> as.numeric()))
+    student_data_summarised$Overall[student_data_summarised$prepost == "Pre"] <- mean(c(as.numeric(negative_data[1, ][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[1, ] |> as.vector() |> as.numeric()), na.rm = TRUE)
     if ("Post" %in% student_data_summarised$prepost) {
-      student_data_summarised$Overall[student_data_summarised$prepost == "Post"] <- mean(c(as.numeric(negative_data[negative_data$prepost == "Pre"][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[2, ] |> as.vector() |> as.numeric()))
+      student_data_summarised$Overall[student_data_summarised$prepost == "Post"] <- mean(c(as.numeric(negative_data[2, ][c("mses_a6_3", "mses_a6_9", "mses_a6_1", "mses_a6_8")]), subset(student_data_summarised, select = -c(mses_a6_3, mses_a6_9, mses_a6_1, mses_a6_8, prepost))[2, ] |> as.vector() |> as.numeric()), na.rm = TRUE)
     }
   }
 
@@ -601,19 +601,24 @@ student_bar_chart <- function(data,
     glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
   }
 
+  if (col_select == "mses_a6") {
+    subtitle <- paste0(subtitle, " or <br>\"1 - Not at all like me 👎👎\", \"2 - Not much like me 👎\" in the case of negatively coded questions <span style = 'color:red;'>(red)</span>")
+  }
+
   p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(
     x = forcats::fct_relevel(forcats::fct_reorder(question, percent, .desc = TRUE), "<span style = 'color:black;'>Overall</span>", after = length(question)),
     y = percent, fill = prepost
   )) +
-    ggplot2::geom_col(position = ggplot2::position_dodge()) +
+    ggplot2::geom_col(position = ggplot2::position_dodge2(reverse = TRUE),
+                      ggplot2::aes(group = prepost)) +
     ggplot2::geom_text(
       ggplot2::aes(
         label = paste0(round(percent), "%")
       ),
-      size = 10,
+      size = 9,
       fontface = "bold",
       color = "black",
-      position = ggplot2::position_dodge2(width = 1, preserve = "total"),
+      position = ggplot2::position_dodge2(width = 1, preserve = "total", reverse = TRUE),
       hjust = -0.25,
       family = "Calibri"
     ) +
@@ -634,10 +639,10 @@ student_bar_chart <- function(data,
     #                   markdown = TRUE) +
     ggplot2::theme(
       plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30, hjust = 0.5, color = "black"),
-      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20, color = "black"),
+      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20, color = "black", lineheight = 0.8),
       legend.position = "none",
-      axis.text.y = ggtext::element_markdown(size = 23),
-      axis.text.x = ggtext::element_markdown(size = 18, color = "black"),
+      axis.text.y = ggtext::element_markdown(size = 23, family = "Calibri"),
+      axis.text.x = ggtext::element_markdown(size = 18, color = "black", family = "Calibri"),
       plot.background = ggplot2::element_rect(fill = "white"),
       panel.background = ggplot2::element_rect(fill = "white"),
       panel.grid.minor.x = ggplot2::element_line(color = "gray40"),
