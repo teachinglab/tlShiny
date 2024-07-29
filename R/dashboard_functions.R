@@ -283,7 +283,8 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
             8,
             11
           ),
-          vjust = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent, -1.5, 0.5)
+          vjust = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent, -1.5, 0.5),
+          show.legend = FALSE
         ) +
         ggplot2::coord_polar("y", start = 0) +
         ggplot2::labs(title = paste0(custom_column_name, " (n = ", format(sum(ggplot_data$n, na.rm = T), big.mark = ","), ")")) +
@@ -620,7 +621,8 @@ student_bar_chart <- function(data,
       color = "black",
       position = ggplot2::position_dodge2(width = 1, preserve = "total", reverse = TRUE),
       hjust = -0.25,
-      family = "Calibri"
+      family = "Calibri",
+      show.legend = FALSE
     ) +
     ggplot2::labs(
       x = "", y = "",
@@ -733,7 +735,8 @@ session_feedback_graph <- function(data) {
         size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        family = "Calibri Bold"
+        family = "Calibri Bold",
+        show.legend = FALSE
       ) +
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly\ndisagree" = "#040404", "2 - Disagree" = "#032E3F",
@@ -865,7 +868,8 @@ course_feedback_graph <- function(data) {
         size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        family = "Calibri Bold"
+        family = "Calibri Bold",
+        show.legend = FALSE
       ) +
       ggplot2::scale_fill_manual(values = c(
         "1 - Strongly\ndisagree" = "#040404", "2 - Disagree" = "#032E3F",
@@ -984,7 +988,8 @@ ongoing_coaching_feedback_graph <- function(data) {
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         size = 6,
-        family = "Calibri Bold"
+        family = "Calibri Bold",
+        show.legend = FALSE
       ) +
       ggplot2::labs(
         x = "", y = "",
@@ -1133,7 +1138,8 @@ end_coaching_feedback_graph <- function(data) {
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         size = 6,
-        family = "Calibri Bold"
+        family = "Calibri Bold",
+        show.legend = FALSE
       ) +
       ggplot2::labs(
         x = "", y = "",
@@ -1195,7 +1201,8 @@ get_percent_positive_student_survey <- function(data) {
   all_data <- data |>
     dplyr::select(tidyselect::matches("crse|teacher_student|self_efficacy|happiness_belonging|being_challenged|growth_mindsets|math_enjoyment|mses|math_a7|high_exp|rig_learn|relevance|affirm|connect_one|custom_one|asd_one|asd_two|overall_experience"), prepost) |>
     dplyr::group_by(prepost) |>
-    dplyr::summarise(dplyr::across(dplyr::matches("crse"), ~ tlShiny:::tl_select_percent(.x, c("4 - Often", "5 - Always"))),
+    dplyr::summarise(
+      dplyr::across(dplyr::matches("crse"), ~ tlShiny:::tl_select_percent(.x, c("4 - Often", "5 - Always"))),
       dplyr::across(dplyr::matches("happiness_belonging_3"), ~ tlShiny:::tl_select_percent(.x, c("1 - Disagree", "2 - Somewhat disagree"))),
       dplyr::across(dplyr::matches("teacher_student_rel|self_efficacy|happiness_belonging_1|happiness_belonging_2|happiness_belonging_4|happiness_belonging_5|happiness_belonging_6"), ~ tlShiny:::tl_select_percent(.x, c("4 - Somewhat agree", "5 - Agree", "5 - Agree 👍", "6 - Strongly agree 👍👍"))),
       dplyr::across(dplyr::matches("being_challenged"), ~ tlShiny:::tl_select_percent(.x, c("4 - Mostly true", "5 - Totally true"))),
