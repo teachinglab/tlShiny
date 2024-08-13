@@ -50,7 +50,35 @@ test_that("Check that subsites are up to date", {
 
   expect_true(length(setdiff(subsites_check, current_subsites)) == 0)
   # setdiff(subsites_check, current_subsites)
-  # subsites <- current_subsites
+  # subsites <- current_subsites |>
+  #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
+  #              "NY_D6",
+  #              "NY_D7", "NY_D7 Other",
+  #              "NY_D9", "NY_D9 Other",
+  #              "NY_D11", "NY_D11 Other",
+  #              "NY_D12", "NY_D12 Other",
+  #              "NY_D13", "NY_D13 Other",
+  #              "NY_D16", "NY_D16 Other",
+  #              "NY_D25", "NY_D25 Other",
+  #              "NY_D27", "NY_D27 Other",
+  #              "NY_D75", "NY_D75 Other",
+  #              "NY_East Harlem Scholar Academies (EHTP)",
+  #              "LA_Pointe Coupee Parish",
+  #              "MA_DESE",
+  #              "MS_Kemper County School District",
+  #              "NC_Charlotte-Mecklenburg Schools",
+  #              "IL_Chicago Public Schools_Network 4",
+  #              "IL_Chicago Public Schools_Network 7",
+  #              "IL_Chicago Public Schools_Network 12",
+  #              "NJ_Great Oaks Legacy Charter Schools",
+  #              "NM_NM Public Education Department",
+  #              "NY_Ascend Charter Schools",
+  #              "NY_CUNY/UA",
+  #              "NY_Transfer High Schools",
+  #              "OH_Cleveland Metro School District",
+  #              "NY_Rochester City Schools",
+  #              "TX_El Paso Leadership Academy",
+  #              "WI_Milwaukee Public Schools"))
   # usethis::use_data(subsites, overwrite = TRUE)
 })
 
