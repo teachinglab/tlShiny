@@ -298,7 +298,8 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           legend.position = "bottom",
           legend.text = ggplot2::element_text(size = 20),
           legend.title = ggplot2::element_blank(),
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold")
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold"),
+          legend.spacing.x = ggplot2::unit(1.0, 'cm')
         )
     } else if (viz_type == "waffle") {
       ggplot_data <- df |>
