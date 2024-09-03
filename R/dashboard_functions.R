@@ -318,7 +318,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         dplyr::select({{ custom_column_name }}, Percent, n) |>
         dplyr::arrange(dplyr::desc(Percent)) |>
         dplyr::mutate(color = rev(tlShiny::tl_palette(n = length(n), color = "blue"))) |>
-        dplyr::summarise(text = stringr::str_c("<b style='color:", color, "'>", !!rlang::ensym(custom_column_name), ": ", Percent, "%</b>", collapse = "<br>")) |>
+        dplyr::summarise(text = stringr::str_c("<b style='color:", color, ";white-space:pre;'>", !!rlang::ensym(custom_column_name), ": ", Percent, "%</b>", collapse = "    ")) |>
         dplyr::pull(text)
 
       ggplot_data |>
