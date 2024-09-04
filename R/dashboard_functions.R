@@ -270,7 +270,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         ggplot2::geom_col(key_glyph = ggplot2::draw_key_point) +
         ggplot2::geom_text(
           ggplot2::aes(
-            label = paste0(Percent, "%"),
+            label = ifelse(Percent > 5, paste0(Percent, "%"), ""),
             y = ypos
           ),
           family = "Calibri Bold",
