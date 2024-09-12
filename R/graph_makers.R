@@ -585,25 +585,25 @@ make_teacher_curriculum_usage <- function(data) {
 
   if (nrow(data) >= 1) {
     curriculum_usage <- data |>
-      tidytable::select(prepost, tidytable::contains("materials")) |>
-      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-      tidytable::drop_na(value) |>
-      tidytable::mutate(name = stringr::str_replace_all(name, c(
+      dplyr::select(prepost, dplyr::contains("materials")) |>
+      dplyr::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      tidyr::drop_na(value) |>
+      dplyr::mutate(name = stringr::str_replace_all(name, c(
         "materials_1" = "curriculum materials adopted by your district",
         "materials_2" = "materials developed by your school or district",
         "materials_3" = "materials you found on the internet",
         "materials_4" = "materials developed by yourself or with colleagues"
       ))) |>
-      tidytable::group_by(name, value, prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::drop_na(value) |>
-      tidytable::mutate(
+      dplyr::group_by(name, value, prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      tidyr::drop_na(value) |>
+      dplyr::mutate(
         name = stringr::str_wrap(name, 25),
         value = stringr::str_wrap(value, 20)
       ) |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::mutate(
+      dplyr::group_by(name, prepost) |>
+      dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
         value = factor(value, levels = c(
           "Never use",
@@ -612,8 +612,8 @@ make_teacher_curriculum_usage <- function(data) {
           "Use everyday"
         ))
       ) |>
-      tidytable::filter(value %in% c("Use often (once or\ntwice weekly)", "Use everyday")) |>
-      tidytable::summarise(
+      dplyr::filter(value %in% c("Use often (once or\ntwice weekly)", "Use everyday")) |>
+      dplyr::summarise(
         Percent = sum(Percent),
         n = sum(n)
       )
@@ -632,7 +632,7 @@ make_teacher_curriculum_usage <- function(data) {
       ggplot2::geom_text(
         ggplot2::aes(
           color = prepost,
-          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
         ),
         position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
         hjust = -0.25,
@@ -691,14 +691,14 @@ make_teacher_lesson_usage <- function(data) {
 
   if (nrow(data) >= 1) {
     lesson_usage <- data |>
-      tidytable::select(prepost, lesson_modifications) |>
-      tidytable::mutate(lesson_modifications = as.character(lesson_modifications)) |>
-      tidytable::drop_na(lesson_modifications) |>
-      tidytable::group_by(lesson_modifications, prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(prepost) |>
-      tidytable::mutate(
+      dplyr::select(prepost, lesson_modifications) |>
+      dplyr::mutate(lesson_modifications = as.character(lesson_modifications)) |>
+      tidyr::drop_na(lesson_modifications) |>
+      dplyr::group_by(lesson_modifications, prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(prepost) |>
+      dplyr::mutate(
         lesson_modifications = stringr::str_wrap(lesson_modifications, 20),
         Percent = round(100 * n / sum(n), 2),
         lesson_modifications = factor(lesson_modifications, levels = c(
@@ -725,7 +725,7 @@ make_teacher_lesson_usage <- function(data) {
       ggplot2::geom_text(
         ggplot2::aes(
           color = lesson_modifications,
-          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
         ),
         position = ggplot2::position_stack(vjust = 0.5),
         fontface = "bold",
@@ -793,9 +793,9 @@ make_teacher_curriculum_perceptions <- function(data) {
 
   if (nrow(data) >= 1) {
     curriculum_perc <- data |>
-      tidytable::select(prepost, tidytable::contains("curriculum_sch_dist")) |>
-      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-      tidytable::mutate(name = stringr::str_replace_all(name, c(
+      dplyr::select(prepost, dplyr::contains("curriculum_sch_dist")) |>
+      dplyr::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      dplyr::mutate(name = stringr::str_replace_all(name, c(
         "curriculum_sch_dist_1" = "The curriculum materials adopted by my school or district are well-suited to the needs of my students",
         "curriculum_sch_dist_2" = "The  curriculum materials adopted by my school or district offer students high-quality opportunities to learn.",
         "curriculum_sch_dist_3" = "The  curriculum materials adopted by my school or district are well-organized and easy to use.",
@@ -803,13 +803,13 @@ make_teacher_curriculum_perceptions <- function(data) {
         "curriculum_sch_dist_5" = "The  curriculum materials adopted by my school or district will help my students learn.",
         "curriculum_sch_dist_6" = "The  curriculum materials adopted by my school are too scripted and don't provide me with enough autonomy."
       ))) |>
-      tidytable::group_by(name, value, prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::drop_na(value) |>
-      tidytable::mutate(name = stringr::str_wrap(name, 25)) |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::mutate(
+      dplyr::group_by(name, value, prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      tidyr::drop_na(value) |>
+      dplyr::mutate(name = stringr::str_wrap(name, 25)) |>
+      dplyr::group_by(name, prepost) |>
+      dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
         value = factor(value, levels = c(
           "Strongly disagree",
@@ -819,15 +819,15 @@ make_teacher_curriculum_perceptions <- function(data) {
           "Strongly agree"
         ))
       ) |>
-      tidytable::filter(value %in% c("Agree", "Strongly agree")) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::summarise(
+      dplyr::filter(value %in% c("Agree", "Strongly agree")) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(name, prepost) |>
+      dplyr::summarise(
         Percent = sum(Percent),
         n = sum(n)
       ) |>
-      tidytable::ungroup() |>
-      tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
+      dplyr::ungroup() |>
+      dplyr::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
 
     n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
     n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
@@ -843,7 +843,7 @@ make_teacher_curriculum_perceptions <- function(data) {
       ggplot2::geom_text(
         ggplot2::aes(
           color = prepost,
-          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
         ),
         position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
         hjust = -0.25,
@@ -905,7 +905,7 @@ contact_lead_graph <- function(data) {
 
   if (nrow(contact_lead) >= 1) {
     contact_lead_likert <- contact_lead |>
-      tidytable::select(
+      dplyr::select(
         `I am satisfied with the overall quality of Teaching Lab’s professional learning and/or coaching sessions.` = mid_year_likert_qs_1,
         `I am satisfied with the overall quality of facilitation of the professional learning and/or coaching sessions.` = mid_year_likert_qs_2,
         `Teaching Lab’s professional learning has been responsive to the needs of our educators/partnership.` = mid_year_likert_qs_3,
@@ -914,22 +914,22 @@ contact_lead_graph <- function(data) {
         `Teaching Lab is helping us to advance our goals.` = mid_year_likert_qs_6,
         `I believe teachers in my school system better understand their curriculum because of Teaching Lab’s professional learning work.` = curriculum
       ) |>
-      tidytable::pivot_longer(tidytable::everything(), names_to = "Question", values_to = "Response") |>
-      tidytable::drop_na(Response) |>
-      tidytable::group_by(Question, Response) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(Question) |>
-      tidytable::mutate(
+      dplyr::pivot_longer(dplyr::everything(), names_to = "Question", values_to = "Response") |>
+      tidyr::drop_na(Response) |>
+      dplyr::group_by(Question, Response) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(Question) |>
+      dplyr::mutate(
         Percent = round(100 * n / sum(n), 2)
       ) |>
-      tidytable::ungroup()
+      dplyr::ungroup()
 
     contact_lead_agree <- contact_lead |>
-      tidytable::count(sort = T)
+      dplyr::count(sort = T)
 
     contact_lead_likert_final <- contact_lead_likert |>
-      tidytable::mutate(
+      dplyr::mutate(
         Question = factor(Question),
         Response = stringr::str_replace_all(Response, c(
           "3- Neither agree nor disagree" = "3- Neither agree\nnor disagree",
@@ -1021,23 +1021,23 @@ make_teacher_perceptions_school_leaders <- function(data) {
 
   if (nrow(data) >= 1) {
     teacher_perc_sl <- data |>
-      tidytable::select(prepost, tidytable::contains("ts_perceptions_sl")) |>
-      # tidytable::select(-tidytable::all_of(c(ts_perceptions_sl_6, ts_perceptions_sl_7, ts_perceptions_sl_8))) |>
-      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-      tidytable::mutate(name = stringr::str_replace_all(name, c(
+      dplyr::select(prepost, dplyr::contains("ts_perceptions_sl")) |>
+      # dplyr::select(-dplyr::all_of(c(ts_perceptions_sl_6, ts_perceptions_sl_7, ts_perceptions_sl_8))) |>
+      dplyr::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      dplyr::mutate(name = stringr::str_replace_all(name, c(
         "ts_perceptions_sl_2" = "My school leaders have created a shared vision for instruction that my curriculum-related professional development experiences is helping our school to implement",
         "ts_perceptions_sl_3" = "My school leaders make sure I have access to all the materials and resources I need to implement our adopted curriculum",
         "ts_perceptions_sl_4" = "My school leaders press me to implement the ideas I learn in curriculum-related professional development",
         "ts_perceptions_sl_5" = "My school leaders make time for my curriculum-related professional development.",
         "ts_perceptions_sl_9" = "My school leader is knowledgeable about the curriculum that I have been asked to implement"
       ))) |>
-      tidytable::group_by(name, value, prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::drop_na(value) |>
-      tidytable::mutate(name = stringr::str_wrap(name, 60)) |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::mutate(
+      dplyr::group_by(name, value, prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      tidyr::drop_na(value) |>
+      dplyr::mutate(name = stringr::str_wrap(name, 60)) |>
+      dplyr::group_by(name, prepost) |>
+      dplyr::mutate(
         Percent = round(100 * n / sum(n), 2),
         value = factor(value, levels = c(
           "Not at all",
@@ -1047,15 +1047,15 @@ make_teacher_perceptions_school_leaders <- function(data) {
           "All the time"
         ))
       ) |>
-      tidytable::filter(value %in% c("Often", "All the time")) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::summarise(
+      dplyr::filter(value %in% c("Often", "All the time")) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(name, prepost) |>
+      dplyr::summarise(
         Percent = sum(Percent),
         n = sum(n)
       ) |>
-      tidytable::ungroup() |>
-      tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
+      dplyr::ungroup() |>
+      dplyr::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
 
     n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
     n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
@@ -1130,28 +1130,28 @@ make_teacher_perceptions_peer_relationships <- function(data) {
 
   if (nrow(data) >= 1) {
     teacher_perc_peer <- data |>
-      tidytable::select(prepost, tidytable::contains("school_environment")) |>
-      tidytable::select(-school_environment_3) |>
-      tidytable::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
-      tidytable::mutate(name = stringr::str_replace_all(name, c(
+      dplyr::select(prepost, dplyr::contains("school_environment")) |>
+      dplyr::select(-school_environment_3) |>
+      dplyr::pivot_longer(!prepost, names_to = "name", values_to = "value") |>
+      dplyr::mutate(name = stringr::str_replace_all(name, c(
         "school_environment_1" = "I trust my fellow teachers in the school",
         "school_environment_2" = "I feel connected to my fellow teachers in the school",
         "school_environment_4" = "I collaborate with my fellow teachers regularly"
       ))) |>
-      tidytable::group_by(name, value, prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::drop_na(value) |>
-      tidytable::mutate(name = stringr::str_wrap(name, 25)) |>
-      tidytable::group_by(name, prepost) |>
-      tidytable::mutate(Percent = round(100 * n / sum(n), 2)) |>
-      tidytable::filter(value %in% c("4 - Agree", "5 - Strongly agree")) |>
-      tidytable::summarise(
+      dplyr::group_by(name, value, prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      tidyr::drop_na(value) |>
+      dplyr::mutate(name = stringr::str_wrap(name, 25)) |>
+      dplyr::group_by(name, prepost) |>
+      dplyr::mutate(Percent = round(100 * n / sum(n), 2)) |>
+      dplyr::filter(value %in% c("4 - Agree", "5 - Strongly agree")) |>
+      dplyr::summarise(
         Percent = sum(Percent),
         n = sum(n)
       ) |>
-      tidytable::ungroup() |>
-      tidytable::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
+      dplyr::ungroup() |>
+      dplyr::mutate(prepost = factor(prepost, levels = c("Pre", "Post")))
 
     n_size_1 <- sum(!is.na(data$prepost[data$prepost == "Pre"]))
     n_size_2 <- sum(!is.na(data$prepost[data$prepost == "Post"]))
@@ -1167,7 +1167,7 @@ make_teacher_perceptions_peer_relationships <- function(data) {
       ggplot2::geom_text(
         ggplot2::aes(
           color = prepost,
-          label = tidytable::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
+          label = dplyr::if_else(Percent >= 10, paste0(round(Percent), "%"), "")
         ),
         position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
         hjust = -0.25,
@@ -1226,24 +1226,24 @@ make_teacher_perceptions_peer_relationships <- function(data) {
 make_student_work_chart_people <- function(data) {
   if (nrow(data) >= 1) {
     grade_breakdown <- data |>
-      tidytable::rename(grades = `Submitted Grade/s`) |>
-      tidytable::select(grades, `Student Work File`, Prepost) |>
-      tidytable::mutate(
-        Prepost = tidytable::replace_na(Prepost, "Pre")
+      dplyr::rename(grades = `Submitted Grade/s`) |>
+      dplyr::select(grades, `Student Work File`, Prepost) |>
+      dplyr::mutate(
+        Prepost = dplyr::replace_na(Prepost, "Pre")
       ) |>
       tidyr::separate_rows(grades, sep = ", ") |>
-      tidytable::mutate(grades = as.numeric(grades)) |>
-      tidytable::drop_na(grades) |>
-      tidytable::group_by(grades, Prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(Prepost) |>
-      tidytable::mutate(
+      dplyr::mutate(grades = as.numeric(grades)) |>
+      tidyr::drop_na(grades) |>
+      dplyr::group_by(grades, Prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(Prepost) |>
+      dplyr::mutate(
         percent = round(100 * (n / sum(n)), 2)
       ) |>
-      tidytable::ungroup() |>
-      tidytable::mutate(
-        Prepost = tidytable::case_when(
+      dplyr::ungroup() |>
+      dplyr::mutate(
+        Prepost = dplyr::case_when(
           Prepost == "Pre" ~ paste0("Pre (n = ", format(sum(n[Prepost == "Pre"], na.rm = TRUE), big.mark = ","), ")"),
           Prepost == "Post" ~ paste0("Post (n = ", format(sum(n[Prepost == "Post"], na.rm = TRUE), big.mark = ","), ")")
         )
@@ -1281,8 +1281,8 @@ make_student_work_chart_people <- function(data) {
       )
 
       student_work_plot_2 <- grade_breakdown |>
-        tidytable::mutate(grades = factor(grades, levels = c("0", "1", "2"))) |>
-        tidytable::arrange(grades) |>
+        dplyr::mutate(grades = factor(grades, levels = c("0", "1", "2"))) |>
+        dplyr::arrange(grades) |>
         ggplot2::ggplot(ggplot2::aes(label = grades, values = n)) +
         ggplot2::geom_text(
           stat = "waffle",
@@ -1340,26 +1340,26 @@ make_student_work_chart_people <- function(data) {
 make_student_work_chart_circle <- function(data) {
   if (nrow(data) >= 1) {
     on_grade_level <- data |>
-      tidytable::rename(grades = `Submitted Grade/s`) |>
-      tidytable::select(grades, `Student Work File`, Prepost) |>
-      tidytable::mutate(Prepost = tidytable::replace_na(Prepost, "Pre")) |>
-      tidytable::drop_na(grades) |>
+      dplyr::rename(grades = `Submitted Grade/s`) |>
+      dplyr::select(grades, `Student Work File`, Prepost) |>
+      dplyr::mutate(Prepost = dplyr::replace_na(Prepost, "Pre")) |>
+      tidyr::drop_na(grades) |>
       tidyr::separate_rows(grades, sep = ", ") |>
-      tidytable::mutate(`Grade Level` = if_else(grades == "Not on grade level", 0, 1)) |>
-      tidytable::group_by(`Grade Level`, Prepost) |>
-      tidytable::count(sort = T) |>
-      tidytable::ungroup() |>
-      tidytable::group_by(Prepost) |>
-      tidytable::mutate(`Percent` = round(100 * n / sum(n), 2)) |>
+      dplyr::mutate(`Grade Level` = if_else(grades == "Not on grade level", 0, 1)) |>
+      dplyr::group_by(`Grade Level`, Prepost) |>
+      dplyr::count(sort = T) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(Prepost) |>
+      dplyr::mutate(`Percent` = round(100 * n / sum(n), 2)) |>
       suppressWarnings()
 
     student_work_plot_1 <- ggplot() +
       ggplot2::geom_col(
-        data = tidytable::tidytable(x = 1, y = 100, fill = "gray90"),
+        data = dplyr::tidytable(x = 1, y = 100, fill = "gray90"),
         ggplot2::aes(x = x, y = y, fill = fill)
       ) +
       ggplot2::geom_col(
-        data = tidytable::tidytable(x = 1, y = on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Pre"], fill = "#04abeb"),
+        data = dplyr::tidytable(x = 1, y = on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Pre"], fill = "#04abeb"),
         aes(x = x, y = y, fill = fill)
       ) +
       ggplot2::annotate("text",
@@ -1387,11 +1387,11 @@ make_student_work_chart_circle <- function(data) {
 
     student_work_plot_1_1 <- ggplot2::ggplot() +
       ggplot2::geom_col(
-        data = tidytable::tidytable(x = 1, y = 100, fill = "gray90"),
+        data = dplyr::tidytable(x = 1, y = 100, fill = "gray90"),
         ggplot2::aes(x = x, y = y, fill = fill)
       ) +
       ggplot2::geom_col(
-        data = tidytable::tidytable(x = 1, y = on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Post"], fill = "#04abeb"),
+        data = dplyr::tidytable(x = 1, y = on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Post"], fill = "#04abeb"),
         ggplot2::aes(x = x, y = y, fill = fill)
       ) +
       ggplot2::annotate("text",

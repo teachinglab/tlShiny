@@ -2,10 +2,10 @@
 test_that("Check that subsites are up to date", {
 
   subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
-    tidytable::select(qname)
+    dplyr::select(qname)
   subsites_check <- subsite_list |>
-    tidytable::slice(9:48) |>
-    tidytable::pull()
+    dplyr::slice(9:48) |>
+    dplyr::pull()
 
   current_subsites <- c("ar_blytheville",
                         "ar_friendship",

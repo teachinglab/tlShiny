@@ -1,5 +1,3 @@
-.datatable.aware <- TRUE
-
 #' @title Remove Empty Rows
 #' @description Filters out all rows that contain entirely NA
 #' @param data the dataframe to apply filter
@@ -7,7 +5,7 @@
 #' @export
 remove_empty_tl <- function(data) {
   data |>
-    tidytable::select(tidytable::where(~ !all(is.na(.x))))
+    dplyr::select(dplyr::where(~ !all(is.na(.x))))
 }
 
 
