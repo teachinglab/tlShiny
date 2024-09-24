@@ -24,6 +24,8 @@ test_that("Check that subsites are up to date", {
                         "district13_other",
                         "district16",
                         "district16_other",
+                        "district17",
+                        "district17_other",
                         "district25",
                         "district25_other",
                         "district27",
@@ -42,6 +44,7 @@ test_that("Check that subsites are up to date", {
                         "nm_nm_ped",
                         "ny_ascend",
                         "ny_cuny",
+                        "ny_lion",
                         "ny_transfer",
                         "oh_cleveland",
                         "rochester",
@@ -49,7 +52,7 @@ test_that("Check that subsites are up to date", {
                         "wi_milwaukee")
 
   expect_true(length(setdiff(subsites_check, current_subsites)) == 0)
-  # setdiff(subsites_check, current_subsites)
+  setdiff(subsites_check, current_subsites)
   # subsites <- current_subsites |>
   #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
   #              "NY_D6",
@@ -59,6 +62,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_D12", "NY_D12 Other",
   #              "NY_D13", "NY_D13 Other",
   #              "NY_D16", "NY_D16 Other",
+  #              "NY_D17", "NY_D17 Other",
   #              "NY_D25", "NY_D25 Other",
   #              "NY_D27", "NY_D27 Other",
   #              "NY_D75", "NY_D75 Other",
@@ -74,6 +78,7 @@ test_that("Check that subsites are up to date", {
   #              "NM_NM Public Education Department",
   #              "NY_Ascend Charter Schools",
   #              "NY_CUNY/UA",
+  #              "NY_LION Charter Schools",
   #              "NY_Transfer High Schools",
   #              "OH_Cleveland Metro School District",
   #              "NY_Rochester City Schools",
