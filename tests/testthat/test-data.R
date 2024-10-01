@@ -4,13 +4,14 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(9:48) |>
+    dplyr::slice(9:49) |>
     dplyr::pull()
 
   current_subsites <- c("ar_blytheville",
                         "ar_friendship",
                         "ar_hope",
                         "ar_osceola",
+                        "dennis_yarm",
                         "district6",
                         "district7",
                         "district7_other",
@@ -52,9 +53,10 @@ test_that("Check that subsites are up to date", {
                         "wi_milwaukee")
 
   expect_true(length(setdiff(subsites_check, current_subsites)) == 0)
-  setdiff(subsites_check, current_subsites)
+  # setdiff(subsites_check, current_subsites)
   # subsites <- current_subsites |>
   #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
+  #              "Dennis-Yarmouth",
   #              "NY_D6",
   #              "NY_D7", "NY_D7 Other",
   #              "NY_D9", "NY_D9 Other",
