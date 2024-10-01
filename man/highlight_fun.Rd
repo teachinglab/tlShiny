@@ -17,3 +17,46 @@ a vector of strings
 \description{
 Provides html formatted highlighting
 }
+\details{
+#' @title Word highlighting
+#' @description Finds most common words in string
+#' @param string the string to evaluate
+#' @param n the number of words to find
+#' @param print whether or not to print the highlighted words
+#' @return a vector of strings
+#'
+#' @export
+find_highlight <- function(string, n = 3, print = F) {
+  stop_words <- tlShiny::stop_words |>
+    dplyr::bind_rows(data.frame(word = tlShiny::na_df,
+                                    lexicon = "TL_NA"))
+
+  txt_df <- data.frame(column_name = "txt") |>
+
+  highlight <- string |>
+    na.omit() |>
+    as.data.frame() |>
+    dplyr::rename() |>
+    tidytext::unnest_tokens(word, txt) |>
+    # This makes sure to get rid of numbers in consideration for highlighting
+    # By making sure as.numeric returns NA on words
+    dplyr::filter(is.na(as.numeric(word))) |>
+    # Get a count of words and sort
+    dplyr::count(word, sort = T) |>
+    # Get rid of generic (stop) words
+    dplyr::anti_join(stop_words) |>
+    # Get a user-specified number of words, or the default 3
+    utils::head(n) |>
+    # Make this a vector
+    dplyr::pull(word) |>
+    # Suppress warnings from the as.numeric call
+    suppressWarnings() |>
+    suppressMessages()
+
+  if (print == T) {
+    print(highlight)
+  }
+
+  return(highlight)
+}
+}
