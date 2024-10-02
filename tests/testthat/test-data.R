@@ -11,7 +11,9 @@ test_that("Check that subsites are up to date", {
                         "ar_friendship",
                         "ar_hope",
                         "ar_osceola",
+                        "ca_santa_ana",
                         "dennis_yarm",
+                        "il_cps",
                         "district6",
                         "district7",
                         "district7_other",
@@ -56,7 +58,9 @@ test_that("Check that subsites are up to date", {
   # setdiff(subsites_check, current_subsites)
   # subsites <- current_subsites |>
   #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
+  #              "CA_Santa Ana Unified School District",
   #              "Dennis-Yarmouth",
+  #              "IL_CPS",
   #              "NY_D6",
   #              "NY_D7", "NY_D7 Other",
   #              "NY_D9", "NY_D9 Other",
