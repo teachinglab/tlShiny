@@ -1424,3 +1424,272 @@ make_student_work_chart_circle <- function(data) {
     tlShiny::no_data_plot_custom(title = paste0("No Student Work Data has been submitted\nas of ", format.Date(Sys.Date(), "%b %d, %Y")))
   }
 }
+
+#' @title IPG Rubric Summary
+#' @description Creates a chart to summarise the IPG Results for a specified rubric
+#' @param data the data
+#' @param rubric the ipg rubric to focus on
+#' @return a ggplot
+#' @export
+
+make_ipg_rubric_summary <- function(data, rubric) {
+
+  ipg_data_1 <- data |>
+    tidytable::filter(ipg_rubric == rubric) |>
+    tidytable::drop_na(direct_to_ts_obs) |>
+    tidytable::rowwise() |>
+    tidytable::mutate(
+      overall_score = mean(c(
+        tlShiny::grade_ipg(k12_m_ca1a, type = "character"),
+        tlShiny::grade_ipg(k12_m_ca1b, type = "character"),
+        tlShiny::grade_ipg(k12_m_ca1c, type = "character"),
+        tlShiny::grade_ipg(k12_ela_ca1a, type = "character"),
+        tlShiny::grade_ipg(k12_ela_ca1b, type = "character"),
+        tlShiny::grade_ipg(k12_ela_ca1c, type = "character"),
+        tlShiny::grade_ipg(k12_m_ca2a, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca2b, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca2c, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca2d, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca3a, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca3b, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca3c, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca3d, type = "numeric"),
+        tlShiny::grade_ipg(k12_m_ca3e, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca2a, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca2b, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca2c, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca2d, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3a, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3b, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3c, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3d, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3e, type = "numeric"),
+        tlShiny::grade_ipg(k12_ela_ca3f, type = "numeric"),
+        tlShiny::grade_ipg(fsot_ac1, type = "numeric"),
+        tlShiny::grade_ipg(fsot_ac2, type = "numeric"),
+        tlShiny::grade_ipg(fsot_td1, type = "numeric"),
+        tlShiny::grade_ipg(fsot_td2, type = "numeric"),
+        tlShiny::grade_ipg(fsot_td3, type = "numeric"),
+        tlShiny::grade_ipg(fsot_td4, type = "numeric"),
+        tlShiny::grade_ipg(fsot_sp1, type = "numeric"),
+        tlShiny::grade_ipg(fsot_sp2, type = "numeric"),
+        tlShiny::grade_ipg(fsot_sp3, type = "numeric"),
+        tlShiny::grade_ipg(fsot_sp4, type = "numeric"),
+        tlShiny::grade_ipg(fsot_ad1, type = "numeric_low"),
+        tlShiny::grade_ipg(fsot_ad2, type = "numeric_low"),
+        tlShiny::grade_ipg(ss_ca1a, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca1b, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca1c, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca1a, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca1b, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca1c, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca2a, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca2b, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca2c, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca2d, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca2a, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca2b, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca2c, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca2d, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca3a, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca3b, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca3c, type = "numeric"),
+        tlShiny::grade_ipg(ss_ca3d, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca3a, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca3b, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca3c, type = "numeric"),
+        tlShiny::grade_ipg(sci_ca3d, type = "numeric")
+      ), na.rm = TRUE),
+      ca1_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_m_ca1c, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1a, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1b, type = "character"),
+          tlShiny::grade_ipg(k12_ela_ca1c, type = "character"),
+          tlShiny::grade_ipg(ss_ca1a, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca1b, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca1c, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca1a, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca1b, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca1c, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca2_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca2d, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca2d, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca2d, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca2a, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca2b, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca2c, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca2d, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ca3_score = mean(
+        c(
+          tlShiny::grade_ipg(k12_m_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_m_ca3e, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3e, type = "numeric"),
+          tlShiny::grade_ipg(k12_ela_ca3f, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(ss_ca3d, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca3a, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca3b, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca3c, type = "numeric"),
+          tlShiny::grade_ipg(sci_ca3d, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ac_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_ac1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_ac2, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      ad_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_ad1, type = "numeric_low"),
+          tlShiny::grade_ipg(fsot_ad2, type = "numeric_low")
+        ),
+        na.rm = TRUE
+      ),
+      sp_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_sp1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_sp4, type = "numeric")
+        ),
+        na.rm = TRUE
+      ),
+      td_score = mean(
+        c(
+          tlShiny::grade_ipg(fsot_td1, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td2, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td3, type = "numeric"),
+          tlShiny::grade_ipg(fsot_td4, type = "numeric")
+        ),
+        na.rm = TRUE
+      )
+    ) |>
+    tidytable::group_by(direct_to_ts_obs) |>
+    tidytable::summarise(
+      overall_score = mean(overall_score, na.rm = TRUE),
+      ca1_n = sum(!is.na(ca1_score)),
+      ca1_score = mean(ca1_score, na.rm = TRUE),
+      ca2_n = sum(!is.na(ca2_score)),
+      ca2_score = mean(ca2_score, na.rm = TRUE),
+      ca3_n = sum(!is.na(ca3_score)),
+      ca3_score = mean(ca3_score, na.rm = TRUE),
+      ac_n = sum(!is.na(ac_score)),
+      ac_score = mean(ac_score, na.rm = TRUE),
+      ad_n = sum(!is.na(ad_score)),
+      ad_score = mean(ad_score, na.rm = TRUE),
+      sp_n = sum(!is.na(sp_score)),
+      sp_score = mean(sp_score, na.rm = TRUE),
+      td_n = sum(!is.na(td_score)),
+      td_score = mean(td_score, na.rm = TRUE),
+      n = tidytable::n()
+    ) |>
+    tidytable::pivot_longer(cols = ends_with("score"), names_to = "Core Action", values_to = "Score") |>
+    tidytable::mutate(
+      n = tidytable::case_when(
+        `Core Action` == "ca1_score" ~ ca1_n,
+        `Core Action` == "ca2_score" ~ ca2_n,
+        `Core Action` == "ca3_score" ~ ca3_n,
+        `Core Action` == "ac_score" ~ ac_n,
+        `Core Action` == "ad_score" ~ ad_n,
+        `Core Action` == "sp_score" ~ sp_n,
+        `Core Action` == "td_score" ~ td_n,
+        `Core Action` == "overall_score" ~ n
+      ),
+      `Core Action` = stringr::str_replace_all(`Core Action`, c(
+        "overall_score" = "Overall",
+        "ca1_score" = "Core Action 1",
+        "ca2_score" = "Core Action 2",
+        "ca3_score" = "Core Action 3",
+        "ac_score" = "Aligned Content",
+        "ad_score" = "Assessment & Differentiation",
+        "sp_score" = "Student Practice",
+        "td_score" = "Teacher-Directed Instruction"
+      ))
+    ) |>
+    tidytable::select(-ends_with("_n")) |>
+    tidytable::filter(direct_to_ts_obs != "Ongoing") |>
+    tidytable::mutate(direct_to_ts_obs = stringr::str_replace_all(direct_to_ts_obs,
+                                                                  c("Baseline \\(first observation of the year\\)" = "Baseline",
+                                                                    "Mid-year \\(middle of service, if applicable\\)" = "Mid-year",
+                                                                    "End of year \\(last observation of the year\\)" = "End of year")),
+                      direct_to_ts_obs = factor(direct_to_ts_obs, levels = c(
+                        "Baseline",
+                        "Mid-year",
+                        "End of year"
+                      ))) |>
+    tidytable::arrange(direct_to_ts_obs) |>
+    tidytable::drop_na()
+
+  color_groups <- length(unique(ipg_data_1$`Core Action`)) + 1
+
+  ipg_data_1 |>
+    tidytable::drop_na(Score) |>
+    tidytable::mutate(
+      `Core Action` = stringr::str_replace_all(`Core Action`, c("Core Action" = "CA",
+                                                                "Student Practice" = "SP",
+                                                                "Aligned Content" = "AC",
+                                                                "Assessment & Differentiation" = "AD",
+                                                                "Teacher-Directed Instruction" = "TDI"))
+    ) |>
+    ggplot2::ggplot(ggplot2::aes(x = forcats::fct_relevel(`Core Action`, "Overall", after = 4L), y = Score)) +
+    ggplot2::geom_col(ggplot2::aes(fill = `Core Action`)) +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score, 1), "%\n (n = ", n, ")")),
+                       fontface = "bold",
+                       vjust = -0.25,
+                       size = 6.5,
+                       family = "Calibri Bold",
+                       lineheight = 0.85
+    ) +
+    ggplot2::facet_wrap( ~ direct_to_ts_obs) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 100),
+      expand = c(0.1, 0)
+    ) +
+    ggplot2::scale_fill_manual(values = tlShiny::tl_palette(color = "blue", n = color_groups)[c(2:color_groups)]) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = paste0("% Positive Indicators Across ", stringr::str_remove_all(rubric, "\\(please use this tool for K-2 observations that are not focused on foundational skills\\)")),
+      caption = '*Note that "Ongoing" observations are not included in this analysis\n CA = Core Action, Aligned Content = AC, Assessment & Differentiation = AD, Student Practice = SP, Teacher-Directed Instruction = TDI'
+    ) +
+    tlShiny::theme_tl() +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(size = 20),
+      axis.text.y = ggplot2::element_text(size = 13),
+      plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
+      strip.text = ggplot2::element_text(size = 21, face = "bold", hjust = 0.5),
+      plot.caption = ggplot2::element_text(size = 12)
+    )
+
+}
