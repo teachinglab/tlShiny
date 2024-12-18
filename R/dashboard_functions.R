@@ -410,19 +410,19 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
 grade_ipg <- function(x, type = "character") {
   x <- x[!is.na(x)]
   x <- x[!is.null(x)]
-  x <- x[!stringr::str_detect(x, "Not Observed|Not observed|NULL|NA|N/A|Not applicable|Did not observe")]
+  x <- x[!grepl(x = x, pattern = "Not Observed|Not observed|NULL|NA|N/A|Not applicable|Did not observe", fixed = TRUE)]
   # purrr::keep( ~ !is.null(.x)) %>%
   # purrr::keep( ~ !str_detect(.x, "Not Observed"))
 
   if (type == "character") {
-    x <- 100 * (sum(stringr::str_detect(x, "Yes"), na.rm = T)) /
-      (sum(stringr::str_detect(x, "No"), na.rm = T) + sum(stringr::str_detect(x, "Yes"), na.rm = T))
+    x <- 100 * (sum(startsWith(x, "Yes"), na.rm = T)) /
+      (sum(startsWith(x, "No"), na.rm = T) + sum(startsWith(x, "Yes"), na.rm = T))
   } else if (type == "numeric") {
-    x <- 100 * (sum(stringr::str_detect(x, "3|4"), na.rm = T)) /
-      (sum(!stringr::str_detect(x, "3|4"), na.rm = T) + sum(stringr::str_detect(x, "3|4"), na.rm = T))
+    x <- 100 * (sum(startsWith(x, "3|4"), na.rm = T)) /
+      (sum(!startsWith(x, "3|4"), na.rm = T) + sum(startsWith(x, "3|4"), na.rm = T))
   } else if (type == "numeric_low") {
-    x <- 100 * (sum(stringr::str_detect(x, "2|3"), na.rm = T)) /
-      (sum(!stringr::str_detect(x, "2|3"), na.rm = T) + sum(stringr::str_detect(x, "2|3"), na.rm = T))
+    x <- 100 * (sum(startsWith(x, "2|3"), na.rm = T)) /
+      (sum(!startsWith(x, "2|3"), na.rm = T) + sum(startsWith(x, "2|3"), na.rm = T))
   }
 
   x
@@ -620,7 +620,7 @@ student_bar_chart <- function(data,
       color = "black",
       position = ggplot2::position_dodge2(width = 1, preserve = "total", reverse = TRUE),
       hjust = -0.25,
-      family = "Calibri",
+      family = "Open Sans",
       show.legend = FALSE
     ) +
     ggplot2::labs(
@@ -639,11 +639,11 @@ student_bar_chart <- function(data,
     # tlShiny::theme_tl(legend = F,
     #                   markdown = TRUE) +
     ggplot2::theme(
-      plot.title = ggtext::element_markdown(family = "Calibri Bold", face = "bold", size = 30, hjust = 0.5, color = "black"),
-      plot.subtitle = ggtext::element_markdown(family = "Calibri", hjust = 0, size = 20, color = "black", lineheight = 0.8),
+      plot.title = ggtext::element_markdown(family = "Fira Sans", face = "bold", size = 30, hjust = 0.5, color = "black"),
+      plot.subtitle = ggtext::element_markdown(family = "Fira Sans", hjust = 0, size = 20, color = "black", lineheight = 0.8),
       legend.position = "none",
-      axis.text.y = ggtext::element_markdown(size = 23, family = "Calibri"),
-      axis.text.x = ggtext::element_markdown(size = 18, color = "black", family = "Calibri"),
+      axis.text.y = ggtext::element_markdown(size = 23, family = "Open Sans"),
+      axis.text.x = ggtext::element_markdown(size = 18, color = "black", family = "Open Sans"),
       plot.background = ggplot2::element_rect(fill = "white"),
       panel.background = ggplot2::element_rect(fill = "white"),
       panel.grid.minor.x = ggplot2::element_line(color = "gray40"),
