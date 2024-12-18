@@ -415,14 +415,17 @@ grade_ipg <- function(x, type = "character") {
   # purrr::keep( ~ !str_detect(.x, "Not Observed"))
 
   if (type == "character") {
-    x <- 100 * (sum(startsWith(x, "Yes"), na.rm = T)) /
-      (sum(startsWith(x, "No"), na.rm = T) + sum(startsWith(x, "Yes"), na.rm = T))
+    yes_count <- sum(grepl("Yes", x), na.rm = TRUE)
+    no_count <- sum(grepl("No", x), na.rm = TRUE)
+    x <- 100 * yes_count / (no_count + yes_count)
   } else if (type == "numeric") {
-    x <- 100 * (sum(startsWith(x, "3|4"), na.rm = T)) /
-      (sum(!startsWith(x, "3|4"), na.rm = T) + sum(startsWith(x, "3|4"), na.rm = T))
+    match_count <- sum(grepl("3|4", x), na.rm = TRUE)
+    non_match_count <- length(x) - match_count
+    x <- 100 * match_count / (non_match_count + match_count)
   } else if (type == "numeric_low") {
-    x <- 100 * (sum(startsWith(x, "2|3"), na.rm = T)) /
-      (sum(!startsWith(x, "2|3"), na.rm = T) + sum(startsWith(x, "2|3"), na.rm = T))
+    match_count <- sum(grepl("2|3", x), na.rm = TRUE)
+    non_match_count <- length(x) - match_count
+    x <- 100 * match_count / (non_match_count + match_count)
   }
 
   x
