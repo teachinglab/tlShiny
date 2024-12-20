@@ -16,7 +16,7 @@ neg_cond_filter(data, if_not_this, filter_this, dat_filter)
 \item{dat_filter}{Data column object to filter}
 }
 \value{
-filtered dataframe
+filtered data.frame
 }
 \description{
 Conditionally filters value given that it is not the first parameter,

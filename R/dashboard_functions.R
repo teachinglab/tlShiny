@@ -16,7 +16,7 @@ remove_empty_tl <- function(data) {
 #' @param if_not_this If value is not this
 #' @param filter_this Filter for this
 #' @param dat_filter Data column object to filter
-#' @return filtered dataframe
+#' @return filtered data.frame
 #' @export
 neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
 
@@ -26,6 +26,21 @@ neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
   } else {
     data
   }
+
+}
+
+#' @title Date filter
+#' @description Efficiently filters data frame by two dates (inclusive),
+#' for use in shiny apps
+#' @param data the dataframe to apply filter to
+#' @param date1 the min date
+#' @param date2 the max date
+#' @param dat_filter Data column object to filter
+#' @return filtered data.frame
+#' @export
+date_filter <- function(data, date1, date2, filter_this) {
+
+  collapse::fsubset(data, get(dat_filter) >= date1 & get(dat_filter) <= date2)
 
 }
 
