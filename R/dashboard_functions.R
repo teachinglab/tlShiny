@@ -20,8 +20,10 @@ remove_empty_tl <- function(data) {
 neg_cond_filter <- function(data, filter_this, dat_filter) {
 
   # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
-  if (length(filter_this) > 0 && filter_this != "") {
+  if (length(filter_this) > 1) {
     collapse::fsubset(data, data[[dat_filter]] %in% filter_this)
+  } else if (length(filter_this) == 1 && dat_filter != "") {
+    collapse::fsubset(data, data[[dat_filter]] == filter_this)
   } else {
     data
   }
