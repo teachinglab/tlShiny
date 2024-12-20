@@ -13,16 +13,15 @@ remove_empty_tl <- function(data) {
 #' @description Conditionally filters value given that it is not the first parameter,
 #' for use in shiny apps
 #' @param data the dataframe to apply filter
-#' @param if_not_this If value is not this
 #' @param filter_this Filter for this
 #' @param dat_filter Data column object to filter
 #' @return filtered data.frame
 #' @export
-neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
+neg_cond_filter <- function(data, filter_this, dat_filter) {
 
   # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
-  if (if_not_this != "" && !is.null(if_not_this)) {
-    collapse::fsubset(data, get(dat_filter) %in% filter_this)
+  if (length(filter_this) > 0 && filter_this != "") {
+    collapse::fsubset(data, data[[dat_filter]] %in% filter_this)
   } else {
     data
   }
