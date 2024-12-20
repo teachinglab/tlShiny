@@ -40,7 +40,7 @@ neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
 #' @export
 date_filter <- function(data, date1, date2, dat_filter) {
 
-  collapse::fsubset(data, get(dat_filter) >= date1 & get(dat_filter) <= date2)
+  collapse::fsubset(data, data[[dat_filter]] >= date1 & data[[dat_filter]] <= date2)
 
 }
 
