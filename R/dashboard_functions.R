@@ -19,21 +19,14 @@ remove_empty_tl <- function(data) {
 #' @return filtered dataframe
 #' @export
 neg_cond_filter <- function(data, if_not_this, filter_this, dat_filter) {
-  # Get quo for filtering the data
-  quo_filter <- rlang::enquo(dat_filter)
-
-  # Get a vector of the inputs to filter minus the "All x" pattern
-  filter_this_no_all <- filter_this[filter_this != if_not_this]
 
   # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
-  if (any(filter_this != if_not_this)) {
-    df <- data |>
-      dplyr::filter(!!quo_filter %in% filter_this_no_all)
+  if (if_not_this != "" && !is.null(if_not_this)) {
+    collapse::fsubset(data, get(dat_filter) %in% filter_this)
   } else {
-    df <- data
+    data
   }
 
-  df
 }
 
 #' @title Verify email domain
