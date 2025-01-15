@@ -4,7 +4,7 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(6:51) |>
+    dplyr::slice(6:53) |>
     dplyr::pull()
 
   current_subsites <- c("ar_blytheville",
@@ -38,6 +38,7 @@ test_that("Check that subsites are up to date", {
                         "east_harlem",
                         "la_pointe_coupee",
                         "ma_dese",
+                        "ma_milford",
                         "ms_kemper",
                         "nc_charlotte",
                         "network4",
@@ -51,6 +52,7 @@ test_that("Check that subsites are up to date", {
                         "ny_transfer",
                         "oh_cleveland",
                         "rochester",
+                        "tn_acceleration",
                         "tx_elpaso",
                         "wi_milwaukee")
 
@@ -75,6 +77,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_East Harlem Scholar Academies (EHTP)",
   #              "LA_Pointe Coupee Parish",
   #              "MA_DESE",
+  #              "MA_Milford",
   #              "MS_Kemper County School District",
   #              "NC_Charlotte-Mecklenburg Schools",
   #              "IL_Chicago Public Schools_Network 4",
@@ -88,6 +91,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_Transfer High Schools",
   #              "OH_Cleveland Metro School District",
   #              "NY_Rochester City Schools",
+  #              "TN_Acceleration for All",
   #              "TX_El Paso Leadership Academy",
   #              "WI_Milwaukee Public Schools"))
   # usethis::use_data(subsites, overwrite = TRUE)

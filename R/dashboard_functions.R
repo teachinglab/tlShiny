@@ -13,7 +13,7 @@ remove_empty_tl <- function(data) {
 #' @description Conditionally filters value given that it is not the first parameter,
 #' for use in shiny apps
 #' @param data the dataframe to apply filter
-#' @param filter_this Filter for this
+#' @param filter_this Filter for this, only filters if length >= 1
 #' @param dat_filter Data column object to filter
 #' @return filtered data.frame
 #' @export

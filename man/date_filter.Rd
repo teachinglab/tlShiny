@@ -4,7 +4,7 @@
 \alias{date_filter}
 \title{Date filter}
 \usage{
-date_filter(data, date1, date2, filter_this)
+date_filter(data, date1, date2, dat_filter)
 }
 \arguments{
 \item{data}{the dataframe to apply filter to}
