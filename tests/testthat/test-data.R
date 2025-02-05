@@ -4,7 +4,7 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(6:55) |>
+    dplyr::slice(6:58) |>
     dplyr::pull()
 
   current_subsites <- c("ar_blytheville",
@@ -38,8 +38,11 @@ test_that("Check that subsites are up to date", {
                         "east_harlem",
                         "la_pointe_coupee",
                         "ma_dese",
+                        "ma_boston",
                         "ma_milford",
+                        "ma_plymouth",
                         "ma_uxbridge",
+                        "ma_westspring",
                         "ms_kemper",
                         "nc_charlotte",
                         "network4",
@@ -80,6 +83,7 @@ test_that("Check that subsites are up to date", {
   #              "LA_Pointe Coupee Parish",
   #              "MA_DESE",
   #              "MA_Milford",
+  #              "MA_Plymouth",
   #              "MA_Uxbridge",
   #              "MS_Kemper County School District",
   #              "NC_Charlotte-Mecklenburg Schools",
