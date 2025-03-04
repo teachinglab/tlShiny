@@ -608,13 +608,13 @@ student_bar_chart <- function(data,
     )
 
   subtitle <- if (length(agree_select) > 1) {
-    glue::glue('The following percentages show the % that selected "{agree_select[1]}" or "{agree_select[2]}"')
+    glue::glue('The following percentages show the % that selected<br>"{agree_select[1]}" or "{agree_select[2]}"')
   } else {
-    glue::glue('The following percentages show the % that selected "{agree_select[1]}"')
+    glue::glue('The following percentages show the % that selected<br>"{agree_select[1]}"')
   }
 
   if (col_select == "mses_a6") {
-    subtitle <- paste0(subtitle, " or <br>\"1 - Not at all like me 👎👎\", \"2 - Not much like me 👎\" in the case of negatively coded questions <span style = 'color:red;'>(red)</span>")
+    subtitle <- paste0(subtitle, " or \"1 - Not at all like me 👎👎\", \"2 - Not much like me 👎\" in the case of negatively coded questions <span style = 'color:red;'>(red)</span>")
   }
 
   p <- ggplot2::ggplot(student_data_percent, ggplot2::aes(
