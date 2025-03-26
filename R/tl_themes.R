@@ -1,6 +1,6 @@
 #' @title Teaching Lab Custom Ggplot2 Theme
 #'
-#' @note It requires installing Roboto, Calibri fonts unless you change the font parameters
+#' @note It requires installing Fira Sans, Open Sans fonts unless you change the font parameters
 #'
 #' \url{https://www.google.com/fonts}
 #'
@@ -31,20 +31,20 @@
 #'
 #' @export
 
-theme_tl <- function(base_family = "Calibri",
+theme_tl <- function(base_family = "Open Sans",
                      base_size = 14,
                      strip_text_family = base_family,
                      strip_text_size = 15,
-                     plot_title_family = "Calibri",
+                     plot_title_family = "Fira Sans",
                      plot_title_size = 20,
                      plot_title_margin = 10,
-                     subtitle_family = "Roboto",
+                     subtitle_family = "Open Sans",
                      subtitle_size = 15,
                      subtitle_margin = 15,
-                     caption_family = "Roboto",
+                     caption_family = "Open Sans",
                      caption_size = 11,
                      caption_margin = 10,
-                     axis_title_family = "Calibri",
+                     axis_title_family = "Fira Sans",
                      axis_title_size = 12,
                      axis_title_just = "mm",
                      axis_text_size = 10.5,
@@ -176,7 +176,7 @@ gt_theme_tl <- function(data, all_caps = F, align = "center", base_font = 16, he
     gt::opt_all_caps(all_caps = all_caps) |>
     gt::opt_table_font(
       font = list(
-        gt::google_font("Calibri"),
+        gt::google_font("Open Sans"),
         gt::default_fonts()
       )
     ) |>
