@@ -632,7 +632,7 @@ student_bar_chart <- function(data,
       color = "black",
       position = ggplot2::position_dodge2(width = 1, preserve = "total", reverse = TRUE),
       hjust = -0.25,
-      family = "Open Sans",
+      family = "Lora",
       show.legend = FALSE
     ) +
     ggplot2::labs(
@@ -651,11 +651,11 @@ student_bar_chart <- function(data,
     # tlShiny::theme_tl(legend = F,
     #                   markdown = TRUE) +
     ggplot2::theme(
-      plot.title = ggtext::element_markdown(family = "Fira Sans", face = "bold", size = 30, hjust = 0.5, color = "black"),
-      plot.subtitle = ggtext::element_markdown(family = "Fira Sans", hjust = 0, size = 20, color = "black", lineheight = 0.8),
+      plot.title = ggtext::element_markdown(family = "Poppins", face = "bold", size = 30, hjust = 0.5, color = "black"),
+      plot.subtitle = ggtext::element_markdown(family = "Poppins", hjust = 0, size = 20, color = "black", lineheight = 0.8),
       legend.position = "none",
-      axis.text.y = ggtext::element_markdown(size = 23, family = "Open Sans"),
-      axis.text.x = ggtext::element_markdown(size = 18, color = "black", family = "Open Sans"),
+      axis.text.y = ggtext::element_markdown(size = 23, family = "Lora"),
+      axis.text.x = ggtext::element_markdown(size = 18, color = "black", family = "Lora"),
       plot.background = ggplot2::element_rect(fill = "white"),
       panel.background = ggplot2::element_rect(fill = "white"),
       panel.grid.minor.x = ggplot2::element_line(color = "gray40"),
