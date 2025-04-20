@@ -4,7 +4,7 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(6:59) |>
+    dplyr::slice(7:61) |>
     dplyr::pull()
 
   current_subsites <- c("ar_blytheville",
@@ -15,6 +15,7 @@ test_that("Check that subsites are up to date", {
                         "dennis_yarm",
                         "il_cps",
                         "district6",
+                        "district6_other",
                         "district7",
                         "district7_other",
                         "district9",
