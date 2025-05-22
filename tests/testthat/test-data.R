@@ -5,7 +5,8 @@ test_that("Check that subsites are up to date", {
     dplyr::select(qname)
   subsites_check <- subsite_list |>
     dplyr::slice(7:61) |>
-    dplyr::pull()
+    dplyr::pull() |>
+    append("denver_hs") # Less than ideal but no subsites for now so manual append
 
   current_subsites <- c("ar_blytheville",
                         "ar_friendship",
@@ -13,6 +14,7 @@ test_that("Check that subsites are up to date", {
                         "ar_osceola",
                         "ca_santa_ana",
                         "dennis_yarm",
+                        "denver_hs",
                         "il_cps",
                         "district6",
                         "district6_other",
@@ -69,8 +71,9 @@ test_that("Check that subsites are up to date", {
   #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
   #              "CA_Santa Ana Unified School District",
   #              "Dennis-Yarmouth",
+  #              "CO_AUL Denver High School",
   #              "IL_CPS",
-  #              "NY_D6",
+  #              "NY_D6", "NY_D6 Other",
   #              "NY_D7", "NY_D7 Other",
   #              "NY_D9", "NY_D9 Other",
   #              "NY_D11", "NY_D11 Other",
