@@ -1,24 +1,17 @@
 
 test_that("Check that subsites are up to date", {
 
-  subsite_list <- qualtRics::survey_questions("SV_djt8w6zgigaNq0C") |>
+  subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(7:61) |>
+    dplyr::slice(6:43) |>
     dplyr::pull()
 
-  current_subsites <- c("ar_blytheville",
-                        "ar_friendship",
-                        "ar_hope",
-                        "ar_osceola",
+  current_subsites <- c("ar_osceola",
                         "ca_santa_ana",
-                        "dennis_yarm",
-                        # "denver_hs",
                         "il_cps",
                         "district6",
                         "district6_other",
-                        "district7",
-                        "district7_other",
                         "district9",
                         "district9_other",
                         "district11",
@@ -33,47 +26,33 @@ test_that("Check that subsites are up to date", {
                         "district17_other",
                         "district25",
                         "district25_other",
-                        "district27",
-                        "district27_other",
                         "district75",
                         "district75_other",
-                        "east_harlem",
-                        "la_pointe_coupee",
-                        "ma_dese",
                         "ma_boston",
+                        "ma_dennis_yarm",
                         "ma_milford",
                         "ma_plymouth",
                         "ma_uxbridge",
                         "ma_westspring",
                         "ms_kemper",
-                        "nc_charlotte",
-                        "network4",
-                        "network7",
-                        "network12",
                         "nj_great_oaks",
-                        "nm_nm_ped",
                         "ny_ascend",
                         "ny_cuny",
                         "ny_lion",
                         "ny_transfer",
-                        "oh_cleveland",
-                        "rochester",
                         "tn_acceleration",
                         "tn_acceleration2",
                         "tx_elpaso",
-                        "wi_milwaukee",
-                        "wi_victory")
+                        "tx_la_joya",
+                        "wi_milwaukee")
 
   expect_true(length(intersect(subsites_check, current_subsites)) == length(current_subsites))
   # setdiff(subsites_check, current_subsites)
   # subsites <- current_subsites |>
-  #   setNames(c("AR_Blytheville School District", "AR_Friendship Aspire Academy", "AR_Hope Public Schools", "AR_Osceola School District",
+  #   setNames(c("AR_Osceola School District",
   #              "CA_Santa Ana Unified School District",
-  #              "Dennis-Yarmouth",
-  #              # "CO_AUL Denver High School",
   #              "IL_CPS",
   #              "NY_D6", "NY_D6 Other",
-  #              "NY_D7", "NY_D7 Other",
   #              "NY_D9", "NY_D9 Other",
   #              "NY_D11", "NY_D11 Other",
   #              "NY_D12", "NY_D12 Other",
@@ -81,35 +60,25 @@ test_that("Check that subsites are up to date", {
   #              "NY_D16", "NY_D16 Other",
   #              "NY_D17", "NY_D17 Other",
   #              "NY_D25", "NY_D25 Other",
-  #              "NY_D27", "NY_D27 Other",
   #              "NY_D75", "NY_D75 Other",
-  #              "NY_East Harlem Scholar Academies (EHTP)",
-  #              "LA_Pointe Coupee Parish",
-  #              "MA_DESE",
   #              "MA_Boston",
+  #              "MA_Dennis-Yarmouth",
   #              "MA_Milford",
   #              "MA_Plymouth",
   #              "MA_Uxbridge",
   #              "MA_West Springfield",
   #              "MS_Kemper County School District",
-  #              "NC_Charlotte-Mecklenburg Schools",
-  #              "IL_Chicago Public Schools_Network 4",
-  #              "IL_Chicago Public Schools_Network 7",
-  #              "IL_Chicago Public Schools_Network 12",
   #              "NJ_Great Oaks Legacy Charter Schools",
-  #              "NM_NM Public Education Department",
   #              "NY_Ascend Charter Schools",
   #              "NY_CUNY/UA",
   #              "NY_LION Charter Schools",
   #              "NY_Transfer High Schools",
-  #              "OH_Cleveland Metro School District",
-  #              "NY_Rochester City Schools",
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
   #              "TX_El Paso Leadership Academy",
-  #              "WI_Milwaukee Public Schools",
-  #              "WI_Victory"))
-  # usethis::use_data(subsites, overwrite = TRUE)
+  #              "TX_La Joya ISD",
+  #              "WI_Milwaukee Public Schools"))
+  usethis::use_data(subsites, overwrite = TRUE)
 })
 
 
