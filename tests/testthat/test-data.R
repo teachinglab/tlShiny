@@ -4,11 +4,12 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(6:43) |>
+    dplyr::slice(6:44) |>
     dplyr::pull()
 
   current_subsites <- c("ar_osceola",
                         "ca_santa_ana",
+                        "ct_bristol",
                         "ct_hamden",
                         "il_cps",
                         "district6",
@@ -47,38 +48,39 @@ test_that("Check that subsites are up to date", {
                         "tx_la_joya")
 
   expect_true(length(intersect(subsites_check, current_subsites)) == length(current_subsites))
-  setdiff(subsites_check, current_subsites)
-  subsites <- current_subsites |>
-    setNames(c("AR_Osceola School District",
-               "CA_Santa Ana Unified School District",
-               "CT_Hamden",
-               "IL_CPS",
-               "NY_D6", "NY_D6 Other",
-               "NY_D9", "NY_D9 Other",
-               "NY_D11", "NY_D11 Other",
-               "NY_D12", "NY_D12 Other",
-               "NY_D13", "NY_D13 Other",
-               "NY_D16", "NY_D16 Other",
-               "NY_D17", "NY_D17 Other",
-               "NY_D25", "NY_D25 Other",
-               "NY_D75", "NY_D75 Other",
-               "MA_Boston",
-               "MA_Dennis-Yarmouth",
-               "MA_Greenfield",
-               "MA_Milford",
-               "MA_Plymouth",
-               "MA_Uxbridge",
-               "MA_West Springfield",
-               "MO_KIPP Kansas City",
-               "NJ_Great Oaks Legacy Charter Schools",
-               "NY_Ascend Charter Schools",
-               "NY_CUNY/UA",
-               "NY_East Harlem Scholar Academies (EHTP)",
-               "NY_Transfer High Schools",
-               "TN_Acceleration for All",
-               "TN_Acceleration for All",
-               "TX_La Joya ISD"))
-  usethis::use_data(subsites, overwrite = TRUE)
+  # setdiff(subsites_check, current_subsites)
+  # subsites <- current_subsites |>
+  #   setNames(c("AR_Osceola School District",
+  #              "CA_Santa Ana Unified School District",
+  #              "CT_Bristol",
+  #              "CT_Hamden",
+  #              "IL_CPS",
+  #              "NY_D6", "NY_D6 Other",
+  #              "NY_D9", "NY_D9 Other",
+  #              "NY_D11", "NY_D11 Other",
+  #              "NY_D12", "NY_D12 Other",
+  #              "NY_D13", "NY_D13 Other",
+  #              "NY_D16", "NY_D16 Other",
+  #              "NY_D17", "NY_D17 Other",
+  #              "NY_D25", "NY_D25 Other",
+  #              "NY_D75", "NY_D75 Other",
+  #              "MA_Boston",
+  #              "MA_Dennis-Yarmouth",
+  #              "MA_Greenfield",
+  #              "MA_Milford",
+  #              "MA_Plymouth",
+  #              "MA_Uxbridge",
+  #              "MA_West Springfield",
+  #              "MO_KIPP Kansas City",
+  #              "NJ_Great Oaks Legacy Charter Schools",
+  #              "NY_Ascend Charter Schools",
+  #              "NY_CUNY/UA",
+  #              "NY_East Harlem Scholar Academies (EHTP)",
+  #              "NY_Transfer High Schools",
+  #              "TN_Acceleration for All",
+  #              "TN_Acceleration for All",
+  #              "TX_La Joya ISD"))
+  # usethis::use_data(subsites, overwrite = TRUE)
 })
 
 
