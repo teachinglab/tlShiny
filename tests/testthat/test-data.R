@@ -4,7 +4,7 @@ test_that("Check that subsites are up to date", {
   subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
     dplyr::select(qname)
   subsites_check <- subsite_list |>
-    dplyr::slice(6:44) |>
+    dplyr::slice(6:45) |> # If role is the last element you've gone too far
     dplyr::pull()
 
   current_subsites <- c("ar_osceola",
@@ -39,6 +39,7 @@ test_that("Check that subsites are up to date", {
                         "ma_westspring",
                         "mo_kipp",
                         "nj_great_oaks",
+                        "ny_cps_openscied",
                         "ny_ascend",
                         "ny_cuny",
                         "ny_east_harlem",
@@ -73,6 +74,7 @@ test_that("Check that subsites are up to date", {
   #              "MA_West Springfield",
   #              "MO_KIPP Kansas City",
   #              "NJ_Great Oaks Legacy Charter Schools",
+  #              "NY_CPS_OpenSciEd",
   #              "NY_Ascend Charter Schools",
   #              "NY_CUNY/UA",
   #              "NY_East Harlem Scholar Academies (EHTP)",
