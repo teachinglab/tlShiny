@@ -2,10 +2,9 @@
 test_that("Check that subsites are up to date", {
 
   subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
-    dplyr::select(qname)
+    dplyr::filter(stringr::str_detect(question, "school|district|region") & qname != "site" & qname != "ny_cps_school" & qname != "podsie_likert")
   subsites_check <- subsite_list |>
-    dplyr::slice(6:45) |> # If role is the last element you've gone too far
-    dplyr::pull()
+    dplyr::pull(qname)
 
   current_subsites <- c("ar_osceola",
                         "ca_santa_ana",
@@ -30,6 +29,8 @@ test_that("Check that subsites are up to date", {
                         "district25_other",
                         "district75",
                         "district75_other",
+                        "district79",
+                        "district79_other",
                         "ma_boston",
                         "ma_dennis_yarm",
                         "ma_greenfield",
@@ -65,6 +66,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_D17", "NY_D17 Other",
   #              "NY_D25", "NY_D25 Other",
   #              "NY_D75", "NY_D75 Other",
+  #              "NY_D79", "NY_D79 Other",
   #              "MA_Boston",
   #              "MA_Dennis-Yarmouth",
   #              "MA_Greenfield",
