@@ -30,7 +30,6 @@ test_that("Check that subsites are up to date", {
                         "district75",
                         "district75_other",
                         "district79",
-                        "district79_other",
                         "ma_boston",
                         "ma_dennis_yarm",
                         "ma_greenfield",
@@ -66,7 +65,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_D17", "NY_D17 Other",
   #              "NY_D25", "NY_D25 Other",
   #              "NY_D75", "NY_D75 Other",
-  #              "NY_D79", "NY_D79 Other",
+  #              "NY_D79",
   #              "MA_Boston",
   #              "MA_Dennis-Yarmouth",
   #              "MA_Greenfield",
@@ -84,7 +83,7 @@ test_that("Check that subsites are up to date", {
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
   #              "TX_La Joya ISD"))
-  # usethis::use_data(subsites, overwrite = TRUE)
+  usethis::use_data(subsites, overwrite = TRUE)
 })
 
 
