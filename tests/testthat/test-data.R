@@ -3,6 +3,7 @@ test_that("Check that subsites are up to date", {
 
   subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
     dplyr::filter(stringr::str_detect(question, "school|district|region") & qname != "site" & qname != "ny_cps_school" & qname != "podsie_likert")
+
   subsites_check <- subsite_list |>
     dplyr::pull(qname)
 
@@ -10,6 +11,8 @@ test_that("Check that subsites are up to date", {
                         "ca_santa_ana",
                         "ct_bristol",
                         "ct_hamden",
+                        "dc_dcps_8",
+                        "dc_dcps_9",
                         "il_cps",
                         "district6",
                         "district6_other",
@@ -49,12 +52,15 @@ test_that("Check that subsites are up to date", {
                         "tx_la_joya")
 
   expect_true(length(intersect(subsites_check, current_subsites)) == length(current_subsites))
+
   # setdiff(subsites_check, current_subsites)
   # subsites <- current_subsites |>
   #   setNames(c("AR_Osceola School District",
   #              "CA_Santa Ana Unified School District",
   #              "CT_Bristol",
   #              "CT_Hamden",
+  #              "DC_DCPS Cluster 8",
+  #              "DC_DCPS Cluster 9",
   #              "IL_CPS",
   #              "NY_D6", "NY_D6 Other",
   #              "NY_D9", "NY_D9 Other",
@@ -83,7 +89,7 @@ test_that("Check that subsites are up to date", {
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
   #              "TX_La Joya ISD"))
-  usethis::use_data(subsites, overwrite = TRUE)
+  # usethis::use_data(subsites, overwrite = TRUE)
 })
 
 

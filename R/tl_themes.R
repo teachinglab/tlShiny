@@ -75,9 +75,9 @@ theme_tl <- function(base_family = "Lora",
   }
 
   if (inherits(grid, "character") | grid == TRUE) {
-    ret <- ret + ggplot2::theme(panel.grid = ggplot2::element_line(color = grid_color, size = 0.10))
-    ret <- ret + ggplot2::theme(panel.grid.major = ggplot2::element_line(color = grid_color, size = 0.10))
-    ret <- ret + ggplot2::theme(panel.grid.minor = ggplot2::element_line(color = grid_color, size = 0.05))
+    ret <- ret + ggplot2::theme(panel.grid = ggplot2::element_line(color = grid_color, linewidth = 0.10))
+    ret <- ret + ggplot2::theme(panel.grid.major = ggplot2::element_line(color = grid_color, linewidth = 0.10))
+    ret <- ret + ggplot2::theme(panel.grid.minor = ggplot2::element_line(color = grid_color, linewidth = 0.05))
 
     if (inherits(grid, "character")) {
       if (regexpr("X", grid)[1] < 0) ret <- ret + ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
@@ -90,22 +90,22 @@ theme_tl <- function(base_family = "Lora",
   }
 
   if (inherits(axis, "character") | axis == TRUE) {
-    ret <- ret + ggplot2::theme(axis.line = ggplot2::element_line(color = grid_color, size = 0.15))
+    ret <- ret + ggplot2::theme(axis.line = ggplot2::element_line(color = grid_color, linewidth = 0.15))
     if (inherits(axis, "character")) {
       axis <- tolower(axis)
       if (regexpr("x", axis)[1] < 0) {
         ret <- ret + ggplot2::theme(axis.line.x = ggplot2::element_blank())
       } else {
-        ret <- ret + ggplot2::theme(axis.line.x = ggplot2::element_line(color = grid_color, size = 0.15))
+        ret <- ret + ggplot2::theme(axis.line.x = ggplot2::element_line(color = grid_color, linewidth = 0.15))
       }
       if (regexpr("y", axis)[1] < 0) {
         ret <- ret + ggplot2::theme(axis.line.y = ggplot2::element_blank())
       } else {
-        ret <- ret + ggplot2::theme(axis.line.y = ggplot2::element_line(color = grid_color, size = 0.15))
+        ret <- ret + ggplot2::theme(axis.line.y = ggplot2::element_line(color = grid_color, linewidth = 0.15))
       }
     } else {
-      ret <- ret + ggplot2::theme(axis.line.x = ggplot2::element_line(color = grid_color, size = 0.15))
-      ret <- ret + ggplot2::theme(axis.line.y = ggplot2::element_line(color = grid_color, size = 0.15))
+      ret <- ret + ggplot2::theme(axis.line.x = ggplot2::element_line(color = grid_color, linewidth = 0.15))
+      ret <- ret + ggplot2::theme(axis.line.y = ggplot2::element_line(color = grid_color, linewidth = 0.15))
     }
   } else {
     ret <- ret + ggplot2::theme(axis.line = ggplot2::element_blank())
@@ -116,9 +116,9 @@ theme_tl <- function(base_family = "Lora",
     ret <- ret + ggplot2::theme(axis.ticks.x = ggplot2::element_blank())
     ret <- ret + ggplot2::theme(axis.ticks.y = ggplot2::element_blank())
   } else {
-    ret <- ret + ggplot2::theme(axis.ticks = ggplot2::element_line(size = 0.15))
-    ret <- ret + ggplot2::theme(axis.ticks.x = ggplot2::element_line(size = 0.15))
-    ret <- ret + ggplot2::theme(axis.ticks.y = ggplot2::element_line(size = 0.15))
+    ret <- ret + ggplot2::theme(axis.ticks = ggplot2::element_line(linewidth = 0.15))
+    ret <- ret + ggplot2::theme(axis.ticks.x = ggplot2::element_line(linewidth = 0.15))
+    ret <- ret + ggplot2::theme(axis.ticks.y = ggplot2::element_line(linewidth = 0.15))
     ret <- ret + ggplot2::theme(axis.ticks.length = grid::unit(5, "pt"))
   }
 
