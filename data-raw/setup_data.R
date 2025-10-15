@@ -1,5 +1,5 @@
 # Content Area ----
-content_area_sites <- c("NY_D9", "NY_D11", "NY_D12", "NY_D13")
+content_area_sites <- c("NY_D9", "NY_D11", "NY_D12", "NY_D13", "NY_D75")
 usethis::use_data(content_area_sites, overwrite = TRUE)
 
 # Subsites ----
