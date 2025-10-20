@@ -5,7 +5,7 @@
 \alias{no_data_plot_filters}
 \title{No Data Plot}
 \format{
-An object of class \code{gg} (inherits from \code{ggplot}) of length 11.
+An object of class \code{ggplot2::ggplot} (inherits from \code{ggplot}, \code{ggplot2::gg}, \code{S7_object}, \code{gg}) of length 1.
 }
 \usage{
 no_data_plot_filters
