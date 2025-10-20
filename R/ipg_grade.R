@@ -207,3 +207,111 @@ ipg_summarise_overall <- function(data) {
 
   return(data_final)
 }
+
+
+#' @title Bar Chart of Overall IPG Scores by Observation Timepoint
+#' @description Creates a column chart of overall IPG scores by observation timepoint (`direct_to_ts_obs`), using the
+#' "Overall" row from \code{\link{ipg_summarise_overall}} and annotating bars with percent and sample size (n).
+#' @param data Long-format data from \code{\link{ipg_summarise_overall}} containing columns:
+#' \code{direct_to_ts_obs}, \code{Core Action}, \code{Score}, and \code{n}.
+#' @return A \code{ggplot} object.
+#'
+#' @examples
+#' teacher_scores <- ipg_summarise_teacher(ipg_data)
+#' overall_long <- ipg_summarise_overall(teacher_scores)
+#' ipg_bar_chart(overall_long)
+#' @export
+ipg_bar_chart <- function(data) {
+  data |>
+    collapse::fsubset(`Core Action` == "Overall") |>
+    # dplyr::filter(`Core Action` == "Overall") |>
+    ggplot2::ggplot(ggplot2::aes(x = direct_to_ts_obs, y = Score)) +
+    ggplot2::geom_col(fill = "#04abeb") +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score, 1), "%\n (n = ", n, ")")),
+                       fontface = "bold",
+                       vjust = -0.5,
+                       size = 11,
+                       lineheight = 0.8,
+                       family = "Poppins",
+                       color = "black"
+    ) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 100),
+      expand = c(0.13, 0)
+    ) +
+    ggplot2::scale_x_discrete(
+      labels = ~ stringr::str_wrap(as.character(.x), 20)
+    ) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = "% Positive Indicators Across\nAll Observation Rubrics",
+      caption = '*Note that "Ongoing" observations are not included in this analysis'
+    ) +
+    tlShiny::theme_tl(base_family = "Lora", plot_title_family = "Poppins", axis_title_family = "Lora") +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(size = 25, family = "Lora"),
+      axis.text.y = ggplot2::element_text(size = 20, family = "Lora"),
+      plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Poppins"),
+      plot.caption = ggplot2::element_text(size = 14, family = "Lora")
+    )
+}
+
+#' @title Faceted Bar Chart of IPG Domain Scores Across Timepoints
+#' @description Plots domain-level IPG scores (CA1–CA3, AC, AD, SP, TDI, and Overall) with facets by
+#' observation timepoint. Labels bars with percent and sample size (n). Uses \code{tlShiny::tl_palette}
+#' for fills and abbreviates domain labels in the plot.
+#' @param data Long-format data from \code{\link{ipg_summarise_overall}} containing columns:
+#' \code{direct_to_ts_obs}, \code{Core Action}, \code{Score}, and \code{n}.
+#' @param rubric Character string used in the plot title (e.g., rubric name shown to users).
+#' @param colors Integer for the number of colors to request from \code{tlShiny::tl_palette}; choose
+#' a value \eqn{\ge} 8 to cover all categories.
+#' @return A \code{ggplot} object.
+#'
+#' @examples
+#' teacher_scores <- ipg_summarise_teacher(ipg_data)
+#' overall_long <- ipg_summarise_overall(teacher_scores)
+#' ipg_rubric_chart(overall_long, rubric = "Math IPG", colors = 8)
+#' @export
+ipg_rubric_chart <- function(data, rubric, colors) {
+  data |>
+    collapse::fsubset(!is.na(Score)) |>
+    collapse::fmutate(
+      `Core Action` = stringr::str_replace_all(`Core Action`, c(
+        "Core Action" = "CA",
+        "Student Practice" = "SP",
+        "Aligned Content" = "AC",
+        "Assessment & Differentiation" = "AD",
+        "Teacher-Directed Instruction" = "TDI"
+      ))
+    ) |>
+    ggplot2::ggplot(ggplot2::aes(x = forcats::fct_relevel(`Core Action`, "Overall", after = 4L), y = Score)) +
+    ggplot2::geom_col(ggplot2::aes(fill = `Core Action`)) +
+    ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score, 1), "%\n (n = ", n, ")")),
+                       fontface = "bold",
+                       vjust = -0.25,
+                       size = 8,
+                       family = "Poppins",
+                       lineheight = 0.85
+    ) +
+    ggplot2::facet_wrap(~direct_to_ts_obs) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent_format(scale = 1),
+      limits = c(0, 100),
+      expand = c(0.1, 0)
+    ) +
+    ggplot2::scale_fill_manual(values = tlShiny::tl_palette(color = "blue", n = colors)[c(2:colors)]) +
+    ggplot2::labs(
+      x = "", y = "",
+      title = paste0("% Positive Indicators Across ", stringr::str_remove_all(rubric, "\\(please use this tool for K-2 observations that are not focused on foundational skills\\)")),
+      caption = '*Note that "Ongoing" observations are not included in this analysis\n CA = Core Action, Aligned Content = AC, Assessment & Differentiation = AD, Student Practice = SP, Teacher-Directed Instruction = TDI'
+    ) +
+    tlShiny::theme_tl(base_family = "Lora", plot_title_family = "Poppins", axis_title_family = "Lora") +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(size = 22, family = "Lora"),
+      axis.text.y = ggplot2::element_text(size = 18, family = "Lora"),
+      plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Poppins"),
+      strip.text = ggplot2::element_text(size = 21, face = "bold", hjust = 0.5, family = "Poppins"),
+      plot.caption = ggplot2::element_text(size = 14, family = "Lora")
+    )
+}
