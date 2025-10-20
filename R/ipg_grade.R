@@ -88,12 +88,15 @@ new_grade_ipg <- function(x, type) {
 #' @title Summarize IPG Scores Per Teacher
 #' @description Converts raw IPG rubric responses to logical scores and computes summary scores by core action and domain.
 #' @param df A data frame with raw IPG rubric columns and metadata (e.g., `direct_to_ts_obs`, `ipg_rubric`).
+#' @param ipg_character_cols character columns
+#' @param ipg_numeric_cols numeric columns
+#' @param ipg_numeric_low_cols numeric columns with low score range
 #' @return A data frame of teacher-level scores, one row per observation.
 #'
 #' @examples
 #' ipg_summarise_teacher(ipg_data)
 #' @export
-ipg_summarise_teacher <- function(df) {
+ipg_summarise_teacher <- function(df, character_cols = ipg_character_cols, numeric_cols = ipg_numeric_cols, numeric_low_cols = ipg_numeric_low_cols) {
 
   ipg_scored <- df |>
     collapse::fsubset(!is.na(direct_to_ts_obs) & direct_to_ts_obs != "Ongoing") |>

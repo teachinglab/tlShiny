@@ -4,10 +4,21 @@
 \alias{ipg_summarise_teacher}
 \title{Summarize IPG Scores Per Teacher}
 \usage{
-ipg_summarise_teacher(df)
+ipg_summarise_teacher(
+  df,
+  character_cols = ipg_character_cols,
+  numeric_cols = ipg_numeric_cols,
+  numeric_low_cols = ipg_numeric_low_cols
+)
 }
 \arguments{
 \item{df}{A data frame with raw IPG rubric columns and metadata (e.g., `direct_to_ts_obs`, `ipg_rubric`).}
+
+\item{ipg_character_cols}{character columns}
+
+\item{ipg_numeric_cols}{numeric columns}
+
+\item{ipg_numeric_low_cols}{numeric columns with low score range}
 }
 \value{
 A data frame of teacher-level scores, one row per observation.
