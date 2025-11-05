@@ -7,6 +7,7 @@ usethis::use_data(content_area_sites, overwrite = TRUE)
 subsites <- current_subsites |>
   setNames(c("AR_Osceola School District",
              "CA_Santa Ana Unified School District",
+             "CO_Denver Public Schools",
              "IL_CPS",
              "NY_D6", "NY_D6 Other",
              "NY_D9", "NY_D9 Other",

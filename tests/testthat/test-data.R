@@ -9,6 +9,7 @@ test_that("Check that subsites are up to date", {
 
   current_subsites <- c("ar_osceola",
                         "ca_santa_ana",
+                        "co_denver",
                         "ct_bristol",
                         "ct_hamden",
                         "dc_dcps_8",
@@ -49,6 +50,7 @@ test_that("Check that subsites are up to date", {
                         "ny_transfer",
                         "tn_acceleration",
                         "tn_acceleration2",
+                        "tx_elpaso",
                         "tx_la_joya")
 
   expect_true(length(intersect(subsites_check, current_subsites)) == length(current_subsites))
@@ -57,6 +59,7 @@ test_that("Check that subsites are up to date", {
   # subsites <- current_subsites |>
   #   setNames(c("AR_Osceola School District",
   #              "CA_Santa Ana Unified School District",
+  #              "CO_Denver Public Schools",
   #              "CT_Bristol",
   #              "CT_Hamden",
   #              "DC_DCPS Cluster 8",
@@ -88,6 +91,7 @@ test_that("Check that subsites are up to date", {
   #              "NY_Transfer High Schools",
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
+  #              "TX_El Paso Leadership Academy",
   #              "TX_La Joya ISD"))
   # usethis::use_data(subsites, overwrite = TRUE)
 })
