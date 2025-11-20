@@ -372,7 +372,7 @@ prek_summarise_teacher <- function(df,
     dplyr::mutate(
       dplyr::across(
         dplyr::all_of(c(prek_lang_cols, prek_lit_cols)),
-        ~ new_grade_ipg(.x, type = "prek")
+        ~ tlShiny::new_grade_ipg(.x, type = "prek")
       )
     ) |>
     dplyr::mutate(

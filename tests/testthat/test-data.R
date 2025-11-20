@@ -2,7 +2,7 @@
 test_that("Check that subsites are up to date", {
 
   subsite_list <- qualtRics::survey_questions("SV_5bBw9H3DUZeBuTA") |>
-    dplyr::filter(stringr::str_detect(question, "school|district|region") & qname != "site" & qname != "ny_cps_school" & qname != "podsie_likert")
+    dplyr::filter(stringr::str_detect(question, "school|district|region|cluster") & qname != "site" & qname != "ny_cps_school" & qname != "podsie_likert")
 
   subsites_check <- subsite_list |>
     dplyr::pull(qname)
@@ -12,8 +12,8 @@ test_that("Check that subsites are up to date", {
                         "co_denver",
                         "ct_bristol",
                         "ct_hamden",
-                        "dc_dcps_8",
-                        "dc_dcps_9",
+                        "dc_dcps",
+                        "dc_dcps2",
                         "il_cps",
                         "district6",
                         "district6_other",
@@ -62,8 +62,8 @@ test_that("Check that subsites are up to date", {
   #              "CO_Denver Public Schools",
   #              "CT_Bristol",
   #              "CT_Hamden",
-  #              "DC_DCPS Cluster 8",
-  #              "DC_DCPS Cluster 9",
+  #              "DC_DCPS",
+  #              "DC_DCPS",
   #              "IL_CPS",
   #              "NY_D6", "NY_D6 Other",
   #              "NY_D9", "NY_D9 Other",
